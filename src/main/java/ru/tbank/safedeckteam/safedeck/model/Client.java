@@ -2,8 +2,13 @@ package ru.tbank.safedeckteam.safedeck.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Client extends AbstractEntity {
+public class Client extends AbstractEntity implements UserDetails {
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -56,4 +61,14 @@ public class Client extends AbstractEntity {
 
     @OneToMany(mappedBy = "user")
     private Set<TrustedUserIP> trustedUserIps = new HashSet<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 }
