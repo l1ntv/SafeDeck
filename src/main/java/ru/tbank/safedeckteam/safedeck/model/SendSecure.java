@@ -2,6 +2,7 @@ package ru.tbank.safedeckteam.safedeck.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "Send_secure")
@@ -9,7 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class SendSecure extends AbstractEntity {
 
     @Column(name = "token", nullable = false)

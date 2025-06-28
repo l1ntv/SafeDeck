@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd">
+
+    <include file="v1-01-create-default-seq.xml" relativeToChangelogFile="true"/>
+    <include file="v1-02-create-table-board.xml" relativeToChangelogFile="true"/>
+    <include file="v1-03-create-table-card.xml" relativeToChangelogFile="true"/>
+    <include file="v1-04-create-table-client.xml" relativeToChangelogFile="true"/>
+    <include file="v1-05-create-table-client_to_subscription.xml" relativeToChangelogFile="true"/>
+    <include file="v1-06-create-table-clients_to_boards.xml" relativeToChangelogFile="true"/>
+    <include file="v1-07-create-table-color.xml" relativeToChangelogFile="true"/>
+    <include file="v1-08-create-table-control_question.xml" relativeToChangelogFile="true"/>
+    <include file="v1-09-create-table-ip.xml" relativeToChangelogFile="true"/>
+    <include file="v1-10-create-table-role.xml" relativeToChangelogFile="true"/>
+    <include file="v1-11-create-table-role_to_card.xml" relativeToChangelogFile="true"/>
+    <include file="v1-12-create-table-role_to_client.xml" relativeToChangelogFile="true"/>
+    <include file="v1-13-create-table-sale.xml" relativeToChangelogFile="true"/>
+    <include file="v1-14-create-table-secure_logs.xml" relativeToChangelogFile="true"/>
+    <include file="v1-15-create-table-send_secure.xml" relativeToChangelogFile="true"/>
+    <include file="v1-16-create-table-status.xml" relativeToChangelogFile="true"/>
+    <include file="v1-17-create-table-subscription_plan.xml" relativeToChangelogFile="true"/>
+    <include file="v1-18-create-table-trusted_board_ip.xml" relativeToChangelogFile="true"/>
+    <include file="v1-19-create-table-trusted_user_ip.xml" relativeToChangelogFile="true"/>
+    <include file="v1-20-add-foreign-keys.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd">
+
+    <changeSet id="1750948462324-22" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="background_color_id" baseTableName="board"
+                                 constraintName="FK_BOARD_ON_BACKGROUND_COLOR" referencedColumnNames="id"
+                                 referencedTableName="color"/>
+    </changeSet>
+    <changeSet id="1750948462324-23" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="board" constraintName="FK_BOARD_ON_OWNER"
+                                 referencedColumnNames="id" referencedTableName="client"/>
+    </changeSet>
+    <changeSet id="1750948462324-24" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="background_color_id" baseTableName="card"
+                                 constraintName="FK_CARD_ON_BACKGROUND_COLOR" referencedColumnNames="id"
+                                 referencedTableName="color"/>
+    </changeSet>
+    <changeSet id="1750948462324-25" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="board_id" baseTableName="card" constraintName="FK_CARD_ON_BOARD"
+                                 referencedColumnNames="id" referencedTableName="board"/>
+    </changeSet>
+    <changeSet id="1750948462324-26" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="register_ip_id" baseTableName="client"
+                                 constraintName="FK_CLIENT_ON_REGISTER_IP" referencedColumnNames="id"
+                                 referencedTableName="ip"/>
+    </changeSet>
+    <changeSet id="1750948462324-27" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="client_id" baseTableName="client_to_subscription"
+                                 constraintName="FK_CLIENT_TO_SUBSCRIPTION_ON_CLIENT" referencedColumnNames="id"
+                                 referencedTableName="client"/>
+    </changeSet>
+    <changeSet id="1750948462324-28" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="sale_id" baseTableName="client_to_subscription"
+                                 constraintName="FK_CLIENT_TO_SUBSCRIPTION_ON_SALE" referencedColumnNames="id"
+                                 referencedTableName="sale"/>
+    </changeSet>
+    <changeSet id="1750948462324-29" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="subscription_plan_id" baseTableName="client_to_subscription"
+                                 constraintName="FK_CLIENT_TO_SUBSCRIPTION_ON_SUBSCRIPTION_PLAN"
+                                 referencedColumnNames="id" referencedTableName="subscription_plan"/>
+    </changeSet>
+    <changeSet id="1750948462324-30" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="board_id" baseTableName="clients_to_boards"
+                                 constraintName="FK_CLITOBOA_ON_BOARD" referencedColumnNames="id"
+                                 referencedTableName="board"/>
+    </changeSet>
+    <changeSet id="1750948462324-31" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="client_id" baseTableName="clients_to_boards"
+                                 constraintName="FK_CLITOBOA_ON_CLIENT" referencedColumnNames="id"
+                                 referencedTableName="client"/>
+    </changeSet>
+    <changeSet id="1750948462324-32" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="board_id" baseTableName="control_question"
+                                 constraintName="FK_CONTROL_QUESTION_ON_BOARD" referencedColumnNames="id"
+                                 referencedTableName="board"/>
+    </changeSet>
+    <changeSet id="1750948462324-33" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="card_id" baseTableName="role_to_card"
+                                 constraintName="FK_ROLTOCAR_ON_CARD" referencedColumnNames="id"
+                                 referencedTableName="card"/>
+    </changeSet>
+    <changeSet id="1750948462324-34" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="role_to_card"
+                                 constraintName="FK_ROLTOCAR_ON_ROLE" referencedColumnNames="id"
+                                 referencedTableName="role"/>
+    </changeSet>
+    <changeSet id="1750948462324-35" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="client_id" baseTableName="role_to_client"
+                                 constraintName="FK_ROLTOCLI_ON_CLIENT" referencedColumnNames="id"
+                                 referencedTableName="client"/>
+    </changeSet>
+    <changeSet id="1750948462324-36" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="role_to_client"
+                                 constraintName="FK_ROLTOCLI_ON_ROLE" referencedColumnNames="id"
+                                 referencedTableName="role"/>
+    </changeSet>
+    <changeSet id="1750948462324-37" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="board_id" baseTableName="secure_logs"
+                                 constraintName="FK_SECURE_LOGS_ON_BOARD" referencedColumnNames="id"
+                                 referencedTableName="board"/>
+    </changeSet>
+    <changeSet id="1750948462324-38" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="card_id" baseTableName="secure_logs"
+                                 constraintName="FK_SECURE_LOGS_ON_CARD" referencedColumnNames="id"
+                                 referencedTableName="card"/>
+    </changeSet>
+    <changeSet id="1750948462324-39" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="ip_id" baseTableName="secure_logs"
+                                 constraintName="FK_SECURE_LOGS_ON_IP" referencedColumnNames="id"
+                                 referencedTableName="ip"/>
+    </changeSet>
+    <changeSet id="1750948462324-40" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="status_id" baseTableName="secure_logs"
+                                 constraintName="FK_SECURE_LOGS_ON_STATUS" referencedColumnNames="id"
+                                 referencedTableName="status"/>
+    </changeSet>
+    <changeSet id="1750948462324-41" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="secure_logs"
+                                 constraintName="FK_SECURE_LOGS_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="client"/>
+    </changeSet>
+    <changeSet id="1750948462324-42" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="card_id" baseTableName="send_secure"
+                                 constraintName="FK_SEND_SECURE_ON_CARD" referencedColumnNames="id"
+                                 referencedTableName="card"/>
+    </changeSet>
+    <changeSet id="1750948462324-43" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="board_id" baseTableName="trusted_board_ip"
+                                 constraintName="FK_TRUSTED_BOARD_IP_ON_BOARD" referencedColumnNames="id"
+                                 referencedTableName="board"/>
+    </changeSet>
+    <changeSet id="1750948462324-44" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="ip_id" baseTableName="trusted_board_ip"
+                                 constraintName="FK_TRUSTED_BOARD_IP_ON_IP" referencedColumnNames="id"
+                                 referencedTableName="ip"/>
+    </changeSet>
+    <changeSet id="1750948462324-45" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="ip_id" baseTableName="trusted_user_ip"
+                                 constraintName="FK_TRUSTED_USER_IP_ON_IP" referencedColumnNames="id"
+                                 referencedTableName="ip"/>
+    </changeSet>
+    <changeSet id="1750948462324-46" author="lintv (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="trusted_user_ip"
+                                 constraintName="FK_TRUSTED_USER_IP_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="client"/>
+    </changeSet>
+</databaseChangeLog>

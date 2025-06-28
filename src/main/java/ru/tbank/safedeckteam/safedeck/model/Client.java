@@ -2,14 +2,12 @@ package ru.tbank.safedeckteam.safedeck.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "Client")
@@ -17,7 +15,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Client extends AbstractEntity implements UserDetails {
 
     @Column(name = "email", nullable = false, unique = true)
@@ -54,7 +52,7 @@ public class Client extends AbstractEntity implements UserDetails {
             joinColumns = @JoinColumn(name = "client_id"),
             inverseJoinColumns = @JoinColumn(name = "board_id")
     )
-    private Set<Board> boards = new HashSet<>();
+    private List<Board> boards = new ArrayList<>();
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ClientToSubscription> subscriptions = new HashSet<>();
