@@ -2,6 +2,7 @@ package ru.tbank.safedeckteam.safedeck.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "Control_question")
@@ -9,7 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class ControlQuestion extends AbstractEntity {
 
     @Column(name = "question", nullable = false)

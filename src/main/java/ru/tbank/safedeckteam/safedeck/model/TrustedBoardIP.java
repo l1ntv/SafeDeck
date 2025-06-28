@@ -2,6 +2,7 @@ package ru.tbank.safedeckteam.safedeck.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "Trusted_board_IP")
@@ -9,7 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class TrustedBoardIP extends AbstractEntity {
 
     @ManyToOne
