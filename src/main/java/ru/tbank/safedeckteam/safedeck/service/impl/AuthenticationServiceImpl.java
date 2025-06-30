@@ -48,6 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new InvalidDataException("User with this email already exists.");
         }
 
+        // Проверить, что IP не существует
         IP ip = IP.builder()
                 .ip(request.getIP())
                 .build();

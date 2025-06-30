@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tbank.safedeckteam.safedeck.model.Board;
 import ru.tbank.safedeckteam.safedeck.model.Client;
+import ru.tbank.safedeckteam.safedeck.model.Color;
 import ru.tbank.safedeckteam.safedeck.repository.BoardRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
+import ru.tbank.safedeckteam.safedeck.repository.ColorRepository;
 import ru.tbank.safedeckteam.safedeck.service.BoardService;
 import ru.tbank.safedeckteam.safedeck.web.dto.CreatedUserBoardDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.RenamedBoardDTO;
@@ -24,6 +26,7 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardMapper boardMapper;
 
+    private final ColorRepository colorRepository;
 
     @Override
     public List<BoardDTO> findUserBoards(String email) {
@@ -37,11 +40,15 @@ public class BoardServiceImpl implements BoardService {
     public BoardDTO createBoard(CreatedUserBoardDTO createdUserBoardDTO, String email) {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Client not found."));
-        String boardName = createdUserBoardDTO.getBoardName();
+
+        Color color = colorRepository.save(Color.builder().rgbCode("DEFAULT").build());
+
         Board board = Board.builder()
-                .name(boardName)
+                .name(createdUserBoardDTO.getBoardName())
+                .owner(client)
+                .color(color)
                 .build();
-        board.setOwner(client);
+
         boardRepository.save(board);
         return boardMapper.toDto(board);
     }

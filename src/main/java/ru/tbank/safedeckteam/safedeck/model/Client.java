@@ -46,11 +46,12 @@ public class Client extends AbstractEntity implements UserDetails {
     @ManyToMany(mappedBy = "clients")
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "Clients_to_Boards",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "board_id")
+    // ----- Основной список досок клиента (владение) -----
+    @OneToMany(
+            mappedBy = "owner",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private List<Board> boards = new ArrayList<>();
 
@@ -60,6 +61,7 @@ public class Client extends AbstractEntity implements UserDetails {
     @OneToMany(mappedBy = "user")
     private Set<TrustedUserIP> trustedUserIps = new HashSet<>();
 
+    // UserDetails methods
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
@@ -68,5 +70,25 @@ public class Client extends AbstractEntity implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

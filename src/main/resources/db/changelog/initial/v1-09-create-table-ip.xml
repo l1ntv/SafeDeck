@@ -21,8 +21,4 @@
             </column>
         </createTable>
     </changeSet>
-
-    <changeSet id="1750948462324-21" author="lintv (generated)">
-        <addUniqueConstraint columnNames="ip" constraintName="UC_IP_IP" tableName="ip"/>
-    </changeSet>
 </databaseChangeLog>
