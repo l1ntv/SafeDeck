@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import ru.tbank.safedeckteam.safedeck.model.Board;
 import ru.tbank.safedeckteam.safedeck.model.Client;
 import ru.tbank.safedeckteam.safedeck.model.Color;
+import ru.tbank.safedeckteam.safedeck.model.exception.BoardNotFoundException;
+import ru.tbank.safedeckteam.safedeck.model.exception.ClientNotFoundException;
+import ru.tbank.safedeckteam.safedeck.model.exception.ConflictResourceException;
 import ru.tbank.safedeckteam.safedeck.repository.BoardRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ColorRepository;
@@ -31,7 +34,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public List<BoardDTO> findUserBoards(String email) {
         Client client = clientRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Client not found."));
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         List<Board> boards = client.getBoards();
         return boardMapper.toDtoList(boards);
     }
@@ -39,7 +42,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardDTO createBoard(CreatedUserBoardDTO createdUserBoardDTO, String email) {
         Client client = clientRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Client not found."));
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
 
         Color color = colorRepository.save(Color.builder().rgbCode("DEFAULT").build());
 
@@ -54,11 +57,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardDTO renameBoard(Long boardId, RenamedBoardDTO renamedBoardDTO, String email) {
         Client client = clientRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Client not found."));
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("Board not found."));
+                .orElseThrow(() -> new BoardNotFoundException("Board not found."));
         if (!board.getOwner().getId().equals(client.getId())) {
-            throw new RuntimeException("The board does not belong to this client.");
+            throw new ConflictResourceException("The board does not belong to this client.");
         }
         board.setName(renamedBoardDTO.getNewBoardName());
         return boardMapper.toDto(boardRepository.save(board));
@@ -67,11 +70,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void deleteBoard(Long boardId, String email) {
         Client client = clientRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Client not found."));
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("Board not found."));
+                .orElseThrow(() -> new BoardNotFoundException("Board not found."));
         if (!board.getOwner().getId().equals(client.getId())) {
-            throw new RuntimeException("The board does not belong to this client.");
+            throw new ConflictResourceException("The board does not belong to this client.");
         }
         boardRepository.delete(board);
     }

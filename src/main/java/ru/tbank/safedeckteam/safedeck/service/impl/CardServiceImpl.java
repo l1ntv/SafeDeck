@@ -3,6 +3,10 @@ package ru.tbank.safedeckteam.safedeck.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tbank.safedeckteam.safedeck.model.*;
+import ru.tbank.safedeckteam.safedeck.model.exception.BoardNotFoundException;
+import ru.tbank.safedeckteam.safedeck.model.exception.CardNotFoundException;
+import ru.tbank.safedeckteam.safedeck.model.exception.ClientNotFoundException;
+import ru.tbank.safedeckteam.safedeck.model.exception.ConflictResourceException;
 import ru.tbank.safedeckteam.safedeck.repository.BoardRepository;
 import ru.tbank.safedeckteam.safedeck.repository.CardRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
@@ -35,10 +39,10 @@ public class CardServiceImpl implements CardService {
     @Override
     public List<CardDTO> findBoardCards(Long boardId, String email) {
         Client client = clientRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Client not found."));
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
 
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("Board not found."));
+                .orElseThrow(() -> new BoardNotFoundException("Board not found."));
 
         // Проверка: владелец ли доски
         if (client.equals(board.getOwner())) {
@@ -51,7 +55,7 @@ public class CardServiceImpl implements CardService {
                 .toList();
 
         if (userRolesOnBoard.isEmpty()) {
-            throw new RuntimeException("Client has no roles on this board.");
+            throw new ConflictResourceException("Client has no roles on this board.");
         }
 
         // Собираем все доступные карточки через роли
@@ -66,9 +70,9 @@ public class CardServiceImpl implements CardService {
     @Override
     public CardDTO create(Long boardId, String email, CreatedCardDTO dto) {
         Client client = clientRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Client not found."));
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("Board not found."));
+                .orElseThrow(() -> new BoardNotFoundException("Board not found."));
 
         // Логика сохранения пароля в noSQL
 
@@ -86,16 +90,16 @@ public class CardServiceImpl implements CardService {
     @Override
     public void delete(Long boardId, Long cardId, String email) {
         Client client = clientRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Client not found."));
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("Board not found."));
+                .orElseThrow(() -> new BoardNotFoundException("Board not found."));
         Card card = cardRepository.findById(cardId)
-                .orElseThrow(() -> new RuntimeException("Card not found."));
+                .orElseThrow(() -> new CardNotFoundException("Card not found."));
         if (!board.getId().equals(card.getBoard().getId())) {
-            throw new RuntimeException("The card is not in this board.");
+            throw new ConflictResourceException("The card is not in this board.");
         }
         if (!board.getOwner().equals(card.getBoard().getOwner())) {
-            throw new RuntimeException("The client is not the owner of the board.");
+            throw new ConflictResourceException("The client is not the owner of the board.");
         }
         cardRepository.deleteById(cardId);
     }
@@ -103,16 +107,16 @@ public class CardServiceImpl implements CardService {
     @Override
     public CardDTO rename(String email, Long boardId, CardDTO dto) {
         Client client = clientRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Client not found."));
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("Board not found."));
+                .orElseThrow(() -> new BoardNotFoundException("Board not found."));
         if (!board.getOwner().getId().equals(client.getId())) {
-            throw new RuntimeException("The client is not the owner of the board.");
+            throw new ConflictResourceException("The client is not the owner of the board.");
         }
         Card card = cardRepository.findById(dto.getCardId())
-                .orElseThrow(() -> new RuntimeException("Card not found."));
+                .orElseThrow(() -> new CardNotFoundException("Card not found."));
         if (!card.getBoard().getId().equals(board.getId())) {
-            throw new RuntimeException("The card is not in this board.");
+            throw new ConflictResourceException("The card is not in this board.");
         }
         card.setName(dto.getCardName());
         return cardMapper.toDto(cardRepository.save(card));
