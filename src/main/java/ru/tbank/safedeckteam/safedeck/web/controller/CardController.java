@@ -2,12 +2,11 @@ package ru.tbank.safedeckteam.safedeck.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.tbank.safedeckteam.safedeck.model.Card;
 import ru.tbank.safedeckteam.safedeck.service.CardService;
 import ru.tbank.safedeckteam.safedeck.web.dto.CardDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.CreatedCardDTO;
 
 import java.security.Principal;
 import java.util.List;
@@ -21,9 +20,31 @@ public class CardController {
 
     @GetMapping("/{boardId}")
     public ResponseEntity<List<CardDTO>> getBoardCards(@PathVariable Long boardId,
-                                                      Principal principal) {
+                                                       Principal principal) {
         return ResponseEntity.ok()
                 .body(cardService.findBoardCards(boardId, principal.getName()));
+    }
+
+    @PostMapping("/{boardId}")
+    public ResponseEntity<CardDTO> create(@PathVariable Long boardId,
+                                          Principal principal, @RequestBody CreatedCardDTO cardDTO) {
+        return ResponseEntity.ok()
+                .body(cardService.create(boardId, principal.getName(), cardDTO));
+    }
+
+    @DeleteMapping("/{boardId}/{cardId}")
+    public ResponseEntity<Void> delete(@PathVariable Long boardId,
+                                       @PathVariable Long cardId,
+                                       Principal principal) {
+        cardService.delete(boardId, cardId, principal.getName());
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{boardId}")
+    public ResponseEntity<CardDTO> rename(@RequestBody CardDTO cardDTO, @PathVariable Long boardId,
+                                          Principal principal) {
+        return ResponseEntity.ok()
+                .body(cardService.rename(principal.getName(), boardId, cardDTO));
     }
 
 }

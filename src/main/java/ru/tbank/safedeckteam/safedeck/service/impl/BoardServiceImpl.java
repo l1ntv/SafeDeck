@@ -48,9 +48,7 @@ public class BoardServiceImpl implements BoardService {
                 .owner(client)
                 .color(color)
                 .build();
-
-        boardRepository.save(board);
-        return boardMapper.toDto(board);
+        return boardMapper.toDto(boardRepository.save(board));
     }
 
     @Override
@@ -59,12 +57,11 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new RuntimeException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new RuntimeException("Board not found."));
-        if (!board.getOwner().equals(client)) {
-            throw new RuntimeException("The board does not belong to this user.");
+        if (!board.getOwner().getId().equals(client.getId())) {
+            throw new RuntimeException("The board does not belong to this client.");
         }
         board.setName(renamedBoardDTO.getNewBoardName());
-        boardRepository.save(board);
-        return boardMapper.toDto(board);
+        return boardMapper.toDto(boardRepository.save(board));
     }
 
     @Override
@@ -73,11 +70,9 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new RuntimeException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new RuntimeException("Board not found."));
-        if (!board.getOwner().equals(client)) {
-            throw new RuntimeException("The board does not belong to this user.");
+        if (!board.getOwner().getId().equals(client.getId())) {
+            throw new RuntimeException("The board does not belong to this client.");
         }
         boardRepository.delete(board);
     }
-
-
 }
