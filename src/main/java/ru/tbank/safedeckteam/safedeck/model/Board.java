@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -40,7 +42,7 @@ public class Board extends AbstractEntity {
 
     // ----- Связанные сущности -----
     @OneToMany(mappedBy = "board")
-    private Set<Card> cards = new HashSet<>();
+    private List<Card> cards = new ArrayList<>();
 
     @OneToMany(mappedBy = "board")
     private Set<ControlQuestion> controlQuestions = new HashSet<>();

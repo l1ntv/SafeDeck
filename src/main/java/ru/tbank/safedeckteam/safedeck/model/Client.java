@@ -44,7 +44,7 @@ public class Client extends AbstractEntity implements UserDetails {
     private Boolean isSubscriber;
 
     @ManyToMany(mappedBy = "clients")
-    private Set<Role> roles = new HashSet<>();
+    private List<Role> roles = new ArrayList<>();
 
     // ----- Основной список досок клиента (владение) -----
     @OneToMany(

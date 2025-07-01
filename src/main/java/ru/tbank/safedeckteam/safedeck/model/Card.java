@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,8 +33,8 @@ public class Card extends AbstractEntity {
     private Boolean field;
 
     @ManyToMany(mappedBy = "cards")
-    private Set<Role> roles = new HashSet<>();
+    private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "card")
-    private Set<SendSecure> sendSecures = new HashSet<>();
+    private List<SendSecure> sendSecures = new ArrayList<>();
 }
