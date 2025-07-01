@@ -25,9 +25,6 @@
             <column name="board_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="field" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

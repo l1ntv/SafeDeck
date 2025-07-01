@@ -3,7 +3,6 @@ package ru.tbank.safedeckteam.safedeck.web.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.tbank.safedeckteam.safedeck.model.Card;
 import ru.tbank.safedeckteam.safedeck.service.CardService;
 import ru.tbank.safedeckteam.safedeck.web.dto.CardDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.CreatedCardDTO;

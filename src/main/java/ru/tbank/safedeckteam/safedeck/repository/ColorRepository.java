@@ -6,5 +6,6 @@ import ru.tbank.safedeckteam.safedeck.model.Color;
 import java.util.Optional;
 
 public interface ColorRepository extends JpaRepository<Color, Long> {
+
     Optional<Color> findByRgbCode(String rgbCode);
 }

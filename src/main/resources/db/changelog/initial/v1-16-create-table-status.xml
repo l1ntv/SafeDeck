@@ -21,4 +21,12 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-status-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="status"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

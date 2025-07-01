@@ -46,7 +46,6 @@ public class Client extends AbstractEntity implements UserDetails {
     @ManyToMany(mappedBy = "clients")
     private List<Role> roles = new ArrayList<>();
 
-    // ----- Основной список досок клиента (владение) -----
     @OneToMany(
             mappedBy = "owner",
             fetch = FetchType.LAZY,
@@ -56,12 +55,11 @@ public class Client extends AbstractEntity implements UserDetails {
     private List<Board> boards = new ArrayList<>();
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ClientToSubscription> subscriptions = new HashSet<>();
+    private List<ClientToSubscription> subscriptions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<TrustedUserIP> trustedUserIps = new HashSet<>();
+    private List<TrustedUserIP> trustedUserIps = new ArrayList<>();
 
-    // UserDetails methods
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));

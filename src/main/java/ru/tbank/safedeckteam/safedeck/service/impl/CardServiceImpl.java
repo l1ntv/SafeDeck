@@ -40,16 +40,12 @@ public class CardServiceImpl implements CardService {
     public List<CardDTO> findBoardCards(Long boardId, String email) {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
-
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
-
-        // Проверка: владелец ли доски
         if (client.equals(board.getOwner())) {
             return cardMapper.toDtoList(new ArrayList<>(board.getCards()));
         }
 
-        // Получаем роли пользователя на этой доске
         List<Role> userRolesOnBoard = client.getRoles().stream()
                 .filter(role -> role.getBoardId() == board.getId())
                 .toList();
@@ -58,12 +54,10 @@ public class CardServiceImpl implements CardService {
             throw new ConflictResourceException("Client has no roles on this board.");
         }
 
-        // Собираем все доступные карточки через роли
         List<Card> accessibleCards = new ArrayList<>();
         for (Role role : userRolesOnBoard) {
             accessibleCards.addAll(role.getCards());
         }
-
         return cardMapper.toDtoList(accessibleCards);
     }
 
@@ -73,8 +67,6 @@ public class CardServiceImpl implements CardService {
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
-
-        // Логика сохранения пароля в noSQL
 
         Color color = colorRepository.save(Color.builder().rgbCode("DEFAULT").build());
 

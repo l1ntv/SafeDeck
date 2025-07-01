@@ -6,4 +6,5 @@ import ru.tbank.safedeckteam.safedeck.model.Card;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
+
 }

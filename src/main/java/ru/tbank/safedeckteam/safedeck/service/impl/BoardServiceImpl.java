@@ -7,6 +7,7 @@ import ru.tbank.safedeckteam.safedeck.model.Client;
 import ru.tbank.safedeckteam.safedeck.model.Color;
 import ru.tbank.safedeckteam.safedeck.model.exception.BoardNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.ClientNotFoundException;
+import ru.tbank.safedeckteam.safedeck.model.exception.ColorNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.ConflictResourceException;
 import ru.tbank.safedeckteam.safedeck.repository.BoardRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
@@ -44,7 +45,8 @@ public class BoardServiceImpl implements BoardService {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
 
-        Color color = colorRepository.save(Color.builder().rgbCode("DEFAULT").build());
+        Color color = colorRepository.findByRgbCode("#FFFFFF")
+                .orElseThrow(() -> new ColorNotFoundException("Color not found."));
 
         Board board = Board.builder()
                 .name(createdUserBoardDTO.getBoardName())

@@ -27,6 +27,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(ColorNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleColorNotFoundException(ColorNotFoundException exception) {
+        ErrorResponseDTO error = new ErrorResponseDTO(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(ConflictResourceException.class)
     public ResponseEntity<ErrorResponseDTO> handleConflictResourceException(ConflictResourceException exception) {
         ErrorResponseDTO error = new ErrorResponseDTO(exception.getMessage());

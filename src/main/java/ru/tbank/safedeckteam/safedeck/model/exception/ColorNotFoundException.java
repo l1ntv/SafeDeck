@@ -1,8 +1,8 @@
 package ru.tbank.safedeckteam.safedeck.model.exception;
 
-public class ConflictResourceException extends RuntimeException {
-    
-    public ConflictResourceException(String message) {
+public class ColorNotFoundException extends RuntimeException {
+
+    public ColorNotFoundException(String message) {
         super(message);
     }
 
