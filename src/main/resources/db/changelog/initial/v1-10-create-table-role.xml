@@ -30,4 +30,12 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-role-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="role"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

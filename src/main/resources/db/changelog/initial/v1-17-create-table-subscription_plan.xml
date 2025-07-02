@@ -23,4 +23,12 @@
             <column name="max_price_per_month" type="INT"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-subscription_plan-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="subscription_plan"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

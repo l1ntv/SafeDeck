@@ -1,5 +1,7 @@
 package ru.tbank.safedeckteam.safedeck.web.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,9 +16,17 @@ import java.util.Map;
 @NoArgsConstructor
 public class CreatedCardDTO {
 
+    @NotNull(message = "Card name must be not null.")
+    @Size(max = 50, message = "Card name cannot exceed 50 characters.")
     private String cardName;
 
+    @NotNull(message = "Description must be not null.")
+    @Size(max = 255, message = "Description cannot exceed 255 characters.")
+    private String description;
+
+    @NotNull(message = "Roles must be not null.")
     private List<RoleDTO> roles;
 
+    @NotNull(message = "Secure data must be not null.")
     private Map<String, String> secureData;
 }

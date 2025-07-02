@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.tbank.safedeckteam.safedeck.service.CardService;
 import ru.tbank.safedeckteam.safedeck.web.dto.CardDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.CreatedCardDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.RenamedCardDTO;
 
 import java.security.Principal;
 import java.util.List;
@@ -26,7 +27,8 @@ public class CardController {
 
     @PostMapping("/{boardId}")
     public ResponseEntity<CardDTO> create(@PathVariable Long boardId,
-                                          Principal principal, @RequestBody CreatedCardDTO cardDTO) {
+                                          Principal principal,
+                                          @RequestBody CreatedCardDTO cardDTO) {
         return ResponseEntity.ok()
                 .body(cardService.create(boardId, principal.getName(), cardDTO));
     }
@@ -36,14 +38,16 @@ public class CardController {
                                        @PathVariable Long cardId,
                                        Principal principal) {
         cardService.delete(boardId, cardId, principal.getName());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok()
+                .build();
     }
 
-    @PatchMapping("/{boardId}")
-    public ResponseEntity<CardDTO> rename(@RequestBody CardDTO cardDTO, @PathVariable Long boardId,
+    @PatchMapping("/{boardId}/{cardId}")
+    public ResponseEntity<CardDTO> rename(@RequestBody RenamedCardDTO cardDTO,
+                                          @PathVariable Long boardId,
+                                          @PathVariable Long cardId,
                                           Principal principal) {
         return ResponseEntity.ok()
-                .body(cardService.rename(principal.getName(), boardId, cardDTO));
+                .body(cardService.rename(principal.getName(), boardId, cardId, cardDTO));
     }
-
 }

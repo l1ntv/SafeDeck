@@ -21,4 +21,12 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-ip-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="ip"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

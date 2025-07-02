@@ -14,6 +14,7 @@ import ru.tbank.safedeckteam.safedeck.repository.ColorRepository;
 import ru.tbank.safedeckteam.safedeck.service.CardService;
 import ru.tbank.safedeckteam.safedeck.web.dto.CardDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.CreatedCardDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.RenamedCardDTO;
 import ru.tbank.safedeckteam.safedeck.web.mapper.CardMapper;
 import ru.tbank.safedeckteam.safedeck.web.mapper.RoleMapper;
 
@@ -72,6 +73,7 @@ public class CardServiceImpl implements CardService {
 
         Card card = Card.builder()
                 .name(dto.getCardName())
+                .description(dto.getDescription())
                 .roles(roleMapper.toEntityList(dto.getRoles()))
                 .color(color)
                 .build();
@@ -97,7 +99,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public CardDTO rename(String email, Long boardId, CardDTO dto) {
+    public CardDTO rename(String email, Long boardId, Long cardId, RenamedCardDTO dto) {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
@@ -105,12 +107,12 @@ public class CardServiceImpl implements CardService {
         if (!board.getOwner().getId().equals(client.getId())) {
             throw new ConflictResourceException("The client is not the owner of the board.");
         }
-        Card card = cardRepository.findById(dto.getCardId())
+        Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new CardNotFoundException("Card not found."));
         if (!card.getBoard().getId().equals(board.getId())) {
             throw new ConflictResourceException("The card is not in this board.");
         }
-        card.setName(dto.getCardName());
+        card.setName(dto.getNewCardName());
         return cardMapper.toDto(cardRepository.save(card));
     }
 }

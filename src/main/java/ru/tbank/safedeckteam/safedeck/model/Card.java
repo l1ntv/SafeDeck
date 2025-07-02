@@ -19,6 +19,9 @@ public class Card extends AbstractEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "description", nullable = false)
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "background_color_id", nullable = false)
     private Color color;

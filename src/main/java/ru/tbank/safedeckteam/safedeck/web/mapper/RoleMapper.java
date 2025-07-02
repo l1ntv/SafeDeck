@@ -15,5 +15,4 @@ public interface RoleMapper extends Mappable<Role, RoleDTO> {
     @Mapping(source = "roleId", target = "id")
     @Mapping(source = "roleName", target = "name")
     Role toEntity(RoleDTO dto);
-
 }
