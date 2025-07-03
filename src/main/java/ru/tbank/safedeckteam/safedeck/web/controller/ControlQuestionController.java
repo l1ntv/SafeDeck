@@ -35,7 +35,7 @@ public class ControlQuestionController {
         return ResponseEntity.ok().body(controlQuestionService.getQuestionById(questionId));
     }
 
-    @PostMapping("/{boardId}")
+    @PostMapping("{boardId}")
     public ResponseEntity<QuestionDTO> createControlQuestion(@PathVariable Long boardId,
                                                              @RequestBody CreatedQuestionDTO createdQuestionDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)

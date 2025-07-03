@@ -33,6 +33,7 @@ public class ControlQuestionServiceImpl implements ControlQuestionService {
         ControlQuestion controlQuestion = ControlQuestion.builder()
                 .question(question)
                 .answer(answer)
+                .board(board)
                 .build();
         controlQuestionRepository.save(controlQuestion);
         return questionMapper.toDto(controlQuestion);
