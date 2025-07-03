@@ -1,5 +1,7 @@
 package ru.tbank.safedeckteam.safedeck.service;
 
+import ru.tbank.safedeckteam.safedeck.web.dto.ChangedAnswerDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.ChangedQuestionDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.CreatedQuestionDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.QuestionDTO;
 
@@ -13,7 +15,11 @@ public interface ControlQuestionService {
 
     List<QuestionDTO> getBoardQuestions(long boardId);
 
-    QuestionDTO changeQuestion(long questionId, long boardId);
+    QuestionDTO getQuestionById(long questionId);
 
-    QuestionDTO changeAnswer(long questionId, long boardId);
+    QuestionDTO changeQuestion(long questionId, long boardId, ChangedQuestionDTO changedQuestionDTO);
+
+    QuestionDTO changeAnswer(long questionId, long boardId, ChangedAnswerDTO changedAnswerDTO);
+
+    List<Long> getBoardQuestionsIds(long boardId);
 }
