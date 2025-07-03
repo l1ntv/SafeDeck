@@ -29,7 +29,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/auth/**", "/welcome")
+                        auth -> auth.requestMatchers("/auth/**", "/welcome", "/h2-console/**")
                                 .permitAll()
                                 .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/api.zaedu.com/v1/**")
                                 .permitAll()

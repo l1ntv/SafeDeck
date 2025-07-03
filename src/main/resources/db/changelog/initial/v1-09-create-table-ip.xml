@@ -30,3 +30,4 @@
                 defaultValueSequenceNext="default_seq"/>
     </changeSet>
 </databaseChangeLog>
+
