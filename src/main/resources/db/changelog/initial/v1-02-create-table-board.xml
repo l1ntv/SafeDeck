@@ -27,4 +27,12 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-board-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="board"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

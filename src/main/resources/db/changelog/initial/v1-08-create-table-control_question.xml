@@ -27,4 +27,12 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-control_question-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="control_question"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

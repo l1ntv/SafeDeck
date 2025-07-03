@@ -36,4 +36,12 @@
     <changeSet id="1750948462324-20" author="lintv (generated)">
         <addUniqueConstraint columnNames="email" constraintName="UC_CLIENT_EMAIL" tableName="client"/>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-client-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="client"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

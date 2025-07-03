@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Color")
@@ -20,8 +20,8 @@ public class Color extends AbstractEntity {
     private String rgbCode;
 
     @OneToMany(mappedBy = "color")
-    private Set<Board> boards = new HashSet<>();
+    private List<Board> boards = new ArrayList<>();
 
     @OneToMany(mappedBy = "color")
-    private Set<Card> cards = new HashSet<>();
+    private List<Card> cards = new ArrayList<>();
 }

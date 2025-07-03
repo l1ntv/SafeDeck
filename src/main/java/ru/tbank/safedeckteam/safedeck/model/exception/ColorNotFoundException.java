@@ -1,7 +1,8 @@
 package ru.tbank.safedeckteam.safedeck.model.exception;
 
-public class InvalidDataException extends RuntimeException {
-    public InvalidDataException(String message) {
+public class ColorNotFoundException extends RuntimeException {
+
+    public ColorNotFoundException(String message) {
         super(message);
     }
 

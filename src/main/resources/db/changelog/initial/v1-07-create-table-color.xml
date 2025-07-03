@@ -21,4 +21,12 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-color-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="color"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

@@ -2,7 +2,6 @@ package ru.tbank.safedeckteam.safedeck.web.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.stereotype.Component;
 import ru.tbank.safedeckteam.safedeck.model.Board;
 import ru.tbank.safedeckteam.safedeck.web.dto.BoardDTO;
 
@@ -16,5 +15,4 @@ public interface BoardMapper extends Mappable<Board, BoardDTO> {
     @Mapping(source = "boardId", target = "id")
     @Mapping(source = "boardName", target = "name")
     Board toEntity(BoardDTO dto);
-
 }

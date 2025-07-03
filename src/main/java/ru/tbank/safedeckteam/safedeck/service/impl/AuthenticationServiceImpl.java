@@ -11,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tbank.safedeckteam.safedeck.configuration.JwtService;
 import ru.tbank.safedeckteam.safedeck.model.Client;
 import ru.tbank.safedeckteam.safedeck.model.IP;
-import ru.tbank.safedeckteam.safedeck.model.exception.InvalidDataException;
+import ru.tbank.safedeckteam.safedeck.model.exception.ClientNotFoundException;
+import ru.tbank.safedeckteam.safedeck.model.exception.ConflictResourceException;
 import ru.tbank.safedeckteam.safedeck.model.exception.WrongDataException;
 import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
 import ru.tbank.safedeckteam.safedeck.repository.IPRepository;
@@ -45,9 +46,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         request.setProvider((String) httpServletRequest.getSession().getAttribute("user-provider"));
 
         if (clientRepository.existsByEmail(request.getEmail())) {
-            throw new InvalidDataException("User with this email already exists.");
+            throw new ConflictResourceException("User with this email already exists.");
         }
 
+        // Проверить, что IP не существует
         IP ip = IP.builder()
                 .ip(request.getIP())
                 .build();
@@ -65,7 +67,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
         clientRepository.save(client);
 
-
         var jwtToken = jwtService.generateToken(client);
         return RegistrationResponseDTO.builder()
                 .token(jwtToken)
@@ -75,7 +76,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request) {
         var client = clientRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new InvalidDataException("Client with this email does not exist."));
+                .orElseThrow(() -> new ClientNotFoundException("Client with this email not found."));
 
         try {
             authenticationManager.authenticate(

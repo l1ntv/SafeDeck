@@ -3,13 +3,18 @@ info:
   title: SafeDeck main module API
   description: API документация для основного модуля сервиса SafeDeck
   version: 1.0.0
+tags:
+  - name: Регистрация и аутентификация
+  - name: Работа с досками
+  - name: Работа с карточками
 servers:
   - url: http://localhost:8080
     description: Локальный сервер
-
 paths:
   /auth/register:
     post:
+      tags:
+        - Регистрация и аутентификация
       summary: Регистрация нового пользователя
       operationId: registerUser
       requestBody:
@@ -43,9 +48,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDTO'
-
   /auth/login:
     post:
+      tags:
+        - Регистрация и аутентификация
       summary: Аутентификация пользователя
       operationId: authenticateUser
       requestBody:
@@ -86,9 +92,388 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDTO'
 
+  /boards:
+    get:
+      tags:
+        - Работа с досками
+      summary: Получить список всех досок текущего пользователя
+      operationId: getUserBoards
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Список досок пользователя успешно получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BoardDTO'
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '404':
+          description: Пользователь не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    post:
+      tags:
+        - Работа с досками
+      summary: Создать новую доску для текущего пользователя
+      operationId: createBoard
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatedUserBoardDTO'
+      responses:
+        '201':
+          description: Доска успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardDTO'
+        '400':
+          description: Ошибка валидации данных доски
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '404':
+          description: Пользователь не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+  /boards/{boardId}/rename:
+    patch:
+      tags:
+        - Работа с досками
+      summary: Переименовать существующую доску
+      operationId: renameBoard
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: boardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenamedBoardDTO'
+      responses:
+        '200':
+          description: Доска успешно переименована
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardDTO'
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '404':
+          description: |
+            Доска не найдена  
+            ИЛИ  
+            Пользователь не является владельцем доски
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+  /boards/{boardId}/delete:
+    delete:
+      tags:
+        - Работа с досками
+      summary: Удалить доску
+      operationId: deleteBoard
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: boardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Доска успешно удалена
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '404':
+          description: |
+            Доска не найдена  
+            ИЛИ  
+            Пользователь не является владельцем доски
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+
+  # === ЭНДПОИНТЫ КАРТОЧЕК ===
+  /cards/{boardId}:
+    get:
+      tags:
+        - Работа с карточками
+      summary: Получить список всех карточек доски
+      operationId: getBoardCards
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: boardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Список карточек успешно получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CardDTO'
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '404':
+          description: |
+            Доска не найдена  
+            ИЛИ  
+            Пользователь не имеет доступа к доске
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    post:
+      tags:
+        - Работа с карточками
+      summary: Создать новую карточку на доске
+      operationId: createCard
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: boardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatedCardDTO'
+      responses:
+        '201':
+          description: Карточка успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardDTO'
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '404':
+          description: |
+            Доска не найдена  
+            ИЛИ  
+            Пользователь не является владельцем доски
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+  /cards/{boardId}/{cardId}:
+    delete:
+      tags:
+        - Работа с карточками
+      summary: Удалить карточку
+      operationId: deleteCard
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: boardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Карточка успешно удалена
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '404':
+          description: |
+            Доска или карточка не найдены  
+            ИЛИ  
+            Пользователь не является владельцем доски
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    patch:
+      tags:
+        - Работа с карточками
+      summary: Переименовать карточку
+      operationId: renameCard
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: boardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenamedCardDTO'
+      responses:
+        '200':
+          description: Карточка успешно переименована
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardDTO'
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '401':
+          description: Пользователь не авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '404':
+          description: |
+            Доска или карточка не найдены  
+            ИЛИ  
+            Пользователь не является владельцем доски
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+
 components:
   schemas:
-
     RegistrationClientRequestDTO:
       type: object
       properties:
@@ -114,7 +499,6 @@ components:
         device:
           type: string
           example: iPhone 13
-
     RegistrationResponseDTO:
       type: object
       properties:
@@ -122,7 +506,6 @@ components:
           type: string
           description: JWT-токен, выданный после успешной регистрации
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxx
-
     AuthenticationRequestDTO:
       type: object
       properties:
@@ -145,7 +528,6 @@ components:
         device:
           type: string
           example: Samsung Galaxy S22
-
     AuthenticationResponseDTO:
       type: object
       properties:
@@ -153,7 +535,6 @@ components:
           type: string
           description: JWT-токен, выданный после успешной аутентификации
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxx
-
     ErrorResponseDTO:
       type: object
       properties:
@@ -164,3 +545,101 @@ components:
           type: string
           format: date-time
           example: "2025-04-05T12:34:56Z"
+    BoardDTO:
+      type: object
+      properties:
+        boardId:
+          type: integer
+          format: int64
+          example: 1
+        boardName:
+          type: string
+          example: "Мои задачи"
+    CreatedUserBoardDTO:
+      type: object
+      required:
+        - boardName
+      properties:
+        boardName:
+          type: string
+          example: "Новая доска"
+    RenamedBoardDTO:
+      type: object
+      properties:
+        newBoardName:
+          type: string
+          example: "Обновлённое имя доски"
+
+    # === DTO для работы с карточками ===
+    CreatedCardDTO:
+      type: object
+      required:
+        - cardName
+        - description
+        - roles
+        - secureData
+      properties:
+        cardName:
+          type: string
+          example: "Изучить OpenAPI"
+          description: "Название карточки (до 50 символов)"
+        description:
+          type: string
+          example: "Понять, как структурировать API"
+          description: "Описание карточки (до 255 символов)"
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleDTO'
+        secureData:
+          type: object
+          additionalProperties:
+            type: string
+          description: "Секретные данные карточки"
+          example:
+            login: "mylogin"
+            password: "secretpassword"
+    CardDTO:
+      type: object
+      properties:
+        cardId:
+          type: integer
+          format: int64
+          example: 101
+        cardName:
+          type: string
+          example: "Изучить OpenAPI"
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleDTO'
+    RenamedCardDTO:
+      type: object
+      required:
+        - newCardName
+      properties:
+        newCardName:
+          type: string
+          example: "Обновлённое название карточки"
+          description: "Новое имя карточки (до 50 символов)"
+    RoleDTO:
+      type: object
+      properties:
+        roleId:
+          type: integer
+          format: int64
+          example: 201
+        roleName:
+          type: string
+          example: "Viewer"
+        permissions:
+          type: array
+          items:
+            type: string
+            example: "READ"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

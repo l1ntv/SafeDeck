@@ -24,4 +24,12 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-send_secure-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="send_secure"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

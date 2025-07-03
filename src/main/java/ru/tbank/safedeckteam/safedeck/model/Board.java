@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Board")
@@ -19,7 +19,7 @@ public class Board extends AbstractEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
     private Client owner;
 
@@ -27,12 +27,17 @@ public class Board extends AbstractEntity {
     @JoinColumn(name = "background_color_id", nullable = false)
     private Color color;
 
-    @OneToMany(mappedBy = "board")
-    private Set<Card> cards = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "Clients_to_Boards",
+            joinColumns = @JoinColumn(name = "board_id"),
+            inverseJoinColumns = @JoinColumn(name = "client_id")
+    )
+    private List<Client> clients = new ArrayList<>();
 
     @OneToMany(mappedBy = "board")
-    private Set<ControlQuestion> controlQuestions = new HashSet<>();
+    private List<Card> cards = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "boards")
-    private Set<Client> clients = new HashSet<>();
+    @OneToMany(mappedBy = "board")
+    private List<ControlQuestion> controlQuestions = new ArrayList<>();
 }
