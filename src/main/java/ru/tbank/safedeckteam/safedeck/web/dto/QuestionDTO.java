@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 public class QuestionDTO {
     private Long questionId;
 
-    private Long boardId;
-
     private String question;
 
     private String answer;
