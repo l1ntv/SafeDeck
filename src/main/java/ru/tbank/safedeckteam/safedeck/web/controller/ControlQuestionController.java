@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.tbank.safedeckteam.safedeck.service.ControlQuestionService;
-import ru.tbank.safedeckteam.safedeck.web.dto.ChangedAnswerDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.ChangedQuestionDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.CreatedQuestionDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.QuestionDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -62,5 +59,9 @@ public class ControlQuestionController {
                 .body(controlQuestionService.changeAnswer(questionId, boardId, changedAnswerDTO));
     }
 
-
+    @PostMapping("/{questionId}/check-question")
+    public ResponseEntity<Boolean> checkControlQuestion(@PathVariable Long questionId,
+                                                        @RequestBody GivenAnswerDTO givenAnswerDTO) {
+        return ResponseEntity.ok().body(controlQuestionService.checkControlQuestion(givenAnswerDTO, questionId));
+    }
 }

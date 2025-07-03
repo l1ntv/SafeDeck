@@ -1,9 +1,6 @@
 package ru.tbank.safedeckteam.safedeck.service;
 
-import ru.tbank.safedeckteam.safedeck.web.dto.ChangedAnswerDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.ChangedQuestionDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.CreatedQuestionDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.QuestionDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.*;
 
 import java.util.List;
 
@@ -22,4 +19,6 @@ public interface ControlQuestionService {
     QuestionDTO changeAnswer(long questionId, long boardId, ChangedAnswerDTO changedAnswerDTO);
 
     List<Long> getBoardQuestionsIds(long boardId);
+
+    boolean checkControlQuestion(GivenAnswerDTO givenAnswerDTO, long questionId);
 }

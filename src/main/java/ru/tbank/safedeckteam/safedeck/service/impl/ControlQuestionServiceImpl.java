@@ -1,16 +1,20 @@
 package ru.tbank.safedeckteam.safedeck.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import ru.tbank.safedeckteam.safedeck.model.Board;
 import ru.tbank.safedeckteam.safedeck.model.ControlQuestion;
 import ru.tbank.safedeckteam.safedeck.repository.BoardRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ControlQuestionRepository;
 import ru.tbank.safedeckteam.safedeck.service.ControlQuestionService;
-import ru.tbank.safedeckteam.safedeck.web.dto.ChangedAnswerDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.ChangedQuestionDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.CreatedQuestionDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.QuestionDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.*;
 import ru.tbank.safedeckteam.safedeck.web.mapper.QuestionMapper;
 
 import java.util.List;
@@ -99,5 +103,33 @@ public class ControlQuestionServiceImpl implements ControlQuestionService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new RuntimeException("Board not found."));
         return board.getControlQuestions().stream().map(ControlQuestion::getId).toList();
+    }
+
+    @Override
+    public boolean checkControlQuestion(GivenAnswerDTO givenAnswerDTO, long questionId) {
+        ControlQuestion question = controlQuestionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("Question not found."));
+        givenAnswerDTO.setCorrectAnswer(question.getQuestion());
+        String url = "http://localhost:8081/check-answer";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String json;
+        try {
+            json = new ObjectMapper().writeValueAsString(givenAnswerDTO);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        HttpEntity entity = new HttpEntity(json, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        String res = restTemplate.postForObject(url, entity, String.class);
+        JsonNode root;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            root = objectMapper.readTree(res);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Could not parse given answer from json");
+        }
+        boolean ans = root.path("result").asBoolean();
+        return ans;
     }
 }
