@@ -45,8 +45,10 @@ public class BoardServiceImpl implements BoardService {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
 
-        Color color = colorRepository.findByRgbCode("#FFFFFF")
-                .orElseThrow(() -> new ColorNotFoundException("Color not found."));
+        Color color = Color.builder()
+                .rgbCode("123")
+                .build();
+        colorRepository.save(color);
 
         Board board = Board.builder()
                 .name(createdUserBoardDTO.getBoardName())
