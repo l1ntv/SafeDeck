@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Role")
@@ -34,7 +34,7 @@ public class Role extends AbstractEntity {
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "client_id")
     )
-    private Set<Client> clients = new HashSet<>();
+    private List<Client> clients = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -42,5 +42,5 @@ public class Role extends AbstractEntity {
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "card_id")
     )
-    private Set<Card> cards = new HashSet<>();
+    private List<Card> cards = new ArrayList<>();
 }

@@ -44,21 +44,21 @@ public class Client extends AbstractEntity implements UserDetails {
     private Boolean isSubscriber;
 
     @ManyToMany(mappedBy = "clients")
-    private Set<Role> roles = new HashSet<>();
+    private List<Role> roles = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "Clients_to_Boards",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "board_id")
+    @OneToMany(
+            mappedBy = "owner",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private List<Board> boards = new ArrayList<>();
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ClientToSubscription> subscriptions = new HashSet<>();
+    private List<ClientToSubscription> subscriptions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<TrustedUserIP> trustedUserIps = new HashSet<>();
+    private List<TrustedUserIP> trustedUserIps = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -68,5 +68,25 @@ public class Client extends AbstractEntity implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RenamedBoardDTO {
+public class RenamedCardDTO {
 
-    @NotNull(message = "New board name must be not null.")
-    @Size(max = 50, message = "New board name cannot exceed 50 characters.")
-    private String newBoardName;
+    @NotNull(message = "New card name must be not null.")
+    @Size(max = 50, message = "New card name cannot exceed 50 characters.")
+    private String newCardName;
 }

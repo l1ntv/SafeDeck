@@ -1,0 +1,24 @@
+package ru.tbank.safedeckteam.safedeck.web.mapper;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import ru.tbank.safedeckteam.safedeck.model.Card;
+import ru.tbank.safedeckteam.safedeck.web.dto.CardDTO;
+
+import java.util.List;
+
+@Mapper(componentModel = "spring")
+public interface CardMapper extends Mappable<Card, CardDTO> {
+
+    @Mapping(source = "id", target = "cardId")
+    @Mapping(source = "name", target = "cardName")
+    @Mapping(source = "roles", target = "roles")
+    CardDTO toDto(Card card);
+
+    @Mapping(source = "cardId", target = "id")
+    @Mapping(source = "cardName", target = "name")
+    @Mapping(source = "roles", target = "roles")
+    Card toEntity(CardDTO dto);
+
+    List<CardDTO> toDtoList(List<Card> cards);
+}

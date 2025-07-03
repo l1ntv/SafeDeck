@@ -29,4 +29,12 @@
             <column name="sale_id" type="BIGINT"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-client_to_subscription-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="client_to_subscription"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

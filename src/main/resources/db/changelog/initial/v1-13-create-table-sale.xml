@@ -24,4 +24,12 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-sale-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="sale"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

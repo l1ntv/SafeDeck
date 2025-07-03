@@ -24,4 +24,12 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-trusted_board_ip-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="trusted_board_ip"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

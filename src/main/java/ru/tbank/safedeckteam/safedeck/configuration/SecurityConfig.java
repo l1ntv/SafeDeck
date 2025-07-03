@@ -22,38 +22,35 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
+
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
-                )
-                .csrf(csrf -> csrf.disable())
-                .headers(headers -> headers
-                        .disable() // разрешаем iframe для H2 Console
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS)
-                );
-
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(
+                        auth -> auth.requestMatchers("/auth/**", "/welcome")
+                                .permitAll()
+                                .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/api.zaedu.com/v1/**")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .cors(Customizer.withDefaults());
         return http.build();
     }
 
-    // Конфигурация CORS
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfig = new CorsConfiguration();
-
         corsConfig.setAllowedOrigins(List.of("http://localhost:4200"));
         corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
         corsConfig.setAllowedHeaders(List.of("*"));
         corsConfig.setAllowCredentials(true);
-
         source.registerCorsConfiguration("/**", corsConfig);
-
         return source;
     }
 }

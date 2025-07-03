@@ -21,7 +21,7 @@ spring:
 
   liquibase:
     enabled: true
-    change-log: classpath:db/changelog/initial/v1-accumulate-changelog.xml
+    change-log: classpath:db/changelog/main-changelog.xml
 
   h2:
     console:

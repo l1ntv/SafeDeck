@@ -45,4 +45,12 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="set-default-seq-for-secure_logs-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="secure_logs"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
+    </changeSet>
 </databaseChangeLog>

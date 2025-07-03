@@ -19,15 +19,23 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="background_color_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="board_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="field" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="set-default-seq-for-card-id" author="vlint">
+        <addDefaultValue
+                columnName="id"
+                tableName="card"
+                schemaName="public"
+                defaultValueSequenceNext="default_seq"/>
     </changeSet>
 </databaseChangeLog>
