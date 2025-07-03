@@ -48,7 +48,7 @@ public class BoardServiceImpl implements BoardService {
         Color color = Color.builder()
                 .rgbCode("123")
                 .build();
-        colorRepository.save(color);
+        colorRepository.save(color); 
 
         Board board = Board.builder()
                 .name(createdUserBoardDTO.getBoardName())

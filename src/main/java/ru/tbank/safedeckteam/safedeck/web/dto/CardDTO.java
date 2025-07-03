@@ -17,5 +17,7 @@ public class CardDTO {
 
     private String cardName;
 
+    private String cardDescription;
+
     private List<RoleDTO> roles;
 }
