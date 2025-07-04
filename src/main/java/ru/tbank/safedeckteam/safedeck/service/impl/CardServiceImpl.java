@@ -81,7 +81,7 @@ public class CardServiceImpl implements CardService {
 
         Card card = Card.builder()
                 .name(dto.getCardName())
-                .description(dto.getDescription())
+                .description(dto.getCardDescription())
                 .roles(roleMapper.toEntityList(dto.getRoles()))
                 .color(color)
                 .build();
