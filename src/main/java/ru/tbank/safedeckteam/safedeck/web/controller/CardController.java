@@ -7,6 +7,7 @@ import ru.tbank.safedeckteam.safedeck.service.CardService;
 import ru.tbank.safedeckteam.safedeck.web.dto.CardDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.CreatedCardDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.RenamedCardDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.UserCardsDTO;
 
 import java.security.Principal;
 import java.util.List;
@@ -19,8 +20,8 @@ public class CardController {
     private final CardService cardService;
 
     @GetMapping("/{boardId}")
-    public ResponseEntity<List<CardDTO>> getBoardCards(@PathVariable Long boardId,
-                                                       Principal principal) {
+    public ResponseEntity<UserCardsDTO> getBoardCards(@PathVariable Long boardId,
+                                                      Principal principal) {
         return ResponseEntity.ok()
                 .body(cardService.findBoardCards(boardId, principal.getName()));
     }

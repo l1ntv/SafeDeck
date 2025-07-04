@@ -3,6 +3,7 @@ package ru.tbank.safedeckteam.safedeck.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tbank.safedeckteam.safedeck.model.*;
+import ru.tbank.safedeckteam.safedeck.model.enums.AccessLevel;
 import ru.tbank.safedeckteam.safedeck.model.exception.BoardNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.CardNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.ClientNotFoundException;
@@ -15,6 +16,7 @@ import ru.tbank.safedeckteam.safedeck.service.CardService;
 import ru.tbank.safedeckteam.safedeck.web.dto.CardDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.CreatedCardDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.RenamedCardDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.UserCardsDTO;
 import ru.tbank.safedeckteam.safedeck.web.mapper.CardMapper;
 import ru.tbank.safedeckteam.safedeck.web.mapper.RoleMapper;
 
@@ -38,13 +40,16 @@ public class CardServiceImpl implements CardService {
     private final RoleMapper roleMapper;
 
     @Override
-    public List<CardDTO> findBoardCards(Long boardId, String email) {
+    public UserCardsDTO findBoardCards(Long boardId, String email) {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
         if (client.equals(board.getOwner())) {
-            return cardMapper.toDtoList(new ArrayList<>(board.getCards()));
+            return UserCardsDTO.builder()
+                    .accessibleCards(cardMapper.toDtoList(board.getCards()))
+                    .accessLevel(AccessLevel.OWNER)
+                    .build();
         }
 
         List<Role> userRolesOnBoard = client.getRoles().stream()
@@ -59,7 +64,10 @@ public class CardServiceImpl implements CardService {
         for (Role role : userRolesOnBoard) {
             accessibleCards.addAll(role.getCards());
         }
-        return cardMapper.toDtoList(accessibleCards);
+        return UserCardsDTO.builder()
+                .accessibleCards(cardMapper.toDtoList(accessibleCards))
+                .accessLevel(AccessLevel.PARTICIPANT)
+                .build();
     }
 
     @Override

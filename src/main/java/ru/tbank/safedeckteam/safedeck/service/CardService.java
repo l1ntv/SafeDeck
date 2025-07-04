@@ -3,12 +3,11 @@ package ru.tbank.safedeckteam.safedeck.service;
 import ru.tbank.safedeckteam.safedeck.web.dto.CardDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.CreatedCardDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.RenamedCardDTO;
-
-import java.util.List;
+import ru.tbank.safedeckteam.safedeck.web.dto.UserCardsDTO;
 
 public interface CardService {
 
-    List<CardDTO> findBoardCards(Long boardId, String email);
+    UserCardsDTO findBoardCards(Long boardId, String email);
 
     CardDTO create(Long boardId, String email, CreatedCardDTO card);
 
