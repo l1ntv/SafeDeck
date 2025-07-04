@@ -20,9 +20,9 @@ public class CreatedCardDTO {
     @Size(max = 50, message = "Card name cannot exceed 50 characters.")
     private String cardName;
 
-    @NotNull(message = "Description must be not null.")
-    @Size(max = 255, message = "Description cannot exceed 255 characters.")
-    private String description;
+    @NotNull(message = "Card description must be not null.")
+    @Size(max = 255, message = "Card description cannot exceed 255 characters.")
+    private String cardDescription;
 
     @NotNull(message = "Roles must be not null.")
     private List<RoleDTO> roles;
