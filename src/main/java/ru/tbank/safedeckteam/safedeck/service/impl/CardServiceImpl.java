@@ -1,7 +1,13 @@
 package ru.tbank.safedeckteam.safedeck.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import ru.tbank.safedeckteam.safedeck.model.*;
 import ru.tbank.safedeckteam.safedeck.model.enums.AccessLevel;
 import ru.tbank.safedeckteam.safedeck.model.exception.BoardNotFoundException;
@@ -13,10 +19,7 @@ import ru.tbank.safedeckteam.safedeck.repository.CardRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ColorRepository;
 import ru.tbank.safedeckteam.safedeck.service.CardService;
-import ru.tbank.safedeckteam.safedeck.web.dto.CardDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.CreatedCardDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.RenamedCardDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.UserCardsDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.*;
 import ru.tbank.safedeckteam.safedeck.web.mapper.CardMapper;
 import ru.tbank.safedeckteam.safedeck.web.mapper.RoleMapper;
 
@@ -38,6 +41,8 @@ public class CardServiceImpl implements CardService {
     private final CardMapper cardMapper;
 
     private final RoleMapper roleMapper;
+
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public UserCardsDTO findBoardCards(Long boardId, String email) {
@@ -86,7 +91,27 @@ public class CardServiceImpl implements CardService {
                 .color(color)
                 .build();
         card.setBoard(board);
-        return cardMapper.toDto(cardRepository.save(card));
+        card = cardRepository.save(card);
+
+        String url = "http://localhost:8081/encryption/encrypt";
+
+        EncryptDTO encryptDTO = EncryptDTO.builder()
+                .cardId(card.getId())
+                .credentials(dto.getSecureData())
+                .build();
+
+        ResponseEntity<Boolean> responseEntity = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                new HttpEntity<>(encryptDTO),
+                new ParameterizedTypeReference<Boolean>() {
+                }
+        );
+        Boolean result = responseEntity.getBody();
+        if (!result)
+            throw new ConflictResourceException("Secure data already exists.");
+
+        return cardMapper.toDto(card);
     }
 
     @Override

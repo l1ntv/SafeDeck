@@ -28,5 +28,5 @@ public class CreatedCardDTO {
     private List<RoleDTO> roles;
 
     @NotNull(message = "Secure data must be not null.")
-    private Map<String, String> secureData;
+    private List<CredentialPairDTO> secureData;
 }
