@@ -24,5 +24,6 @@
     <include file="v1-17-create-table-subscription_plan.xml" relativeToChangelogFile="true"/>
     <include file="v1-18-create-table-trusted_board_ip.xml" relativeToChangelogFile="true"/>
     <include file="v1-19-create-table-trusted_user_ip.xml" relativeToChangelogFile="true"/>
-    <include file="v1-20-add-foreign-keys.xml" relativeToChangelogFile="true"/>
+    <include file="v1-20-create-table-2FA.xml" relativeToChangelogFile="true"/>
+    <include file="v1-21-add-foreign-keys.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

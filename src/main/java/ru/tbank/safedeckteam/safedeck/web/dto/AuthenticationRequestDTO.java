@@ -22,6 +22,10 @@ public class AuthenticationRequestDTO {
     @Size(min = 6, message = "Password must be greater than 6.")
     private String password;
 
+    @NotNull(message = "Generated code must be not null.")
+    @Size(min = 5, max = 5, message = "Generated code cannot exceed 50 characters.")
+    private String generatedCode;
+
     private String IP;
 
     private String country;

@@ -1,12 +1,13 @@
 package ru.tbank.safedeckteam.safedeck.service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import ru.tbank.safedeckteam.safedeck.web.dto.AuthenticationRequestDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.AuthenticationResponseDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.RegistrationClientRequestDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.RegistrationResponseDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.*;
 
 public interface AuthenticationService {
+
+    void generateRegisterCode(GenerateRegisterCodeRequestDTO dto);
+
+    void generate2FACode(Generate2FACodeRequestDTO dto);
 
     RegistrationResponseDTO register(RegistrationClientRequestDTO request, HttpServletRequest httpServletRequest);
 

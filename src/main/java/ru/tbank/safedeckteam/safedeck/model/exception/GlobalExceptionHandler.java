@@ -35,6 +35,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(GeneratedCodeNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleGeneratedCodeNotFoundException(GeneratedCodeNotFoundException exception) {
+        ErrorResponseDTO error = new ErrorResponseDTO(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(ConflictResourceException.class)
     public ResponseEntity<ErrorResponseDTO> handleConflictResourceException(ConflictResourceException exception) {
         ErrorResponseDTO error = new ErrorResponseDTO(exception.getMessage());
@@ -51,5 +57,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleConnectionException(ConnectException exception) {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(new ErrorResponseDTO("The encryption service is not working."));
+    }
+
+    @ExceptionHandler(EmailNotSentException.class)
+    public ResponseEntity<ErrorResponseDTO> handleEmailNotSentException(EmailNotSentException exception) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(new ErrorResponseDTO("The email has not been sent."));
     }
 }

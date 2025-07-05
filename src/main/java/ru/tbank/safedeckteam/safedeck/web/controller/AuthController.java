@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tbank.safedeckteam.safedeck.service.AuthenticationService;
-import ru.tbank.safedeckteam.safedeck.web.dto.AuthenticationRequestDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.AuthenticationResponseDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.RegistrationClientRequestDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.RegistrationResponseDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -20,6 +17,18 @@ import ru.tbank.safedeckteam.safedeck.web.dto.RegistrationResponseDTO;
 public class AuthController {
 
     private final AuthenticationService authenticationService;
+
+    @PostMapping("/generate-register-code")
+    public ResponseEntity<Void> generateRegisterCode(@RequestBody GenerateRegisterCodeRequestDTO dto) {
+        authenticationService.generateRegisterCode(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/generate-2fa-code")
+    public ResponseEntity<Void> generate2FACode(@RequestBody Generate2FACodeRequestDTO dto) {
+        authenticationService.generate2FACode(dto);
+        return ResponseEntity.ok().build();
+    }
 
     @PostMapping("/register")
     public ResponseEntity<RegistrationResponseDTO> register(@RequestBody RegistrationClientRequestDTO request,
