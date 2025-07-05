@@ -148,4 +148,22 @@ public class CardServiceImpl implements CardService {
         card.setName(dto.getNewCardName());
         return cardMapper.toDto(cardRepository.save(card));
     }
+
+    @Override
+    public CardDTO changeDescription(String email, Long boardId, Long cardId, ChangedDescriptionCardDTO dto) {
+        Client client = clientRepository.findByEmail(email)
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new BoardNotFoundException("Board not found."));
+        if (!board.getOwner().getId().equals(client.getId())) {
+            throw new ConflictResourceException("The client is not the owner of the board.");
+        }
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new CardNotFoundException("Card not found."));
+        if (!card.getBoard().getId().equals(board.getId())) {
+            throw new ConflictResourceException("The card is not in this board.");
+        }
+        card.setDescription(dto.getNewCardDescription());
+        return cardMapper.toDto(cardRepository.save(card));
+    }
 }

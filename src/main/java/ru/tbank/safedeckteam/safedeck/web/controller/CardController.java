@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.tbank.safedeckteam.safedeck.service.CardService;
-import ru.tbank.safedeckteam.safedeck.web.dto.CardDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.CreatedCardDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.RenamedCardDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.UserCardsDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -43,12 +40,21 @@ public class CardController {
                 .build();
     }
 
-    @PatchMapping("/{boardId}/{cardId}")
+    @PatchMapping("/rename/{boardId}/{cardId}")
     public ResponseEntity<CardDTO> rename(@RequestBody RenamedCardDTO cardDTO,
                                           @PathVariable Long boardId,
                                           @PathVariable Long cardId,
                                           Principal principal) {
         return ResponseEntity.ok()
                 .body(cardService.rename(principal.getName(), boardId, cardId, cardDTO));
+    }
+
+    @PatchMapping("/change-description/{boardId}/{cardId}")
+    public ResponseEntity<CardDTO> changeDescription(@RequestBody ChangedDescriptionCardDTO cardDTO,
+                                          @PathVariable Long boardId,
+                                          @PathVariable Long cardId,
+                                          Principal principal) {
+        return ResponseEntity.ok()
+                .body(cardService.changeDescription(principal.getName(), boardId, cardId, cardDTO));
     }
 }
