@@ -9,5 +9,4 @@ public class SafeDeckApplication {
     public static void main(String[] args) {
         SpringApplication.run(SafeDeckApplication.class, args);
     }
-
 }

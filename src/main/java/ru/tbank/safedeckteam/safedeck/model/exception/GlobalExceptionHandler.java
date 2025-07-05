@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.tbank.safedeckteam.safedeck.web.dto.ErrorResponseDTO;
 
+import java.net.ConnectException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -43,5 +45,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleWrongDataException(WrongDataException exception) {
         ErrorResponseDTO error = new ErrorResponseDTO(exception.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    @ExceptionHandler(ConnectException.class)
+    public ResponseEntity<ErrorResponseDTO> handleConnectionException(ConnectException exception) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(new ErrorResponseDTO("The encryption service is not working."));
     }
 }

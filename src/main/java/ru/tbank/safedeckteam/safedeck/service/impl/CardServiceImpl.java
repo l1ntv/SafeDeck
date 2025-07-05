@@ -76,6 +76,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    @Transactional
     public CardDTO create(Long boardId, String email, CreatedCardDTO dto) {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
