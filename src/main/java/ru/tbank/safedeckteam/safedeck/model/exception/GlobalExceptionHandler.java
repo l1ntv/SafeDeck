@@ -41,6 +41,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(SendSecureNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleSendSecureNotFoundException(SendSecureNotFoundException exception) {
+        ErrorResponseDTO error = new ErrorResponseDTO(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(ConflictResourceException.class)
     public ResponseEntity<ErrorResponseDTO> handleConflictResourceException(ConflictResourceException exception) {
         ErrorResponseDTO error = new ErrorResponseDTO(exception.getMessage());

@@ -3,6 +3,7 @@ package ru.tbank.safedeckteam.safedeck.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,8 +30,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/auth/**", "/welcome", "/h2-console/**")
+                        auth -> auth.requestMatchers("/auth/**", "/welcome", "/h2-console/**", "/send-secure/{token}")
                                 .permitAll()
+                                .requestMatchers(HttpMethod.GET, "/send-secure/**").permitAll() // GET без авторизации
                                 .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/api.zaedu.com/v1/**")
                                 .permitAll()
                                 .anyRequest()
