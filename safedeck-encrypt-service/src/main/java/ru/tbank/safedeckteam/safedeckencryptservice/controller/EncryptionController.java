@@ -19,8 +19,8 @@ public class EncryptionController {
     private final EncryptionService encryptionService;
 
     @PostMapping("/encrypt")
-    public Boolean encryptCredentials(@Valid @RequestBody EncryptDTO dto) throws Exception {
-        return encryptionService.encryptCredentials(dto.getCardId(), dto.getCredentials());
+    public void encryptCredentials(@Valid @RequestBody EncryptDTO dto) throws Exception {
+        encryptionService.encryptCredentials(dto.getCardId(), dto.getCredentials());
     }
 
     @PostMapping("/decrypt")
