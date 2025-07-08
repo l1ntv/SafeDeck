@@ -47,6 +47,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleRoleNotFoundException(RoleNotFoundException exception) {
+        ErrorResponseDTO error = new ErrorResponseDTO(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(ConflictResourceException.class)
     public ResponseEntity<ErrorResponseDTO> handleConflictResourceException(ConflictResourceException exception) {
         ErrorResponseDTO error = new ErrorResponseDTO(exception.getMessage());

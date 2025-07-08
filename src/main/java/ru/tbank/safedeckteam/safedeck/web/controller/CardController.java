@@ -51,9 +51,9 @@ public class CardController {
 
     @PatchMapping("/change-description/{boardId}/{cardId}")
     public ResponseEntity<CardDTO> changeDescription(@RequestBody ChangedDescriptionCardDTO cardDTO,
-                                          @PathVariable Long boardId,
-                                          @PathVariable Long cardId,
-                                          Principal principal) {
+                                                     @PathVariable Long boardId,
+                                                     @PathVariable Long cardId,
+                                                     Principal principal) {
         return ResponseEntity.ok()
                 .body(cardService.changeDescription(principal.getName(), boardId, cardId, cardDTO));
     }

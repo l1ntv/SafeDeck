@@ -20,13 +20,7 @@ public class Role extends AbstractEntity {
     private String name;
 
     @Column(name = "board_id", nullable = false)
-    private int boardId;
-
-    @Column(name = "is_personal_role", nullable = false)
-    private boolean isPersonalRole;
-
-    @Column(name = "is_editor", nullable = false)
-    private boolean isEditor;
+    private Long boardId;
 
     @ManyToMany
     @JoinTable(

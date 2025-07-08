@@ -22,12 +22,6 @@
             <column name="board_id" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_personal_role" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-            <column name="is_editor" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
     </changeSet>
 

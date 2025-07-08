@@ -1,17 +1,19 @@
 package ru.tbank.safedeckteam.safedeck.web.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleDTO {
+public class RoleWithCardsDTO {
 
-    private Long roleId;
+    private Long id;
 
-    private String roleName;
+    private String name;
+
+    private List<CardDTO> cards;
 }

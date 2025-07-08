@@ -1,0 +1,2 @@
+MAIL=edifff2@yandex.ru
+PASSWORD=xnielnkwaligmrdq
