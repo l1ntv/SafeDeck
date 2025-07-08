@@ -20,7 +20,7 @@ public class RoleController {
     @GetMapping("/{boardId}")
     public ResponseEntity<List<RoleDTO>> getRoles(@PathVariable Long boardId,
                                                   Principal principal) {
-
+        return ResponseEntity.ok(roleService.findRoles(boardId, principal.getName()));
     }
 
     @PostMapping("/{boardId}")
@@ -46,5 +46,4 @@ public class RoleController {
                                                            Principal principal) {
         return ResponseEntity.ok(roleService.updateRole(roleId, boardId, cards, principal.getName()));
     }
-
 }
