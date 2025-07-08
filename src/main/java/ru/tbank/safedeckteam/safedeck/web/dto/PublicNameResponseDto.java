@@ -1,12 +1,12 @@
 package ru.tbank.safedeckteam.safedeck.web.dto;
 
+
 import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RenamedBoardDTO {
-
-    private String newBoardName;
+public class PublicNameResponseDto {
+    private String publicName;
 }

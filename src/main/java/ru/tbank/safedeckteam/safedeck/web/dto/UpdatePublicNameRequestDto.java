@@ -1,12 +1,14 @@
 package ru.tbank.safedeckteam.safedeck.web.dto;
 
+
+
 import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RenamedBoardDTO {
+public class UpdatePublicNameRequestDto {
 
-    private String newBoardName;
+    private String newPublicName;
 }
