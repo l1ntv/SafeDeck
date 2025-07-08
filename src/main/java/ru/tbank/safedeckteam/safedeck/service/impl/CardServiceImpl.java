@@ -101,16 +101,13 @@ public class CardServiceImpl implements CardService {
                 .credentials(dto.getSecureData())
                 .build();
 
-        ResponseEntity<Boolean> responseEntity = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 new HttpEntity<>(encryptDTO),
                 new ParameterizedTypeReference<Boolean>() {
                 }
         );
-        Boolean result = responseEntity.getBody();
-        if (!result)
-            throw new ConflictResourceException("Secure data already exists.");
 
         return cardMapper.toDto(card);
     }

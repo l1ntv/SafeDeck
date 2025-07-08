@@ -43,19 +43,20 @@ public class EncryptionServiceImpl implements EncryptionService {
     }
 
     @Override
-    public Boolean encryptCredentials(Long cardId, List<CredentialPairDTO> credentials) throws Exception {
-        if (secureRepository.existsByCardId(cardId))
-            return Boolean.FALSE;
-
+    public void encryptCredentials(Long cardId, List<CredentialPairDTO> credentials) throws Exception {
         String jsonData = objectMapper.writeValueAsString(credentials);
         String encrypt = encrypt(jsonData);
-
-        Secure secure = Secure.builder()
-                .cardId(cardId)
-                .data(encrypt)
-                .build();
+        Secure secure = null;
+        if (!secureRepository.existsByCardId(cardId)) {
+            secure = Secure.builder()
+                    .cardId(cardId)
+                    .data(encrypt)
+                    .build();
+        } else {
+            secure = secureRepository.findByCardId(cardId).get();
+            secure.setData(encrypt);
+        }
         secureRepository.save(secure);
-        return Boolean.TRUE;
     }
 
     @Override

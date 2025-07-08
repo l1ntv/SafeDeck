@@ -19,6 +19,7 @@ import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
 import ru.tbank.safedeckteam.safedeck.service.SecureDataService;
 import ru.tbank.safedeckteam.safedeck.web.dto.CredentialPairDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.DecryptDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.EncryptDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.SecureDataDTO;
 
 import java.util.Collections;
@@ -61,5 +62,33 @@ public class SecureDataServiceImpl implements SecureDataService {
         );
         List<CredentialPairDTO> body = responseEntity.getBody();
         return new SecureDataDTO(body);
+    }
+
+    @Override
+    public SecureDataDTO changeSecureData(Long cardId, List<CredentialPairDTO> credentials, String email) {
+        Client client = clientRepository.findByEmail(email)
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new CardNotFoundException("Card not found."));
+        Board board = card.getBoard();
+        if (board == null)
+            throw new ConflictResourceException("Card has no board.");
+        if (!board.getOwner().equals(client))
+            throw new ConflictResourceException("Client does not have the right to edit secure data.");
+
+        String url = "http://localhost:8081/encryption/encrypt";
+        EncryptDTO encryptDTO = EncryptDTO.builder()
+                .cardId(card.getId())
+                .credentials(credentials)
+                .build();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                new HttpEntity<>(encryptDTO),
+                new ParameterizedTypeReference<Boolean>() {
+                }
+        );
+        return new SecureDataDTO(credentials);
     }
 }
