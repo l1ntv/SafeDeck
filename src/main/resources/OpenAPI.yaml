@@ -472,6 +472,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponseDTO'
 
+#Эндпоинты контрольных вопросов#
   /questions/{boardId}:
     get:
       tags:
@@ -480,8 +481,210 @@ paths:
       operationId: getBoardQuestions
       security:
         - bearerAuth: [ ]
+      parameters:
+        - name: boardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-
+        '200':
+          description: Список контрольных вопросов доски успешно получен
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/QuestionDTO'
+    post:
+      tags:
+        - Работа с контрольными вопросами
+      summary: Создать контрольный вопрос
+      operationId: createControlQuestion
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: boardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Контрольный вопрос успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionDTO'
+  /questions/{boardId}/ids:
+    get:
+      tags:
+        - Работа с контрольными вопросами
+      summary: Получить все id контрольных вопросов доски
+      operationId: getBoardQuestionsIds
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: boardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Список id контрольных вопросов доски успешно получен
+          content:
+            application/json:
+              schema:
+                items:
+                  type: integer
+                  format: int64
+                  example: 303
+  /questions/by-id/{questionId}:
+    get:
+      tags:
+        - Работа с контрольными вопросами
+      summary: Получить контрольный вопрос по id
+      operationId: getQuestionById
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Контрольный вопрос получен успешно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionDTO'
+  /questions/{boardId}/{questionId}/delete:
+    delete:
+      tags:
+        - Работа с контрольными вопросами
+      summary: Удалить контрольный вопрос по id
+      operationId: deleteQuestion
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: boardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Контрольный вопрос успешно удалён
+  /questions/{boardId}/{questionId}/change-question:
+    patch:
+      tags:
+        - Работа с контрольными вопросами
+      summary: Изменить контрольный вопрос по id
+      operationId: changeQuestion
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: boardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangedQuestionDTO'
+      responses:
+        '200':
+          description: Контрольный вопрос успешно изменён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionDTO'
+  /questions/{boardId}/{questionId}/change-answer:
+    patch:
+      tags:
+        - Работа с контрольными вопросами
+      summary: Изменить ответ на контрольный вопрос по id
+      operationId: changeQuestionAnswer
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: boardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangedAnswerDTO'
+      responses:
+        '200':
+          description: Ответ на контрольный вопрос успешно изменён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionDTO'
+  /questions/{questionId}/check-question:
+    post:
+      tags:
+        - Работа с контрольными вопросами
+      summary: Проверить совпадает ли данный пользователем ответ с правильным ответом на LLM
+      operationId: changeQuestionAnswer
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GivenAnswerDTO'
+      responses:
+        '200':
+          description: Проверка прошла успешно
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: true
 
 components:
   schemas:
@@ -648,6 +851,40 @@ components:
           items:
             type: string
             example: "READ"
+    QuestionDTO:
+      type: object
+      properties:
+        questionId:
+          type: integer
+          format: int64
+          example: 303
+        question:
+          type: string
+          example: "Любимый питомец тимлида"
+        answer:
+          type: string
+          example: "Кот"
+    ChangedQuestionDTO:
+      type: object
+      properties:
+        newQuestion:
+          type: string
+          example: "Какой новый любимый питомец тимлида?"
+    ChangedAnswerDTO:
+      type: object
+      properties:
+        newAnswer:
+          type: string
+          example: "Пёс"
+    GivenAnswerDTO:
+      type: object
+      properties:
+        correctAnswer:
+          type: string
+          summary: Заполняется на беке
+        givenAnswer:
+          type: string
+          example: "Орёл"
 
   securitySchemes:
     bearerAuth:
