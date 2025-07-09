@@ -1,0 +1,26 @@
+package ru.tbank.safedeckteam.safedeck.web.dto;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import ru.tbank.safedeckteam.safedeck.model.Client;
+import ru.tbank.safedeckteam.safedeck.model.enums.AuthStatus;
+
+import java.time.LocalDateTime;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class CreatedLogDTO {
+
+    @NotNull(message = "Email must be not null")
+    private String email;
+
+    private LocalDateTime viewTime;
+
+    @NotNull(message = "CardId must be not null")
+    private Long cardId;
+}
