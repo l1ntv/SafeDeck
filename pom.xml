@@ -13,8 +13,15 @@
     <groupId>ru.tbank.safe-deck-team</groupId>
     <artifactId>SafeDeck</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>SafeDeck</name>
     <description>SafeDeck</description>
+    <modules>
+        <module>safedeck-llm</module>
+        <module>safedeck-encrypt-service</module>
+        <module>safedeck-email-service</module>
+        <module>root</module>
+    </modules>
 
     <properties>
         <java.version>17</java.version>
