@@ -1,4 +1,4 @@
-package ru.tbank.safedeckteam.safedeck.service.impl;
+    package ru.tbank.safedeckteam.safedeck.service.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +46,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
-    @Transactional
     public void generateRegisterCode(GenerateRegisterCodeRequestDTO dto) {
         String email = dto.getEmail();
         if (clientRepository.existsByEmail(email))
@@ -111,9 +110,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ConflictResourceException("User with this email already exists.");
         }
 
-        /* SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())
+        SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())
                 .orElseThrow(() -> new GeneratedCodeNotFoundException("Code not found."));
-        secondFARepository.delete(secondFA); */
+        secondFARepository.delete(secondFA);
 
         request.setIP(httpServletRequest.getRemoteAddr());
         request.setDevice(httpServletRequest.getHeader("User-Agent"));
@@ -151,9 +150,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var client = clientRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ClientNotFoundException("Client with this email not found."));
 
-        /*SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())
+        SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())
                 .orElseThrow(() -> new GeneratedCodeNotFoundException("Code not found."));
-        secondFARepository.delete(secondFA);*/
+        secondFARepository.delete(secondFA);
 
         try {
             authenticationManager.authenticate(
