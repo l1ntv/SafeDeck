@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "second_fa", schema = "public")@Getter
+@Table(name = "second_fa", schema = "public")
+@Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
