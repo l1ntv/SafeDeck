@@ -2,6 +2,7 @@ package ru.tbank.safedeckteam.safedeck.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tbank.safedeckteam.safedeck.model.Board;
 import ru.tbank.safedeckteam.safedeck.model.Card;
 import ru.tbank.safedeckteam.safedeck.model.Client;
@@ -80,6 +81,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional
     public RoleWithCardsDTO updateRole(Long roleId, Long boardId, List<AddedCardDTO> cards, String email) {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
@@ -100,16 +102,16 @@ public class RoleServiceImpl implements RoleService {
                 throw new ConflictResourceException("The card does not apply to this board.");
         }
 
-        List<Card> cardsEntites = new ArrayList<>();
+        List<Card> cardEntities = new ArrayList<>();
+
         for (AddedCardDTO dto : cards) {
             Card card = cardRepository.findById(dto.getCardId())
                     .orElseThrow(() -> new CardNotFoundException("Card not found."));
-            List<Role> roles = card.getRoles();
-            roles.add(role);
-            card.setRoles(roles);
-            cardRepository.save(card);
-            cardsEntites.add(card);
+            if (!card.getBoard().getId().equals(boardId))
+                throw new ConflictResourceException("The card does not apply to this board.");
+            role.getCards().add(card);
+            cardEntities.add(card);
         }
-        return new RoleWithCardsDTO(roleId, role.getName(), cardMapper.toDtoList(cardsEntites));
+        return new RoleWithCardsDTO(roleId, role.getName(), cardMapper.toDtoList(cardEntities));
     }
 }
