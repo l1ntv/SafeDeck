@@ -110,6 +110,7 @@ public class RoleServiceImpl implements RoleService {
             if (!card.getBoard().getId().equals(boardId))
                 throw new ConflictResourceException("The card does not apply to this board.");
             role.getCards().add(card);
+            card.getRoles().add(role); // <-- Добавляем роль в список ролей карточки
             cardEntities.add(card);
         }
         return new RoleWithCardsDTO(roleId, role.getName(), cardMapper.toDtoList(cardEntities));
