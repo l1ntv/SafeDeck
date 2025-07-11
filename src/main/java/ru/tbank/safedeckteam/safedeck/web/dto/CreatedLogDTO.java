@@ -1,5 +1,6 @@
 package ru.tbank.safedeckteam.safedeck.web.dto;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +19,9 @@ public class CreatedLogDTO {
 
     @NotNull(message = "Email must be not null")
     private String email;
+
+    @NotNull(message = "Http servlet request must be not null")
+    private HttpServletRequest httpServletRequest;
 
     private LocalDateTime viewTime;
 

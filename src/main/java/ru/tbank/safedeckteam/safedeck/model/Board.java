@@ -3,6 +3,7 @@ package ru.tbank.safedeckteam.safedeck.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.aspectj.weaver.patterns.TypePatternQuestions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,4 +41,7 @@ public class Board extends AbstractEntity {
 
     @OneToMany(mappedBy = "board")
     private List<ControlQuestion> controlQuestions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<SecureLog> secureLogs = new ArrayList<>();
 }
