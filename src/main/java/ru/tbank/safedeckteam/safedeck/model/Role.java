@@ -30,7 +30,7 @@ public class Role extends AbstractEntity {
     )
     private List<Client> clients = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "Role_to_Card",
             joinColumns = @JoinColumn(name = "role_id"),

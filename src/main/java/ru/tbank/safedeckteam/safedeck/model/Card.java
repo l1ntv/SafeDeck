@@ -30,7 +30,7 @@ public class Card extends AbstractEntity {
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-    @ManyToMany(mappedBy = "cards")
+    @ManyToMany(mappedBy = "cards", fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "card")

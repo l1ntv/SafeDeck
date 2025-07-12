@@ -13,10 +13,7 @@ import ru.tbank.safedeckteam.safedeck.repository.CardRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
 import ru.tbank.safedeckteam.safedeck.repository.RoleRepository;
 import ru.tbank.safedeckteam.safedeck.service.RoleService;
-import ru.tbank.safedeckteam.safedeck.web.dto.AddedCardDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.CardDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.RoleDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.RoleWithCardsDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.*;
 import ru.tbank.safedeckteam.safedeck.web.mapper.CardMapper;
 import ru.tbank.safedeckteam.safedeck.web.mapper.RoleMapper;
 
@@ -102,7 +99,6 @@ public class RoleServiceImpl implements RoleService {
                 throw new ConflictResourceException("The card does not apply to this board.");
         }
 
-        List<Card> cardEntities = new ArrayList<>();
 
         for (AddedCardDTO dto : cards) {
             Card card = cardRepository.findById(dto.getCardId())
@@ -111,8 +107,17 @@ public class RoleServiceImpl implements RoleService {
                 throw new ConflictResourceException("The card does not apply to this board.");
             role.getCards().add(card);
             card.getRoles().add(role); // <-- Добавляем роль в список ролей карточки
-            cardEntities.add(card);
+            cardRepository.save(card);
         }
-        return new RoleWithCardsDTO(roleId, role.getName(), cardMapper.toDtoList(cardEntities));
+        roleRepository.save(role);
+
+        Role updatedRole = roleRepository.findById(role.getId())
+                .orElseThrow(() -> new RoleNotFoundException("Role not found"));
+
+
+        return new RoleWithCardsDTO(
+                role.getId(),
+                role.getName(),
+                cardMapper.toDtoList(updatedRole.getCards()));
     }
 }

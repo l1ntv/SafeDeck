@@ -5,6 +5,8 @@ import org.mapstruct.Mapping;
 import ru.tbank.safedeckteam.safedeck.model.Role;
 import ru.tbank.safedeckteam.safedeck.web.dto.RoleDTO;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface RoleMapper extends Mappable<Role, RoleDTO> {
 
@@ -15,4 +17,8 @@ public interface RoleMapper extends Mappable<Role, RoleDTO> {
     @Mapping(source = "roleId", target = "id")
     @Mapping(source = "roleName", target = "name")
     Role toEntity(RoleDTO dto);
+
+    @Mapping(source = "id", target = "roleId")
+    @Mapping(source = "name", target = "roleName")
+    List<RoleDTO> toDtoList(List<Role> roles);
 }

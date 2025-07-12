@@ -5,9 +5,7 @@ import org.mapstruct.Mapping;
 import ru.tbank.safedeckteam.safedeck.model.Card;
 import ru.tbank.safedeckteam.safedeck.web.dto.CardDTO;
 
-import java.util.List;
-
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = RoleMapper.class)
 public interface CardMapper extends Mappable<Card, CardDTO> {
 
     @Mapping(source = "id", target = "cardId")
@@ -21,6 +19,4 @@ public interface CardMapper extends Mappable<Card, CardDTO> {
     @Mapping(source = "cardDescription", target = "description")
     @Mapping(source = "roles", target = "roles")
     Card toEntity(CardDTO dto);
-
-    List<CardDTO> toDtoList(List<Card> cards);
 }
