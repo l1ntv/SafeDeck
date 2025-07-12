@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: kafka
+    hostname: kafka
+    ports:
+      - "29092:29092"  # EXTERNAL порт для локальных приложений
+      - "9092:9092"    # INTERNAL порт для Kafka UI
+      - "9093:9093"    # CONTROLLER порт для KRaft
+    environment:
+      # KRaft Configuration
+      KAFKA_ENABLE_KRAFT: "yes"
+      KAFKA_CFG_PROCESS_ROLES: "controller,broker"
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CFG_NODE_ID: "1"
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+      KAFKA_KRAFT_CLUSTER_ID: "Adksdfonds_sAdsf"
+
+      # Listeners Configuration
+      KAFKA_CFG_LISTENERS: "INTERNAL://:9092,EXTERNAL://:29092,CONTROLLER://:9093"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "INTERNAL://kafka:9092,EXTERNAL://localhost:29092"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT"
+
+      # Broker Settings
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_JMX_PORT: "9102"
+
+      # Additional Settings
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
+    healthcheck:
+      test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "kafka:9092", "--list"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: "local"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9092"  # Используем INTERNAL listener
+      KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: "PLAINTEXT"
+    depends_on:
+      kafka:
+        condition: service_healthy
