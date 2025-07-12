@@ -120,4 +120,21 @@ public class RoleServiceImpl implements RoleService {
                 role.getName(),
                 cardMapper.toDtoList(updatedRole.getCards()));
     }
+
+    @Override
+    public RoleDTO renameRole(Long roleId, Long boardId, String newRoleName, String email) {
+        Client client = clientRepository.findByEmail(email)
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new BoardNotFoundException("Board not found."));
+        if (!client.getId().equals(board.getOwner().getId()))
+            throw new ConflictResourceException("The client is not the owner of the board.");
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new RoleNotFoundException("Role not found."));
+        if (!boardId.equals(role.getBoardId()))
+            throw new ConflictResourceException("The role does not apply to this board.");
+
+        role.setName(newRoleName);
+        return roleMapper.toDto(roleRepository.save(role));
+    }
 }

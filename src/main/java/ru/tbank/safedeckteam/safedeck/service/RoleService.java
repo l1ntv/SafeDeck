@@ -15,4 +15,6 @@ public interface RoleService {
     void deleteRole(Long boardId, Long roleId, String email);
 
     RoleWithCardsDTO updateRole(Long roleId, Long boardId, List<AddedCardDTO> cards, String email);
+
+    RoleDTO renameRole(Long roleId, Long boardId, String newRoleName, String email);
 }

@@ -12,4 +12,6 @@ public interface SecondFARepository extends JpaRepository<SecondFA, Long> {
     boolean existsByEmail(String email);
 
     Optional<SecondFA> findByEmailAndGeneratedCode(String email, String generatedCode);
+
+    SecondFA findByEmail(String email);
 }

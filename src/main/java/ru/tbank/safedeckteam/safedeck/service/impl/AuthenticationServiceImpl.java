@@ -1,4 +1,4 @@
-    package ru.tbank.safedeckteam.safedeck.service.impl;
+package ru.tbank.safedeckteam.safedeck.service.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +50,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String email = dto.getEmail();
         if (clientRepository.existsByEmail(email))
             throw new ConflictResourceException("Email already in use.");
-        if (secondFARepository.existsByEmail(email))
-            throw new ConflictResourceException("The code has already been sent.");
+        if (secondFARepository.existsByEmail(email)) {
+            SecondFA secondFA = secondFARepository.findByEmail(email);
+            secondFARepository.delete(secondFA);
+        }
         String code = generateCode();
         SecondFA secondFA = SecondFA.builder()
                 .email(email)
@@ -78,8 +80,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String email = dto.getEmail();
         if (!clientRepository.existsByEmail(email))
             throw new ClientNotFoundException("Client not registered yet.");
-        if (secondFARepository.existsByEmail(email))
-            throw new ConflictResourceException("The code has already been sent.");
+        if (secondFARepository.existsByEmail(email)) {
+            SecondFA secondFA = secondFARepository.findByEmail(email);
+            secondFARepository.delete(secondFA);
+        }
 
         String code = generateCode();
         SecondFA secondFA = SecondFA.builder()

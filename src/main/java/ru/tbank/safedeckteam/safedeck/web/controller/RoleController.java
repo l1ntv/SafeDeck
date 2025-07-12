@@ -46,4 +46,12 @@ public class RoleController {
                                                            Principal principal) {
         return ResponseEntity.ok(roleService.updateRole(roleId, boardId, cards, principal.getName()));
     }
+
+    @PatchMapping("/{boardId}/rename/{roleId}")
+    public ResponseEntity<RoleDTO> renameRole(@PathVariable Long roleId,
+                                              @PathVariable Long boardId,
+                                              @RequestBody RenamedRoleDTO dto,
+                                              Principal principal) {
+        return ResponseEntity.ok(roleService.renameRole(roleId, boardId, dto.getNewRoleName(), principal.getName()));
+    }
 }
