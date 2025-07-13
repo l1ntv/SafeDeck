@@ -1,6 +1,7 @@
 package ru.tbank.safedeckteam.safedeck.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -47,8 +48,12 @@ public class CardServiceImpl implements CardService {
     public UserCardsDTO findBoardCards(Long boardId, String email) {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
-        Board board = boardRepository.findById(boardId)
+        Board board = boardRepository.findWithCardsById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
+        for (Card card : board.getCards()) {
+            Hibernate.initialize(card.getRoles());
+        }
+
         if (client.equals(board.getOwner())) {
             return UserCardsDTO.builder()
                     .accessibleCards(cardMapper.toDtoList(board.getCards()))
@@ -99,14 +104,9 @@ public class CardServiceImpl implements CardService {
 
             List<Role> roles = roleRepository.findAllById(roleIds);
             card.setRoles(roles);
-
             for (Role role : roles) {
-                if (role.getCards() == null) {
-                    role.setCards(new ArrayList<>());
-                }
                 role.getCards().add(card);
             }
-            roleRepository.saveAll(roles);
         }
 
         card = cardRepository.save(card);
