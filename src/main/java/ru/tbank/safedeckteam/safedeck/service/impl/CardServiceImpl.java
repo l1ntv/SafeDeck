@@ -14,10 +14,7 @@ import ru.tbank.safedeckteam.safedeck.model.exception.BoardNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.CardNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.ClientNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.ConflictResourceException;
-import ru.tbank.safedeckteam.safedeck.repository.BoardRepository;
-import ru.tbank.safedeckteam.safedeck.repository.CardRepository;
-import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
-import ru.tbank.safedeckteam.safedeck.repository.ColorRepository;
+import ru.tbank.safedeckteam.safedeck.repository.*;
 import ru.tbank.safedeckteam.safedeck.service.CardService;
 import ru.tbank.safedeckteam.safedeck.web.dto.*;
 import ru.tbank.safedeckteam.safedeck.web.mapper.CardMapper;
@@ -37,6 +34,8 @@ public class CardServiceImpl implements CardService {
     private final ColorRepository colorRepository;
 
     private final CardRepository cardRepository;
+
+    private final RoleRepository roleRepository;
 
     private final CardMapper cardMapper;
 
@@ -85,14 +84,30 @@ public class CardServiceImpl implements CardService {
 
         Color color = colorRepository.save(Color.builder().rgbCode("DEFAULT").build());
 
+        List<Long> roleIds = dto.getRoles().stream()
+                .map(RoleDTO::getRoleId)
+                .toList();
+
+        List<Role> roles = roleRepository.findAllById(roleIds);
+
         Card card = Card.builder()
                 .name(dto.getCardName())
                 .description(dto.getCardDescription())
-                .roles(roleMapper.toEntityList(dto.getRoles()))
                 .color(color)
+                .board(board)
                 .build();
-        card.setBoard(board);
+
+        card.setRoles(roles);
+
+        for (Role role : roles) {
+            if (role.getCards() == null) {
+                role.setCards(new ArrayList<>());
+            }
+            role.getCards().add(card);
+        }
+
         card = cardRepository.save(card);
+        roleRepository.saveAll(roles);
 
         String url = "http://localhost:8081/encryption/encrypt";
 
