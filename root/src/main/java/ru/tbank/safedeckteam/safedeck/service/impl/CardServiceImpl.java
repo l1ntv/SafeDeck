@@ -48,7 +48,7 @@ public class CardServiceImpl implements CardService {
     public UserCardsDTO findBoardCards(Long boardId, String email) {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
-        Board board = boardRepository.findWithCardsById(boardId)
+        Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
         for (Card card : board.getCards()) {
             Hibernate.initialize(card.getRoles());
