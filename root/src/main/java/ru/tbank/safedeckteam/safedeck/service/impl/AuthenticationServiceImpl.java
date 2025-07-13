@@ -114,9 +114,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ConflictResourceException("User with this email already exists.");
         }
 
-        SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())
+        /*SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())
                 .orElseThrow(() -> new GeneratedCodeNotFoundException("Code not found."));
-        secondFARepository.delete(secondFA);
+        secondFARepository.delete(secondFA);*/
 
         request.setIP(httpServletRequest.getRemoteAddr());
         request.setDevice(httpServletRequest.getHeader("User-Agent"));

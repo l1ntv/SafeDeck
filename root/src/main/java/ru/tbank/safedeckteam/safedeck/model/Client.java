@@ -54,6 +54,9 @@ public class Client extends AbstractEntity implements UserDetails {
     )
     private List<Board> boards = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "clients")
+    private List<Board> memberBoards = new ArrayList<>();
+
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClientToSubscription> subscriptions = new ArrayList<>();
 

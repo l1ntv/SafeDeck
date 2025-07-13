@@ -7,7 +7,6 @@ import ru.tbank.safedeckteam.safedeck.service.CardService;
 import ru.tbank.safedeckteam.safedeck.web.dto.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/cards")

@@ -2,6 +2,7 @@ package ru.tbank.safedeckteam.safedeck.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tbank.safedeckteam.safedeck.model.Board;
 import ru.tbank.safedeckteam.safedeck.model.Client;
 import ru.tbank.safedeckteam.safedeck.model.Color;
@@ -37,10 +38,12 @@ public class BoardServiceImpl implements BoardService {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         List<Board> boards = client.getBoards();
+        boards.addAll(client.getMemberBoards());
         return boardMapper.toDtoList(boards);
     }
 
     @Override
+    @Transactional
     public BoardDTO createBoard(CreatedUserBoardDTO createdUserBoardDTO, String email) {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));

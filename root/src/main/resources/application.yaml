@@ -1,6 +1,18 @@
 server:
   port: 8080
 
+springdoc:
+  swagger-ui:
+    enabled: true
+  openapi:
+    urls:
+      - /v3/api-docs
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 spring:
   security:
     enabled: false

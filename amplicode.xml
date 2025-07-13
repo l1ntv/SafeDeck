@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AmplicodePersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit moduleName="root" name="Default">
+        <packages>
+          <package value="ru.tbank.safedeckteam.safedeck" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="safedeck-encrypt-service" name="Default">
+        <packages>
+          <package value="ru.tbank.safedeckteam.safedeckencryptservice" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="safedeck-llm" name="Default">
+        <packages>
+          <package value="ru.tbank.safedeckteam.safedeckllm" />
+        </packages>
+      </persistence-unit>
+    </persistence-units>
+  </component>
+</project>
