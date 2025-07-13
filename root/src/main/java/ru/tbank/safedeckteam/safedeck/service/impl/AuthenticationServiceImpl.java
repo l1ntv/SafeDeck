@@ -24,7 +24,6 @@ import ru.tbank.safedeckteam.safedeck.repository.SecondFARepository;
 import ru.tbank.safedeckteam.safedeck.service.AuthenticationService;
 import ru.tbank.safedeckteam.safedeck.web.dto.*;
 
-import java.util.List;
 import java.util.Random;
 
 @Service
@@ -151,7 +150,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request) {
-        var client = clientRepository.findByEmail(request.getEmail())
+        var client = clientRepository.findOptionalByEmail(request.getEmail())
                 .orElseThrow(() -> new ClientNotFoundException("Client with this email not found."));
 
         SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())

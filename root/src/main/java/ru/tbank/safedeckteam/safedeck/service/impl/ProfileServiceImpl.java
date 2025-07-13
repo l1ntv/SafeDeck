@@ -17,7 +17,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public PublicNameResponseDTO getCurrentUserPublicName(String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Client not found."));
         return new PublicNameResponseDTO(client.getPublicName());
     }
@@ -25,7 +25,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     @Transactional
     public PublicNameResponseDTO updatePublicName(String email, UpdatePublicNameRequestDTO requestDto) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Client not found."));
         client.setPublicName(requestDto.getNewPublicName());
         clientRepository.save(client);

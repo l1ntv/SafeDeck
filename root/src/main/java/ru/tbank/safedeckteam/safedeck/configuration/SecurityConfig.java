@@ -9,6 +9,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -28,19 +29,28 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/auth/**", "/welcome", "/h2-console/**", "/send-secure/{token}")
-                                .permitAll()
-                                .requestMatchers(HttpMethod.GET, "/send-secure/**").permitAll() // GET без авторизации
-                                .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/api.zaedu.com/v1/**")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/h2-console/**") // игнорируем CSRF для H2
+                        .disable()
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**", "/welcome", "/h2-console/**", "/send-secure/{token}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/send-secure/**").permitAll() // GET без авторизации
+                        .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/api.zaedu.com/v1/**").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll() // разрешаем доступ к H2
+                        .anyRequest().authenticated()
+                )
+                .headers(headers -> headers
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable) // разрешаем отображение H2 в iframe
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(Customizer.withDefaults());
+
         return http.build();
     }
 

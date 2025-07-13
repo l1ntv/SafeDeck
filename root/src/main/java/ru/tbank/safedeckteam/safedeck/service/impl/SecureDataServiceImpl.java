@@ -37,7 +37,7 @@ public class SecureDataServiceImpl implements SecureDataService {
 
     @Override
     public SecureDataDTO findSecureData(Long cardId, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new CardNotFoundException("Card not found."));
@@ -66,7 +66,7 @@ public class SecureDataServiceImpl implements SecureDataService {
 
     @Override
     public SecureDataDTO changeSecureData(Long cardId, List<CredentialPairDTO> credentials, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new CardNotFoundException("Card not found."));

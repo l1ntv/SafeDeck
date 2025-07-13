@@ -43,12 +43,12 @@ public class Client extends AbstractEntity implements UserDetails {
     @Column(name = "is_subscriber")
     private Boolean isSubscriber;
 
-    @ManyToMany(mappedBy = "clients")
+    @ManyToMany(mappedBy = "clients", fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "owner",
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )

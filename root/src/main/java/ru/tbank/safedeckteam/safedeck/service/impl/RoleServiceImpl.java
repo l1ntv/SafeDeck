@@ -38,7 +38,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleDTO> findRoles(Long boardId, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
@@ -49,7 +49,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleDTO createRole(Long boardId, String roleName, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
@@ -64,7 +64,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void deleteRole(Long boardId, Long roleId, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
@@ -80,7 +80,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public RoleWithCardsDTO updateRole(Long roleId, Long boardId, List<AddedCardDTO> cards, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
@@ -117,7 +117,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleDTO renameRole(Long roleId, Long boardId, String newRoleName, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));

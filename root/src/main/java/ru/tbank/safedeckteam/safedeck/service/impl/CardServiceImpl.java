@@ -5,7 +5,6 @@ import org.hibernate.Hibernate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +18,6 @@ import ru.tbank.safedeckteam.safedeck.repository.*;
 import ru.tbank.safedeckteam.safedeck.service.CardService;
 import ru.tbank.safedeckteam.safedeck.web.dto.*;
 import ru.tbank.safedeckteam.safedeck.web.mapper.CardMapper;
-import ru.tbank.safedeckteam.safedeck.web.mapper.RoleMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +42,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public UserCardsDTO findBoardCards(Long boardId, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
@@ -61,9 +59,8 @@ public class CardServiceImpl implements CardService {
         if (!board.getClients().contains(client))
             throw new ConflictResourceException("The client does not have the right to view this board.");
 
-        List<Role> userRolesOnBoard = client.getRoles().stream()
-                .filter(role -> role.getBoardId().equals(board.getId()))
-                .toList();
+        List<Role> userRolesOnBoard = roleRepository.findRolesByClientIdAndBoardId(client.getId(), boardId);
+
         if (userRolesOnBoard.isEmpty())
             throw new ConflictResourceException("Client has no roles on this board.");
         List<Card> accessibleCards = new ArrayList<>();
@@ -79,7 +76,7 @@ public class CardServiceImpl implements CardService {
     @Override
     @Transactional
     public CardDTO create(Long boardId, String email, CreatedCardDTO dto) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
@@ -126,7 +123,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public void delete(Long boardId, Long cardId, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
@@ -142,7 +139,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDTO rename(String email, Long boardId, Long cardId, RenamedCardDTO dto) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
@@ -158,7 +155,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDTO changeDescription(String email, Long boardId, Long cardId, ChangedDescriptionCardDTO dto) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));

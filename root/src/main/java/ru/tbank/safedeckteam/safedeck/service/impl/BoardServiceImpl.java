@@ -8,7 +8,6 @@ import ru.tbank.safedeckteam.safedeck.model.Client;
 import ru.tbank.safedeckteam.safedeck.model.Color;
 import ru.tbank.safedeckteam.safedeck.model.exception.BoardNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.ClientNotFoundException;
-import ru.tbank.safedeckteam.safedeck.model.exception.ColorNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.ConflictResourceException;
 import ru.tbank.safedeckteam.safedeck.repository.BoardRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
@@ -35,7 +34,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<BoardDTO> findUserBoards(String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         List<Board> boards = client.getBoards();
         boards.addAll(client.getMemberBoards());
@@ -45,7 +44,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public BoardDTO createBoard(CreatedUserBoardDTO createdUserBoardDTO, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
 
         Color color = Color.builder()
@@ -63,7 +62,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public BoardDTO renameBoard(Long boardId, RenamedBoardDTO renamedBoardDTO, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
@@ -76,7 +75,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void deleteBoard(Long boardId, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));

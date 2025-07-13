@@ -15,5 +15,7 @@ public class BoardMemberDTO {
 
     private String publicName;
 
+    private String email;
+
     private List<RoleDTO> roles;
 }

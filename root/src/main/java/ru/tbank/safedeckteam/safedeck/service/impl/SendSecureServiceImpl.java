@@ -43,7 +43,7 @@ public class SendSecureServiceImpl implements SendSecureService {
 
     @Override
     public SendSecureDTO createSendSecureLink(Long cardId, String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found"));
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new CardNotFoundException("Card not found."));
