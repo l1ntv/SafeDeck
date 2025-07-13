@@ -33,11 +33,11 @@ public class BoardMembersController {
     }
 
     @PatchMapping("/{boardId}/{memberId}")
-    public ResponseEntity<BoardMembersDTO> updateBoardMember(@PathVariable Long boardId,
+    public ResponseEntity<BoardMemberDTO> updateBoardMember(@PathVariable Long boardId,
                                                              @PathVariable Long memberId,
                                                              @RequestBody List<RoleDTO> roles,
                                                              Principal principal) {
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(boardMembersService.updateBoardMember(boardId, memberId, roles, principal.getName()));
     }
 
     @DeleteMapping("/{boardId}/{memberId}")

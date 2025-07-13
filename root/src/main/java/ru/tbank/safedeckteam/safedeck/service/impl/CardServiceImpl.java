@@ -136,6 +136,7 @@ public class CardServiceImpl implements CardService {
                 .orElseThrow(() -> new CardNotFoundException("Card not found."));
         if (!board.getId().equals(card.getBoard().getId()))
             throw new ConflictResourceException("The card is not in this board.");
+        card.getRoles().forEach(role -> role.getCards().remove(card));
         cardRepository.deleteById(cardId);
     }
 

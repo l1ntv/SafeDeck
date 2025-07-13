@@ -92,23 +92,17 @@ public class RoleServiceImpl implements RoleService {
         if (!boardId.equals(role.getBoardId()))
             throw new ConflictResourceException("The role does not apply to this board.");
 
+        List<Card> cardEntites = new ArrayList<>();
         for (AddedCardDTO dto : cards) {
             Card card = cardRepository.findById(dto.getCardId())
                     .orElseThrow(() -> new CardNotFoundException("Card not found."));
             if (!card.getBoard().getId().equals(boardId))
                 throw new ConflictResourceException("The card does not apply to this board.");
+            if (!card.getRoles().contains(role))
+                card.getRoles().add(role);
+            cardEntites.add(card);
         }
-
-
-        for (AddedCardDTO dto : cards) {
-            Card card = cardRepository.findById(dto.getCardId())
-                    .orElseThrow(() -> new CardNotFoundException("Card not found."));
-            if (!card.getBoard().getId().equals(boardId))
-                throw new ConflictResourceException("The card does not apply to this board.");
-            role.getCards().add(card);
-            card.getRoles().add(role); // <-- Добавляем роль в список ролей карточки
-            cardRepository.save(card);
-        }
+        role.setCards(cardEntites);
         roleRepository.save(role);
 
         Role updatedRole = roleRepository.findById(role.getId())
