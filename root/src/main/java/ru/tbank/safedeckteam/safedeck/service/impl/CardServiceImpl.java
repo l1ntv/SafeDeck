@@ -84,11 +84,6 @@ public class CardServiceImpl implements CardService {
 
         Color color = colorRepository.save(Color.builder().rgbCode("DEFAULT").build());
 
-        List<Long> roleIds = dto.getRoles().stream()
-                .map(RoleDTO::getRoleId)
-                .toList();
-
-        List<Role> roles = roleRepository.findAllById(roleIds);
 
         Card card = Card.builder()
                 .name(dto.getCardName())
@@ -97,18 +92,24 @@ public class CardServiceImpl implements CardService {
                 .board(board)
                 .build();
 
-        card.setRoles(roles);
+        if (dto.getRoles() != null) {
+            List<Long> roleIds = dto.getRoles().stream()
+                    .map(RoleDTO::getRoleId)
+                    .toList();
 
-        for (Role role : roles) {
-            if (role.getCards() == null) {
-                role.setCards(new ArrayList<>());
+            List<Role> roles = roleRepository.findAllById(roleIds);
+            card.setRoles(roles);
+
+            for (Role role : roles) {
+                if (role.getCards() == null) {
+                    role.setCards(new ArrayList<>());
+                }
+                role.getCards().add(card);
             }
-            role.getCards().add(card);
+            roleRepository.saveAll(roles);
         }
 
         card = cardRepository.save(card);
-        roleRepository.saveAll(roles);
-
         String url = "http://localhost:8081/encryption/encrypt";
 
         EncryptDTO encryptDTO = EncryptDTO.builder()
