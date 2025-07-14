@@ -1,6 +1,7 @@
 package ru.tbank.safedeckteam.safedeck.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tbank.safedeckteam.safedeck.model.Board;
@@ -168,15 +169,32 @@ public class BoardMembersServiceImpl implements BoardMembersService {
 
         Client member = clientRepository.findById(memberId)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
-        List<Client> boardClients = board.getClients();
-        if (!boardClients.contains(member))
-            throw new ConflictResourceException("The client is not the member of the board.");
+
+        if (!board.getClients().contains(member))
+            throw new ConflictResourceException("The client is not a member of the board.");
+
+        // Удалить клиента из доски
         board.getClients().remove(member);
         boardRepository.save(board);
 
-        member.getRoles().removeIf(role -> role.getBoardId().equals(boardId));
-        clientRepository.save(client);
+        // Найти все роли клиента, связанные с этой доской
+        List<Role> rolesToRemove = roleRepository.findAllByBoardIdAndClients_Id(boardId, memberId);
 
-        return new BoardMemberDTO(member.getId(), member.getPublicName(), member.getEmail(), roleMapper.toDtoList(member.getRoles()));
+        for (Role role : rolesToRemove) {
+            Hibernate.initialize(role.getClients()); // Инициализируем коллекцию
+            role.getClients().remove(member);        // Удаляем клиента из роли
+            roleRepository.save(role);               // Сохраняем изменения в роли
+        }
+
+        // Удаляем роли у клиента
+        member.getRoles().removeAll(rolesToRemove);
+        clientRepository.save(member);
+
+        return new BoardMemberDTO(
+                member.getId(),
+                member.getPublicName(),
+                member.getEmail(),
+                roleMapper.toDtoList(member.getRoles())
+        );
     }
 }
