@@ -6,12 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tbank.safedeckteam.safedeck.model.Board;
 import ru.tbank.safedeckteam.safedeck.model.Client;
 import ru.tbank.safedeckteam.safedeck.model.Color;
+import ru.tbank.safedeckteam.safedeck.model.Role;
 import ru.tbank.safedeckteam.safedeck.model.exception.BoardNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.ClientNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.ConflictResourceException;
 import ru.tbank.safedeckteam.safedeck.repository.BoardRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ColorRepository;
+import ru.tbank.safedeckteam.safedeck.repository.RoleRepository;
 import ru.tbank.safedeckteam.safedeck.service.BoardService;
 import ru.tbank.safedeckteam.safedeck.web.dto.CreatedUserBoardDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.RenamedBoardDTO;
@@ -31,6 +33,8 @@ public class BoardServiceImpl implements BoardService {
     private final BoardMapper boardMapper;
 
     private final ColorRepository colorRepository;
+
+    private final RoleRepository roleRepository;
 
     @Override
     public List<BoardDTO> findUserBoards(String email) {
@@ -74,6 +78,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void deleteBoard(Long boardId, String email) {
         Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
@@ -82,6 +87,10 @@ public class BoardServiceImpl implements BoardService {
         if (!board.getOwner().getId().equals(client.getId())) {
             throw new ConflictResourceException("The board does not belong to this client.");
         }
+        client.getBoards().remove(board);
+
+        roleRepository.deleteAllByBoardId(boardId);
         boardRepository.delete(board);
+        clientRepository.save(client);
     }
 }

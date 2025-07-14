@@ -8,11 +8,16 @@
     <changeSet id="1750948462324-11" author="lintv (generated)">
         <createTable tableName="role_to_card">
             <column name="card_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_role_to_card"/>
+                <constraints nullable="false"/>
             </column>
             <column name="role_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_role_to_card"/>
+                <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <!-- Устанавливаем составной первичный ключ -->
+        <addPrimaryKey columnNames="card_id, role_id"
+                       constraintName="pk_role_to_card"
+                       tableName="role_to_card"/>
     </changeSet>
 </databaseChangeLog>

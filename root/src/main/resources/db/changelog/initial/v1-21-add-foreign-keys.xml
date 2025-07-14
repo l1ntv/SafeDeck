@@ -61,7 +61,8 @@
     <changeSet id="1750948462324-33" author="lintv (generated)">
         <addForeignKeyConstraint baseColumnNames="card_id" baseTableName="role_to_card"
                                  constraintName="FK_ROLTOCAR_ON_CARD" referencedColumnNames="id"
-                                 referencedTableName="card"/>
+                                 referencedTableName="card"
+                                 onDelete="CASCADE"/>
     </changeSet>
     <changeSet id="1750948462324-34" author="lintv (generated)">
         <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="role_to_card"

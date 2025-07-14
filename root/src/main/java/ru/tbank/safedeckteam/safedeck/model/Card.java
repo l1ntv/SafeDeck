@@ -3,6 +3,8 @@ package ru.tbank.safedeckteam.safedeck.model;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,7 @@ public class Card extends AbstractEntity {
     private Board board;
 
     @ManyToMany(mappedBy = "cards", fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "card")

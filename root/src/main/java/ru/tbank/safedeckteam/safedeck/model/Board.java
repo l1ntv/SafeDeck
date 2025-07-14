@@ -35,9 +35,9 @@ public class Board extends AbstractEntity {
     )
     private List<Client> clients = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Card> cards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<ControlQuestion> controlQuestions = new ArrayList<>();
 }

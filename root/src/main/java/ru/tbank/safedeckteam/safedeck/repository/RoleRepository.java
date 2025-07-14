@@ -18,4 +18,6 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     List<Role> findRolesByClientIdAndBoardId(@Param("clientId") Long clientId, @Param("boardId") Long boardId);
 
     List<Role> findAllByClients_Id(Long clientsId);
+
+    void deleteAllByBoardId(Long boardId);
 }
