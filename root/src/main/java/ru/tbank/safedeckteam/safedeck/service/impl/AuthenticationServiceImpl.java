@@ -1,5 +1,7 @@
-    package ru.tbank.safedeckteam.safedeck.service.impl;
+package ru.tbank.safedeckteam.safedeck.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import ru.tbank.safedeckteam.safedeck.configuration.JwtService;
+import ru.tbank.safedeckteam.safedeck.kafka.KafkaProducerService;
 import ru.tbank.safedeckteam.safedeck.model.Client;
 import ru.tbank.safedeckteam.safedeck.model.IP;
 import ru.tbank.safedeckteam.safedeck.model.SecondFA;
@@ -24,12 +27,13 @@ import ru.tbank.safedeckteam.safedeck.repository.SecondFARepository;
 import ru.tbank.safedeckteam.safedeck.service.AuthenticationService;
 import ru.tbank.safedeckteam.safedeck.web.dto.*;
 
-import java.util.List;
 import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
+
+    private final KafkaProducerService kafkaProducerService;
 
     private final ClientRepository clientRepository;
 
@@ -58,19 +62,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .generatedCode(code)
                 .build();
 
-        String url = "http://localhost:8087/mail/send-register-code";
-
-        ResponseEntity<SendEmailResponseDTO> responseEntity = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                new HttpEntity<>(new SendRegisterCodeDTO(email, code)),
-                new ParameterizedTypeReference<SendEmailResponseDTO>() {
-                }
-        );
-        SendEmailResponseDTO sendEmailResponseDTO = responseEntity.getBody();
-        if (!sendEmailResponseDTO.getIsSuccess())
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            kafkaProducerService.sendRegisterCode(mapper.writeValueAsString(new SendRegisterCodeDTO(email, code)));
+        } catch (JsonProcessingException e) {
             throw new EmailNotSentException("The email has not been sent.");
+        }
+
         secondFARepository.save(secondFA);
+
     }
 
     @Override
@@ -87,18 +87,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .generatedCode(code)
                 .build();
 
-        String url = "http://localhost:8087/mail/send-2fa-code";
-
-        ResponseEntity<SendEmailResponseDTO> responseEntity = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                new HttpEntity<>(new Send2FACodeDTO(email, code)),
-                new ParameterizedTypeReference<SendEmailResponseDTO>() {
-                }
-        );
-        SendEmailResponseDTO sendEmailResponseDTO = responseEntity.getBody();
-        if (!sendEmailResponseDTO.getIsSuccess())
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            kafkaProducerService.send2FACode(mapper.writeValueAsString(new Send2FACodeDTO(email, code)));
+        } catch (JsonProcessingException e) {
             throw new EmailNotSentException("The email has not been sent.");
+        }
+
         secondFARepository.save(secondFA);
     }
 

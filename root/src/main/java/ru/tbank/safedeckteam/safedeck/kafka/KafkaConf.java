@@ -1,4 +1,4 @@
-package ru.tbank.safedeckteam.safedeckemailservice.kafka;
+package ru.tbank.safedeckteam.safedeck.kafka;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -8,7 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.core.*;
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.ProducerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,24 +33,6 @@ public class KafkaConf {
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
-    }
-
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, String> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(new DefaultKafkaConsumerFactory<>(consumerConfigs()));
-        return factory;
-    }
-
-    @Bean
-    public Map<String, Object> consumerConfigs() {
-        Map<String, Object> props = new HashMap<>();
-        props.put("bootstrap.servers", bootstrap_servers_config);
-        props.put("group.id", "email-service-group");
-        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        return props;
     }
 
     @Bean

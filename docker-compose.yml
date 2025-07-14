@@ -40,7 +40,7 @@ services:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
     ports:
-      - "8080:8080"
+      - "8085:8080"
     environment:
       KAFKA_CLUSTERS_0_NAME: "local"
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9092"  # Используем INTERNAL listener
@@ -48,3 +48,60 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
+
+  root:
+    build:
+      context: ./root
+    container_name: root
+    environment:
+      BOOTSTRAP_SERVERS: "kafka:9092"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kafka
+      - safedeck-email-service
+      - safedeck-encrypt-service
+      - safedeck-llm
+
+  safedeck-email-service:
+    build:
+      context: ./safedeck-email-service
+    container_name: safedeck-email-service
+    environment:
+      MAIL: ${MAIL}
+      PASSWORD: ${MAIL_PASSWORD}
+      BOOTSTRAP_SERVERS : "kafka:9092"
+    ports:
+      - "8081:8080"
+    depends_on:
+      - kafka
+
+  safedeck-encrypt-service:
+    build:
+      context: ./safedeck-encrypt-service
+    container_name: safedeck-encrypt-service
+    ports:
+      - "8082:8080"
+
+  safedeck-llm:
+    build:
+      context: ./safedeck-llm
+    container_name: safedeck-llm
+    ports:
+      - "8083:8080"
+
+# Если нужна база данных, раскомментируйте и настройте:
+#  db:
+#    image: postgres:17
+#    container_name: db
+#    environment:
+#      POSTGRES_DB: safedeck
+#      POSTGRES_USER: safedeck
+#      POSTGRES_PASSWORD: safedeck
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - db_data:/var/lib/postgresql/data
+#
+#volumes:
+#  db_data:

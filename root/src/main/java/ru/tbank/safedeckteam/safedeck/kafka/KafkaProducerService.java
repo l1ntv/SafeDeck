@@ -1,4 +1,4 @@
-package ru.tbank.safedeckteam.safedeckemailservice.kafka;
+package ru.tbank.safedeckteam.safedeck.kafka;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
