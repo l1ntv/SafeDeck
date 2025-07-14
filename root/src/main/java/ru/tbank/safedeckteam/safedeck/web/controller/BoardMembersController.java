@@ -25,6 +25,13 @@ public class BoardMembersController {
         return ResponseEntity.ok(boardMembersService.getBoardMembers(boardId, principal.getName()));
     }
 
+    @GetMapping("/{boardId}/{memberId}")
+    public ResponseEntity<BoardMemberDTO> getBoardMember(@PathVariable Long boardId,
+                                                         @PathVariable Long memberId,
+                                                         Principal principal) {
+        return ResponseEntity.ok(boardMembersService.getBoardMember(boardId, memberId, principal.getName()));
+    }
+
     @PostMapping("/{boardId}")
     public ResponseEntity<BoardMemberDTO> addBoardMember(@PathVariable Long boardId,
                                                          @RequestBody AddedBoardMemberDTO dto,

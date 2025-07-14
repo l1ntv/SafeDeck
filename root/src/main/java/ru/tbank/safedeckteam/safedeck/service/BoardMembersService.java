@@ -9,6 +9,8 @@ public interface BoardMembersService {
 
     List<BoardMemberDTO> getBoardMembers(Long boardId, String email);
 
+    BoardMemberDTO getBoardMember(Long boardId, Long memberId, String email);
+
     BoardMemberDTO updateBoardMember(Long boardId, Long memberId, List<RoleDTO> roles, String email);
 
     BoardMemberDTO addBoardMember(Long boardId, AddedBoardMemberDTO dto, String email);

@@ -58,6 +58,24 @@ public class BoardMembersServiceImpl implements BoardMembersService {
     }
 
     @Override
+    public BoardMemberDTO getBoardMember(Long boardId, Long memberId, String email) {
+        Client client = clientRepository.findOptionalByEmail(email)
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new BoardNotFoundException("Board not found."));
+        if (!board.getOwner().equals(client))
+            throw new ConflictResourceException("The client is not the owner of the board.");
+        Client member = clientRepository.findById(memberId)
+                .orElseThrow(() -> new ClientNotFoundException("Member not found."));
+        if (!board.getClients().contains(member))
+            throw new ConflictResourceException("The client is not a member of this board.");
+        return new BoardMemberDTO(member.getId(),
+                member.getPublicName(),
+                member.getEmail(),
+                roleMapper.toDtoList(member.getRoles()));
+    }
+
+    @Override
     public BoardMemberDTO updateBoardMember(Long boardId, Long memberId, List<RoleDTO> roles, String email) {
         Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
