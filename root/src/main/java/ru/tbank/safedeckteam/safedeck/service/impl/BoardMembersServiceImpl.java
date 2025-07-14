@@ -102,6 +102,8 @@ public class BoardMembersServiceImpl implements BoardMembersService {
 
         Client member = clientRepository.findOptionalByEmail(dto.getEmail())
                 .orElseThrow(() -> new ClientNotFoundException("Member not found."));
+        if (owner.getId().equals(member.getId()))
+            throw new ConflictResourceException("The owner of the board cannot invite himself.");
 
         Client finalMember = member;
         if (board.getClients().stream().anyMatch(c -> c.equals(finalMember))) {
