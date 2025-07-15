@@ -18,7 +18,7 @@ public class RoleController {
     private final RoleService roleService;
 
     @GetMapping("/{boardId}")
-    public ResponseEntity<List<RoleDTO>> getRoles(@PathVariable Long boardId,
+    public ResponseEntity<List<RoleWithCardsDTO>> getRoles(@PathVariable Long boardId,
                                                   Principal principal) {
         return ResponseEntity.ok(roleService.findRoles(boardId, principal.getName()));
     }

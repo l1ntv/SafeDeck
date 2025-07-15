@@ -37,14 +37,25 @@ public class RoleServiceImpl implements RoleService {
     private final CardMapper cardMapper;
 
     @Override
-    public List<RoleDTO> findRoles(Long boardId, String email) {
+    public List<RoleWithCardsDTO> findRoles(Long boardId, String email) {
         Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found."));
         if (!client.getId().equals(board.getOwner().getId()))
             throw new ConflictResourceException("The client is not the owner of the board.");
-        return roleMapper.toDtoList(roleRepository.findAllByBoardId(boardId));
+        List<Role> roles = roleRepository.findAllByBoardId(boardId);
+        List<RoleWithCardsDTO> roleWithCardsDTOs = new ArrayList<>();
+        for (Role role : roles) {
+            roleWithCardsDTOs.add(
+                    new RoleWithCardsDTO(
+                            role.getId(),
+                            role.getName(),
+                            cardMapper.toDtoList(role.getCards())
+                    )
+            );
+        }
+        return roleWithCardsDTOs;
     }
 
     @Override
