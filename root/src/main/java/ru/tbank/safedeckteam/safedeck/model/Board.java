@@ -40,4 +40,7 @@ public class Board extends AbstractEntity {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<ControlQuestion> controlQuestions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<SecureLog> secureLogs = new ArrayList<>();
 }
