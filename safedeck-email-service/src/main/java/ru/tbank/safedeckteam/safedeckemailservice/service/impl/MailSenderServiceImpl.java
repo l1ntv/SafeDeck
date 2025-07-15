@@ -58,10 +58,31 @@ public class MailSenderServiceImpl implements MailSenderService {
 
         try {
             javaMailSender.send(mailMessage);
-            return Boolean.TRUE;
         } catch (MailException exception) {
             return Boolean.FALSE;
         }
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean sendBoardInviteInformation(String email) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom(emailFrom);
+        mailMessage.setTo(email);
+        mailMessage.setSubject("Код двухфакторной аутентификации для SafeDeck.");
+
+        StringBuilder text = new StringBuilder();
+        text.append("Пожалуйста, подтвердите ваш вход в учётную запись SafeDeck.\n")
+                .append("Для подтверждения входа в ваш аккаунт SafeDeck введите следующий код: ")
+                .append("\nЕсли вы не пытались войти в аккаунт — проигнорируйте это сообщение.");
+        mailMessage.setText(text.toString());
+
+        try {
+            javaMailSender.send(mailMessage);
+        } catch (MailException exception) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
     }
 
     @Override

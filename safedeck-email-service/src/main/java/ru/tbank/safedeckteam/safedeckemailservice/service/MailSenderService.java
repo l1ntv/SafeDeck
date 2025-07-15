@@ -9,6 +9,8 @@ public interface MailSenderService {
 
     Boolean send2FACode(String email, String generatedCode);
 
+    Boolean sendBoardInviteInformation(String email);
+
     void sendAlert(Alert alert);
 
     void sendOffer(PromoOffer promoOffer);
