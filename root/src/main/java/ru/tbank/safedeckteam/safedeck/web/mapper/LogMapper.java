@@ -1,23 +1,28 @@
 package ru.tbank.safedeckteam.safedeck.web.mapper;
 
-import lombok.RequiredArgsConstructor;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import ru.tbank.safedeckteam.safedeck.model.IP;
 import ru.tbank.safedeckteam.safedeck.model.SecureLog;
-import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
+import ru.tbank.safedeckteam.safedeck.repository.IPRepository;
 import ru.tbank.safedeckteam.safedeck.web.dto.LogDTO;
 
 @Mapper(componentModel = "spring", imports = {ru.tbank.safedeckteam.safedeck.model.Client.class,
         SecureLog.class,
-        ru.tbank.safedeckteam.safedeck.model.Card.class})
+        ru.tbank.safedeckteam.safedeck.model.Card.class,
+        ru.tbank.safedeckteam.safedeck.model.IP.class,
+        ru.tbank.safedeckteam.safedeck.model.Client.class,
+        ru.tbank.safedeckteam.safedeck.repository.IPRepository.class})
 public interface LogMapper extends Mappable<SecureLog, LogDTO>{
 
     @Mapping(source = "id", target = "logId")
     @Mapping(expression = "java(secureLog.getUser().getEmail())", target = "email")
     @Mapping(source = "ip", target = "ip")
     @Mapping(source = "viewTime", target = "viewTime")
-    @Mapping(source = "java(secureLog.getCard().getId())", target = "cardId")
-    @Mapping(source = "status", target = "status")
+    @Mapping(expression = "java(secureLog.getCard().getId())", target = "cardId")
+    @Mapping(source = "status.name", target = "status")
     LogDTO toDto(SecureLog secureLog);
 
     // TODO: cardId -> card и email -> user (Нудно разобраться как работают сервисы в маппере)
@@ -25,5 +30,5 @@ public interface LogMapper extends Mappable<SecureLog, LogDTO>{
     @Mapping(source = "ip", target = "ip")
     @Mapping(source = "viewTime", target = "viewTime")
     @Mapping(source = "status", target = "status")
-    SecureLog toEntity(LogDTO dto);
+    SecureLog toEntity(LogDTO dto, @Context IPRepository ipRepository);
 }
