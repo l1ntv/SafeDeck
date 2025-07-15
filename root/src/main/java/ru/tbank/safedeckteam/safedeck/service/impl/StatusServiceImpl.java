@@ -23,9 +23,9 @@ public class StatusServiceImpl implements StatusService {
         Client client = clientDataDTO.getClient();
         List<TrustedUserIP> trustedUserIps = client.getTrustedUserIps();
         boolean isIPTrusted = trustedUserIps.stream().map(TrustedUserIP::getIp).toList().contains(clientDataDTO.getIP());
-        boolean isDeviceTrusted = client.getDevice().equals(clientDataDTO.getDevice());
-        boolean isCountryTrusted = client.getCountry().equals(clientDataDTO.getCountry());
-        boolean isProviderTrusted = client.getProvider().equals(clientDataDTO.getProvider());
+        boolean isDeviceTrusted = client.getDevice().equals(clientDataDTO.getDevice() == null ? "" : clientDataDTO.getDevice()) ;
+        boolean isCountryTrusted = client.getCountry().equals(clientDataDTO.getCountry() ==  null ? "" : clientDataDTO.getCountry());
+        boolean isProviderTrusted = client.getProvider().equals(clientDataDTO.getProvider()  == null ? "" : clientDataDTO.getProvider());
         if (isIPTrusted && isDeviceTrusted && isCountryTrusted && isProviderTrusted) {
             return statusRepository.findById(0).orElseThrow(() -> new RuntimeException("No status found")); // OK
         }
