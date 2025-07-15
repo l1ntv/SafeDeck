@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tbank.safedeckteam.safedeck.model.*;
+import ru.tbank.safedeckteam.safedeck.model.enums.AuthStatus;
 import ru.tbank.safedeckteam.safedeck.model.exception.BoardNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.CardNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.ClientNotFoundException;
@@ -35,6 +36,16 @@ public class SecureLogServiceImpl implements SecureLogService {
                 .orElseThrow(() -> new BoardNotFoundException("Board not found"));
         List<SecureLog> secureLogs = board.getSecureLogs();
         return logMapper.toDtoList(secureLogs);
+    }
+
+    @Override
+    public LogDTO getFullLog(long logId) {
+        SecureLog secureLog = secureLogRepository.findById(logId)
+                .orElseThrow(() -> new RuntimeException("Log not found"));
+        if (!secureLog.getStatus().getName().equals(AuthStatus.OK.name())) {
+            return logMapper.toDto(secureLog);
+        }
+        return null;
     }
 
     @Override

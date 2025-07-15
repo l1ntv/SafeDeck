@@ -21,6 +21,11 @@ public class SecureLogController {
         return ResponseEntity.ok().body(secureLogService.getBoardLogs(boardId));
     }
 
+    @GetMapping("/{logId}/all")
+    ResponseEntity<LogDTO> getFullLog(@PathVariable Long logId) {
+        return ResponseEntity.ok().body(secureLogService.getFullLog(logId));
+    }
+
     @DeleteMapping("/{logId}/delete")
     ResponseEntity<?> deleteLog(@PathVariable Long logId) {
         secureLogService.deleteLog(logId);

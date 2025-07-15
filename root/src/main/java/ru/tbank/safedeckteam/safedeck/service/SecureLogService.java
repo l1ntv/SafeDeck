@@ -9,6 +9,8 @@ public interface SecureLogService {
 
     List<LogDTO> getBoardLogs(long boardId);
 
+    LogDTO getFullLog(long logId);
+
     void createLog(CreatedLogDTO createdLogDTO);
 
     void deleteLog(long logId);
