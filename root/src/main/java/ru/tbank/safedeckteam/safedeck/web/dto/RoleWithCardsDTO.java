@@ -11,9 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 public class RoleWithCardsDTO {
 
-    private Long id;
+    private Long roleId;
 
-    private String name;
+    private String roleName;
 
     private List<CardDTO> cards;
 }
