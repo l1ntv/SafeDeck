@@ -1,5 +1,6 @@
 package ru.tbank.safedeckteam.safedeck.web.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class SecureDataController {
     private final SecureDataService secureDataService;
 
     @GetMapping("/{cardId}")
-    public ResponseEntity<SecureDataDTO> getSecureData(@PathVariable Long cardId, Principal principal) {
+    public ResponseEntity<SecureDataDTO> getSecureData(@PathVariable Long cardId, Principal principal, HttpServletRequest request) {
         return ResponseEntity
                 .ok(secureDataService.findSecureData(cardId, principal.getName()));
     }
