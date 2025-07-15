@@ -41,8 +41,8 @@ public class SecureLogServiceImpl implements SecureLogService {
 
     @Override
     public void createLog(CreatedLogDTO createdLogDTO) {
-        Client client = clientRepository.findByEmail(createdLogDTO.getEmail())
-                .orElseThrow(() -> new ClientNotFoundException("Client not found"));
+        Client client = clientRepository.findOptionalByEmail(createdLogDTO.getEmail())
+                .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Card card = cardRepository.findById(createdLogDTO.getCardId())
                 .orElseThrow(() -> new CardNotFoundException("Card not found"));
         Board board = card.getBoard();
