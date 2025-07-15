@@ -18,7 +18,7 @@ public class LogDTO {
 
     private String email;
 
-    private IP ip;
+    private String ip;
 
     private LocalDateTime viewTime;
 
