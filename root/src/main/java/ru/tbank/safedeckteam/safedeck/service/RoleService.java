@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface RoleService {
 
-    List<RoleDTO> findRoles(Long boardId, String email);
+    List<RoleWithCardsDTO> findRoles(Long boardId, String email);
 
     RoleDTO createRole(Long boardId, String roleName, String email);
 
