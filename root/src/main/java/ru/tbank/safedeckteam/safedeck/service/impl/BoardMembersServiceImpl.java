@@ -1,5 +1,7 @@
 package ru.tbank.safedeckteam.safedeck.service.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,9 @@ public class BoardMembersServiceImpl implements BoardMembersService {
     private final ClientMapper clientMapper;
 
     private final RoleMapper roleMapper;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<BoardMemberDTO> getBoardMembers(Long boardId, String email) {
@@ -77,6 +82,7 @@ public class BoardMembersServiceImpl implements BoardMembersService {
     }
 
     @Override
+    @Transactional
     public BoardMemberDTO updateBoardMember(Long boardId, Long memberId, List<RoleDTO> roles, String email) {
         Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
@@ -85,25 +91,40 @@ public class BoardMembersServiceImpl implements BoardMembersService {
         if (!board.getOwner().equals(client))
             throw new ConflictResourceException("The client is not the owner of the board.");
 
-        List<Role> boardRoles = new ArrayList<>();
-        for (Card card : board.getCards()) {
-            boardRoles.addAll(card.getRoles());
-        }
+        List<Role> boardRoles = board.getCards().stream()
+                .flatMap(card -> card.getRoles().stream())
+                .toList();
 
         Client member = clientRepository.findById(memberId)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
+
         if (!board.getClients().contains(member))
             throw new ConflictResourceException("The client is not a member of the board.");
 
+        List<Role> previousRoles = new ArrayList<>(member.getRoles());
+        for (Role role : previousRoles) {
+            role.getClients().remove(member);
+            roleRepository.save(role);
+        }
+
+        List<Role> newRoles = new ArrayList<>();
         for (RoleDTO dto : roles) {
             Role role = roleRepository.findById(dto.getRoleId())
                     .orElseThrow(() -> new RoleNotFoundException("Role not found."));
             if (!boardRoles.contains(role))
                 throw new ConflictResourceException("The role is missing from the cards on this board.");
-            member.getRoles().add(role);
+
+            role.getClients().add(member);
+            newRoles.add(role);
         }
 
-        return new BoardMemberDTO(member.getId(), member.getPublicName(), member.getEmail(), roleMapper.toDtoList(member.getRoles()));
+        roleRepository.saveAll(newRoles);
+        return new BoardMemberDTO(
+                member.getId(),
+                member.getPublicName(),
+                member.getEmail(),
+                roleMapper.toDtoList(newRoles)
+        );
     }
 
     @Override
