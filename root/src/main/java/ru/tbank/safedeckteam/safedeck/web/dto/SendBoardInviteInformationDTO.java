@@ -4,16 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleWithCardsDTO {
+public class SendBoardInviteInformationDTO {
 
-    private Long roleId;
+    private String email;
 
-    private String roleName;
+    private String boardName;
 
-    private List<CardDTO> cards;
+    private String boardId;
 }
+

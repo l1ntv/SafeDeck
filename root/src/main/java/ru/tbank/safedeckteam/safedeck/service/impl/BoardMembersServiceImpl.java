@@ -1,17 +1,21 @@
 package ru.tbank.safedeckteam.safedeck.service.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import ru.tbank.safedeckteam.safedeck.model.Board;
 import ru.tbank.safedeckteam.safedeck.model.Card;
 import ru.tbank.safedeckteam.safedeck.model.Client;
 import ru.tbank.safedeckteam.safedeck.model.Role;
-import ru.tbank.safedeckteam.safedeck.model.exception.BoardNotFoundException;
-import ru.tbank.safedeckteam.safedeck.model.exception.ClientNotFoundException;
-import ru.tbank.safedeckteam.safedeck.model.exception.ConflictResourceException;
-import ru.tbank.safedeckteam.safedeck.model.exception.RoleNotFoundException;
+import ru.tbank.safedeckteam.safedeck.model.exception.*;
 import ru.tbank.safedeckteam.safedeck.repository.BoardRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
 import ru.tbank.safedeckteam.safedeck.repository.RoleRepository;
@@ -34,9 +38,12 @@ public class BoardMembersServiceImpl implements BoardMembersService {
 
     private final RoleRepository roleRepository;
 
-    private final ClientMapper clientMapper;
+    private final RestTemplate restTemplate = new RestTemplate();
 
     private final RoleMapper roleMapper;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<BoardMemberDTO> getBoardMembers(Long boardId, String email) {
@@ -77,6 +84,7 @@ public class BoardMembersServiceImpl implements BoardMembersService {
     }
 
     @Override
+    @Transactional
     public BoardMemberDTO updateBoardMember(Long boardId, Long memberId, List<RoleDTO> roles, String email) {
         Client client = clientRepository.findOptionalByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
@@ -85,25 +93,40 @@ public class BoardMembersServiceImpl implements BoardMembersService {
         if (!board.getOwner().equals(client))
             throw new ConflictResourceException("The client is not the owner of the board.");
 
-        List<Role> boardRoles = new ArrayList<>();
-        for (Card card : board.getCards()) {
-            boardRoles.addAll(card.getRoles());
-        }
+        List<Role> boardRoles = board.getCards().stream()
+                .flatMap(card -> card.getRoles().stream())
+                .toList();
 
         Client member = clientRepository.findById(memberId)
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
+
         if (!board.getClients().contains(member))
             throw new ConflictResourceException("The client is not a member of the board.");
 
+        List<Role> previousRoles = new ArrayList<>(member.getRoles());
+        for (Role role : previousRoles) {
+            role.getClients().remove(member);
+            roleRepository.save(role);
+        }
+
+        List<Role> newRoles = new ArrayList<>();
         for (RoleDTO dto : roles) {
             Role role = roleRepository.findById(dto.getRoleId())
                     .orElseThrow(() -> new RoleNotFoundException("Role not found."));
             if (!boardRoles.contains(role))
                 throw new ConflictResourceException("The role is missing from the cards on this board.");
-            member.getRoles().add(role);
+
+            role.getClients().add(member);
+            newRoles.add(role);
         }
 
-        return new BoardMemberDTO(member.getId(), member.getPublicName(), member.getEmail(), roleMapper.toDtoList(member.getRoles()));
+        roleRepository.saveAll(newRoles);
+        return new BoardMemberDTO(
+                member.getId(),
+                member.getPublicName(),
+                member.getEmail(),
+                roleMapper.toDtoList(newRoles)
+        );
     }
 
     @Override
@@ -154,6 +177,20 @@ public class BoardMembersServiceImpl implements BoardMembersService {
         // Сохраняем изменения пользователя
         clientRepository.save(member);
         List<Role> actuallyRoles = roleRepository.findAllByClients_Id(member.getId());
+
+        String url = "http://localhost:8087/mail/send-board-invite-information";
+
+        ResponseEntity<SendEmailResponseDTO> responseEntity = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                new HttpEntity<>(new SendBoardInviteInformationDTO(member.getEmail(), board.getName(), String.valueOf(board.getId()))),
+                new ParameterizedTypeReference<SendEmailResponseDTO>() {
+                }
+        );
+        SendEmailResponseDTO sendEmailResponseDTO = responseEntity.getBody();
+        if (!sendEmailResponseDTO.getIsSuccess())
+            throw new EmailNotSentException("The email has not been sent.");
+
         return new BoardMemberDTO(member.getId(), member.getPublicName(), member.getEmail(), roleMapper.toDtoList(actuallyRoles));
     }
 
