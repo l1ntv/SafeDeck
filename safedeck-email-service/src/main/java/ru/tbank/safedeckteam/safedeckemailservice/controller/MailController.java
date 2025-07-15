@@ -2,10 +2,7 @@ package ru.tbank.safedeckteam.safedeckemailservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.tbank.safedeckteam.safedeckemailservice.dto.*;
 import ru.tbank.safedeckteam.safedeckemailservice.service.MailSenderService;
 
@@ -26,6 +23,12 @@ public class MailController {
     public ResponseEntity<SendEmailResponseDTO> send2FACode(@RequestBody Send2FACodeDTO dto) {
         return ResponseEntity.ok()
                 .body(new SendEmailResponseDTO(mailSenderService.send2FACode(dto.getEmail(), dto.getGeneratedCode())));
+    }
+
+    @PostMapping("/send-board-invite-information")
+    public ResponseEntity<SendEmailResponseDTO> sendBoardInviteInformation(@RequestBody SendBoardInviteInformationDTO dto) {
+        return ResponseEntity.ok()
+                .body(new SendEmailResponseDTO(mailSenderService.sendBoardInviteInformation(dto.getEmail(), dto.getBoardName(), dto.getBoardId())));
     }
 
     @PostMapping("/alert")

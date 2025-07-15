@@ -4,16 +4,18 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import ru.tbank.safedeckteam.safedeck.model.Board;
 import ru.tbank.safedeckteam.safedeck.model.Card;
 import ru.tbank.safedeckteam.safedeck.model.Client;
 import ru.tbank.safedeckteam.safedeck.model.Role;
-import ru.tbank.safedeckteam.safedeck.model.exception.BoardNotFoundException;
-import ru.tbank.safedeckteam.safedeck.model.exception.ClientNotFoundException;
-import ru.tbank.safedeckteam.safedeck.model.exception.ConflictResourceException;
-import ru.tbank.safedeckteam.safedeck.model.exception.RoleNotFoundException;
+import ru.tbank.safedeckteam.safedeck.model.exception.*;
 import ru.tbank.safedeckteam.safedeck.repository.BoardRepository;
 import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
 import ru.tbank.safedeckteam.safedeck.repository.RoleRepository;
@@ -36,7 +38,7 @@ public class BoardMembersServiceImpl implements BoardMembersService {
 
     private final RoleRepository roleRepository;
 
-    private final ClientMapper clientMapper;
+    private final RestTemplate restTemplate = new RestTemplate();
 
     private final RoleMapper roleMapper;
 
@@ -175,6 +177,20 @@ public class BoardMembersServiceImpl implements BoardMembersService {
         // Сохраняем изменения пользователя
         clientRepository.save(member);
         List<Role> actuallyRoles = roleRepository.findAllByClients_Id(member.getId());
+
+        String url = "http://localhost:8087/mail/send-board-invite-information";
+
+        ResponseEntity<SendEmailResponseDTO> responseEntity = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                new HttpEntity<>(new SendBoardInviteInformationDTO(member.getEmail(), board.getName(), String.valueOf(board.getId()))),
+                new ParameterizedTypeReference<SendEmailResponseDTO>() {
+                }
+        );
+        SendEmailResponseDTO sendEmailResponseDTO = responseEntity.getBody();
+        if (!sendEmailResponseDTO.getIsSuccess())
+            throw new EmailNotSentException("The email has not been sent.");
+
         return new BoardMemberDTO(member.getId(), member.getPublicName(), member.getEmail(), roleMapper.toDtoList(actuallyRoles));
     }
 

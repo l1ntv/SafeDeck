@@ -58,10 +58,37 @@ public class MailSenderServiceImpl implements MailSenderService {
 
         try {
             javaMailSender.send(mailMessage);
-            return Boolean.TRUE;
         } catch (MailException exception) {
             return Boolean.FALSE;
         }
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean sendBoardInviteInformation(String email, String boardName, String boardId) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom(emailFrom);
+        mailMessage.setTo(email);
+        mailMessage.setSubject("Вас пригласили в доску в Safedeck.");
+
+        StringBuilder text = new StringBuilder();
+        text.append("Здравствуйте!\n")
+                .append("Вас пригласили в доску ").append(boardName)
+                .append(" в сервисе Safedeck.")
+                .append("\nПросим вас зайти в систему и ознакомиться с карточками, к которым у вас есть доступ.")
+                .append("\nСсылка на доску: ")
+                .append("http://localhost:4200/cards/").append(boardId)
+                .append("\nЕсли у вас возникнут вопросы или вам понадобится помощь, мы всегда на связи. ")
+                .append("\nС уважением,")
+                .append("\nКоманда Safedeck!");
+        mailMessage.setText(text.toString());
+
+        try {
+            javaMailSender.send(mailMessage);
+        } catch (MailException exception) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
     }
 
     @Override
