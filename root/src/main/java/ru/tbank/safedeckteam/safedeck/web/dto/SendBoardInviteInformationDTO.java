@@ -1,4 +1,4 @@
-package ru.tbank.safedeckteam.safedeckemailservice.dto;
+package ru.tbank.safedeckteam.safedeck.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,3 +15,4 @@ public class SendBoardInviteInformationDTO {
 
     private String boardId;
 }
+

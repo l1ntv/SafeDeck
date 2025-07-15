@@ -65,7 +65,7 @@ public class MailSenderServiceImpl implements MailSenderService {
     }
 
     @Override
-    public Boolean sendBoardInviteInformation(String email, String boardName) {
+    public Boolean sendBoardInviteInformation(String email, String boardName, String boardId) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(emailFrom);
         mailMessage.setTo(email);
@@ -73,8 +73,14 @@ public class MailSenderServiceImpl implements MailSenderService {
 
         StringBuilder text = new StringBuilder();
         text.append("Здравствуйте!\n")
-                .append("Вас пригласили в доску в сервисе Safedeck. Теперь у вас есть доступ к организованным карточкам, ")
-                .append("\nЕсли вы не пытались войти в аккаунт — проигнорируйте это сообщение.");
+                .append("Вас пригласили в доску ").append(boardName)
+                .append(" в сервисе Safedeck.")
+                .append("\nПросим вас зайти в систему и ознакомиться с карточками, к которым у вас есть доступ.")
+                .append("\nСсылка на доску: ")
+                .append("http://localhost:4200/cards/").append(boardId)
+                .append("\nЕсли у вас возникнут вопросы или вам понадобится помощь, мы всегда на связи. ")
+                .append("\nС уважением,")
+                .append("\nКоманда Safedeck!");
         mailMessage.setText(text.toString());
 
         try {

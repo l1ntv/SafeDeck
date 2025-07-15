@@ -25,9 +25,10 @@ public class MailController {
                 .body(new SendEmailResponseDTO(mailSenderService.send2FACode(dto.getEmail(), dto.getGeneratedCode())));
     }
 
-    @PostMapping("/{email}/send-board-invite-information")
+    @PostMapping("/send-board-invite-information")
     public ResponseEntity<SendEmailResponseDTO> sendBoardInviteInformation(@RequestBody SendBoardInviteInformationDTO dto) {
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok()
+                .body(new SendEmailResponseDTO(mailSenderService.sendBoardInviteInformation(dto.getEmail(), dto.getBoardName(), dto.getBoardId())));
     }
 
     @PostMapping("/alert")
