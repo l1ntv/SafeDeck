@@ -7,10 +7,7 @@ import ru.tbank.safedeckteam.safedeck.model.*;
 import ru.tbank.safedeckteam.safedeck.model.exception.BoardNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.CardNotFoundException;
 import ru.tbank.safedeckteam.safedeck.model.exception.ClientNotFoundException;
-import ru.tbank.safedeckteam.safedeck.repository.BoardRepository;
-import ru.tbank.safedeckteam.safedeck.repository.CardRepository;
-import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
-import ru.tbank.safedeckteam.safedeck.repository.SecureLogRepository;
+import ru.tbank.safedeckteam.safedeck.repository.*;
 import ru.tbank.safedeckteam.safedeck.service.SecureLogService;
 import ru.tbank.safedeckteam.safedeck.service.StatusService;
 import ru.tbank.safedeckteam.safedeck.web.dto.ClientDataDTO;
@@ -30,6 +27,7 @@ public class SecureLogServiceImpl implements SecureLogService {
     private final BoardRepository boardRepository;
     private final LogMapper logMapper;
     private final StatusService statusService;
+    private final IPRepository ipRepository;
 
     @Override
     public List<LogDTO> getBoardLogs(long boardId) {
@@ -50,10 +48,11 @@ public class SecureLogServiceImpl implements SecureLogService {
         IP ip = IP.builder()
                 .ip(httpServletRequest.getRemoteAddr())
                 .build();
+        ip = ipRepository.save(ip);
 
         String country = httpServletRequest.getLocale() != null ? httpServletRequest.getLocale().getCountry() : "Unknown";
-        String device = httpServletRequest.getHeader("User-Agent");
-        String provider = (String) httpServletRequest.getSession().getAttribute("user-provider");
+        String device = httpServletRequest.getHeader("User-Agent") == null ? "Unknown" : httpServletRequest.getHeader("User-Agent");
+        String provider = (String) httpServletRequest.getSession().getAttribute("user-provider") == null ? "Unknown" : httpServletRequest.getHeader("user-provider");
 
         ClientDataDTO clientDataDTO = ClientDataDTO.builder()
                 .client(client)
