@@ -65,15 +65,15 @@ public class MailSenderServiceImpl implements MailSenderService {
     }
 
     @Override
-    public Boolean sendBoardInviteInformation(String email) {
+    public Boolean sendBoardInviteInformation(String email, String boardName) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(emailFrom);
         mailMessage.setTo(email);
-        mailMessage.setSubject("Код двухфакторной аутентификации для SafeDeck.");
+        mailMessage.setSubject("Вас пригласили в доску в Safedeck.");
 
         StringBuilder text = new StringBuilder();
-        text.append("Пожалуйста, подтвердите ваш вход в учётную запись SafeDeck.\n")
-                .append("Для подтверждения входа в ваш аккаунт SafeDeck введите следующий код: ")
+        text.append("Здравствуйте!\n")
+                .append("Вас пригласили в доску в сервисе Safedeck. Теперь у вас есть доступ к организованным карточкам, ")
                 .append("\nЕсли вы не пытались войти в аккаунт — проигнорируйте это сообщение.");
         mailMessage.setText(text.toString());
 

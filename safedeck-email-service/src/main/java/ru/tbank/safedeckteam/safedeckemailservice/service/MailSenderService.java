@@ -9,7 +9,7 @@ public interface MailSenderService {
 
     Boolean send2FACode(String email, String generatedCode);
 
-    Boolean sendBoardInviteInformation(String email);
+    Boolean sendBoardInviteInformation(String email, String boardName);
 
     void sendAlert(Alert alert);
 

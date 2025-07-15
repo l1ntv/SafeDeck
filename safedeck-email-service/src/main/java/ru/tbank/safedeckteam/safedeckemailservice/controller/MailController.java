@@ -26,7 +26,7 @@ public class MailController {
     }
 
     @PostMapping("/{email}/send-board-invite-information")
-    public ResponseEntity<SendEmailResponseDTO> sendBoardInviteInformation(@PathVariable String email) {
+    public ResponseEntity<SendEmailResponseDTO> sendBoardInviteInformation(@RequestBody SendBoardInviteInformationDTO dto) {
         return ResponseEntity.ok(null);
     }
 
