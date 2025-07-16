@@ -17,10 +17,12 @@ import ru.tbank.safedeckteam.safedeck.configuration.JwtService;
 import ru.tbank.safedeckteam.safedeck.model.Client;
 import ru.tbank.safedeckteam.safedeck.model.IP;
 import ru.tbank.safedeckteam.safedeck.model.SecondFA;
+import ru.tbank.safedeckteam.safedeck.model.TrustedUserIP;
 import ru.tbank.safedeckteam.safedeck.model.exception.*;
 import ru.tbank.safedeckteam.safedeck.repository.ClientRepository;
 import ru.tbank.safedeckteam.safedeck.repository.IPRepository;
 import ru.tbank.safedeckteam.safedeck.repository.SecondFARepository;
+import ru.tbank.safedeckteam.safedeck.repository.TrustedUsersIPRepository;
 import ru.tbank.safedeckteam.safedeck.service.AuthenticationService;
 import ru.tbank.safedeckteam.safedeck.web.dto.*;
 
@@ -35,6 +37,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final IPRepository ipRepository;
 
     private final SecondFARepository secondFARepository;
+
+    private final TrustedUsersIPRepository trustedUsersIPRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -117,6 +121,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .orElseThrow(() -> new GeneratedCodeNotFoundException("Code not found."));
         secondFARepository.delete(secondFA);*/
 
+
         request.setIP(httpServletRequest.getRemoteAddr());
         request.setDevice(httpServletRequest.getHeader("User-Agent"));
         request.setCountry(httpServletRequest.getLocale() != null ? httpServletRequest.getLocale().getCountry() : "Unknown");
@@ -129,6 +134,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
         ipRepository.save(ip);
 
+
         var client = Client.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -140,6 +146,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .provider(request.getProvider())
                 .build();
         clientRepository.save(client);
+
+        TrustedUserIP trustedUserIP = TrustedUserIP.builder()
+                .ip(ip)
+                .user(client)
+                .build();
+        trustedUsersIPRepository.save(trustedUserIP);
+
 
         var jwtToken = jwtService.generateToken(client);
         return RegistrationResponseDTO.builder()
