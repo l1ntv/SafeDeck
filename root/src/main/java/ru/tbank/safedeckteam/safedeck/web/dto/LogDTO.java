@@ -22,7 +22,8 @@ public class LogDTO {
 
     private LocalDateTime viewTime;
 
-    private Long cardId;
+    //private Long cardId;
+    private String cardName;
 
     private AuthStatus status;
 }

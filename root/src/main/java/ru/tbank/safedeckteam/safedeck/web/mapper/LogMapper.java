@@ -21,7 +21,8 @@ public interface LogMapper extends Mappable<SecureLog, LogDTO>, IPMapper{
     @Mapping(expression = "java(secureLog.getUser().getEmail())", target = "email")
     @Mapping(expression = "java(secureLog.getIp().getIp())", target = "ip")
     @Mapping(source = "viewTime", target = "viewTime")
-    @Mapping(expression = "java(secureLog.getCard().getId())", target = "cardId")
+    //@Mapping(expression = "java(secureLog.getCard().getId())", target = "cardId")
+    @Mapping(expression = "java(secureLog.getCard().getName())",target = "cardName")
     @Mapping(source = "status.name", target = "status")
     LogDTO toDto(SecureLog secureLog);
 
