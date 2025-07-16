@@ -172,62 +172,60 @@ class BoardMembersControllerTest {
     // ===============================================
 
     @Test
-    void updateBoardMember_shouldAlwaysReturnOkWithNullBody() {
+    void updateBoardMember_shouldReturnUpdatedMember() {
         // Arrange
         List<RoleDTO> roles = Collections.singletonList(new RoleDTO());
+        BoardMemberDTO mockResponse = new BoardMemberDTO();
+        when(boardMembersService.updateBoardMember(testBoardId, testMemberId, roles, testEmail))
+                .thenReturn(mockResponse);
 
         // Act
-        ResponseEntity<BoardMembersDTO> response =
+        ResponseEntity<BoardMemberDTO> response =
                 boardMembersController.updateBoardMember(testBoardId, testMemberId, roles, testPrincipal);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNull(response.getBody());
-        verifyNoInteractions(boardMembersService); // Сервис не должен вызываться
+        assertEquals(mockResponse, response.getBody());
+        verify(boardMembersService).updateBoardMember(testBoardId, testMemberId, roles, testEmail);
     }
 
     @Test
-    void updateBoardMember_shouldReturnOkEvenWithEmptyRoles() {
+    void updateBoardMember_shouldAcceptEmptyRoles() {
         // Arrange
         List<RoleDTO> emptyRoles = Collections.emptyList();
+        BoardMemberDTO mockResponse = new BoardMemberDTO();
+        when(boardMembersService.updateBoardMember(testBoardId, testMemberId, emptyRoles, testEmail))
+                .thenReturn(mockResponse);
 
         // Act
-        ResponseEntity<BoardMembersDTO> response =
+        ResponseEntity<BoardMemberDTO> response =
                 boardMembersController.updateBoardMember(testBoardId, testMemberId, emptyRoles, testPrincipal);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNull(response.getBody());
-        verifyNoInteractions(boardMembersService);
+        assertNotNull(response.getBody());
     }
 
     @Test
-    void updateBoardMember_shouldNotThrowNPE_whenPrincipalIsNull() {
+    void updateBoardMember_shouldThrowNPE_whenPrincipalIsNull() {
         // Arrange
         List<RoleDTO> roles = Collections.singletonList(new RoleDTO());
 
-        // Act
-        ResponseEntity<BoardMembersDTO> response =
-                boardMembersController.updateBoardMember(testBoardId, testMemberId, roles, null);
-
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode()); // Ожидаем 200 OK, так как проверка Principal не реализована
-        assertNull(response.getBody());
+        // Act & Assert
+        assertThrows(NullPointerException.class, () ->
+                boardMembersController.updateBoardMember(testBoardId, testMemberId, roles, null));
     }
 
     @Test
-    void updateBoardMember_shouldReturnOkForInvalidIds() {
+    void updateBoardMember_shouldHandleInvalidIds() {
         // Arrange
         List<RoleDTO> roles = Collections.singletonList(new RoleDTO());
+        when(boardMembersService.updateBoardMember(-1L, -1L, roles, testEmail))
+                .thenThrow(new RuntimeException("Invalid IDs"));
 
-        // Act
-        ResponseEntity<BoardMembersDTO> response =
-                boardMembersController.updateBoardMember(-1L, -1L, roles, testPrincipal);
-
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNull(response.getBody());
-        verifyNoInteractions(boardMembersService);
+        // Act & Assert
+        assertThrows(RuntimeException.class, () ->
+                boardMembersController.updateBoardMember(-1L, -1L, roles, testPrincipal));
     }
 
     // ===============================================
