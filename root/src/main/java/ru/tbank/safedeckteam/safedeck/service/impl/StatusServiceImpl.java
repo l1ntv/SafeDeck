@@ -29,7 +29,13 @@ public class StatusServiceImpl implements StatusService {
                 .equals(String.valueOf(clientDataDTO.getCountry()));
         boolean isProviderTrusted =  String.valueOf(client.getProvider())
                 .equals(String.valueOf(clientDataDTO.getProvider()));
-        if (isIPTrusted && isDeviceTrusted && isCountryTrusted && isProviderTrusted) {
+
+        System.out.println("isIPTrusted: " + isIPTrusted);
+        System.out.println("isDeviceTrusted: " + isDeviceTrusted);
+        System.out.println("isCountryTrusted: " + isCountryTrusted);
+        System.out.println("isProviderTrusted: " + isProviderTrusted);
+
+        if (isIPTrusted && isDeviceTrusted && isCountryTrusted) {
             return statusRepository.findByName("OK").orElseThrow(() -> new RuntimeException("No status found")); // OK
         }
         else if (isIPTrusted || isDeviceTrusted || isCountryTrusted || isProviderTrusted) {
