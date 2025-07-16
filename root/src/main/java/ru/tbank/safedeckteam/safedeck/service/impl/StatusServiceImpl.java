@@ -30,12 +30,12 @@ public class StatusServiceImpl implements StatusService {
         boolean isProviderTrusted =  String.valueOf(client.getProvider())
                 .equals(String.valueOf(clientDataDTO.getProvider()));
         if (isIPTrusted && isDeviceTrusted && isCountryTrusted && isProviderTrusted) {
-            return statusRepository.findById(0).orElseThrow(() -> new RuntimeException("No status found")); // OK
+            return statusRepository.findByName("OK").orElseThrow(() -> new RuntimeException("No status found")); // OK
         }
         else if (isIPTrusted || isDeviceTrusted || isCountryTrusted || isProviderTrusted) {
-            return statusRepository.findById(1).orElseThrow(() -> new RuntimeException("No status found")); // SUSPECT
+            return statusRepository.findByName("SUSPECT").orElseThrow(() -> new RuntimeException("No status found")); // SUSPECT
         } else {
-            return statusRepository.findById(2).orElseThrow(() -> new RuntimeException("No status found")); // HACK
+            return statusRepository.findByName("HACK").orElseThrow(() -> new RuntimeException("No status found")); // HACK
         }
     }
 }
