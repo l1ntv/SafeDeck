@@ -16,6 +16,7 @@ import ru.tbank.safedeckteam.safedeck.web.dto.CreatedLogDTO;
 import ru.tbank.safedeckteam.safedeck.web.dto.LogDTO;
 import ru.tbank.safedeckteam.safedeck.web.mapper.LogMapper;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -35,7 +36,9 @@ public class SecureLogServiceImpl implements SecureLogService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("Board not found"));
         List<SecureLog> secureLogs = board.getSecureLogs();
-        return logMapper.toDtoList(secureLogs);
+        List<LogDTO> logDTOS = logMapper.toDtoList(secureLogs);
+        logDTOS.sort(Comparator.comparing(LogDTO::getViewTime).reversed());
+        return logDTOS;
     }
 
     @Override
