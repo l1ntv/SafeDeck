@@ -76,4 +76,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(new ErrorResponseDTO("The email has not been sent."));
     }
+
+    @ExceptionHandler(ClientSuspectedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleClientSuspectedException(Exception exception) {
+        return  ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT)
+                .body(new ErrorResponseDTO("Client has been suspected."));
+    }
+
+    @ExceptionHandler(ClientHackedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleClientHackedException(Exception exception) {
+        return  ResponseEntity.status(HttpStatus.LOCKED)
+                .body(new ErrorResponseDTO("Client has been hacked."));
+    }
 }

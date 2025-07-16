@@ -52,17 +52,24 @@ public class SecureLogServiceImpl implements SecureLogService {
     }
 
     @Override
-    public void createLog(CreatedLogDTO createdLogDTO) {
+    public Status createLog(CreatedLogDTO createdLogDTO) {
         Client client = clientRepository.findOptionalByEmail(createdLogDTO.getEmail())
                 .orElseThrow(() -> new ClientNotFoundException("Client not found."));
         Card card = cardRepository.findById(createdLogDTO.getCardId())
                 .orElseThrow(() -> new CardNotFoundException("Card not found"));
         Board board = card.getBoard();
         HttpServletRequest httpServletRequest = createdLogDTO.getHttpServletRequest();
-        IP ip = IP.builder()
-                .ip(httpServletRequest.getRemoteAddr())
-                .build();
-        ip = ipRepository.save(ip);
+
+        IP ip;
+        if (ipRepository.findByIp(httpServletRequest.getRemoteAddr()).orElse(null) == null) {
+            ip = IP.builder()
+                    .ip(httpServletRequest.getRemoteAddr())
+                    .build();
+            ip = ipRepository.save(ip);
+        } else {
+            ip = ipRepository.findByIp(httpServletRequest.getRemoteAddr())
+                    .orElseThrow(() -> new RuntimeException("IP not found."));
+        }
 
         String country = httpServletRequest.getLocale() != null ? httpServletRequest.getLocale().getCountry() : "Unknown";
         String device = httpServletRequest.getHeader("User-Agent") == null ? "Unknown" : httpServletRequest.getHeader("User-Agent");
@@ -90,6 +97,8 @@ public class SecureLogServiceImpl implements SecureLogService {
 
         secureLogRepository.save(secureLog);
         logMapper.toDto(secureLog);
+
+        return secureLog.getStatus();
     }
 
     @Override
