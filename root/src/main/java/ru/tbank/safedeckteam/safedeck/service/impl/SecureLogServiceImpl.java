@@ -89,7 +89,7 @@ public class SecureLogServiceImpl implements SecureLogService {
                 .user(client)
                 .ip(ip)
                 .viewTime(createdLogDTO.getViewTime())
-                .status(statusService.determineStatus(clientDataDTO))
+                .status(createdLogDTO.getStatus() == null ? statusService.determineStatus(clientDataDTO) : createdLogDTO.getStatus())
                 .country(country)
                 .device(device)
                 .provider(provider)

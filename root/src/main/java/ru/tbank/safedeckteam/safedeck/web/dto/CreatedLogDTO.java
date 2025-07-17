@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.tbank.safedeckteam.safedeck.model.Client;
+import ru.tbank.safedeckteam.safedeck.model.Status;
 import ru.tbank.safedeckteam.safedeck.model.enums.AuthStatus;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,8 @@ public class CreatedLogDTO {
 
     @NotNull(message = "Http servlet request must be not null")
     private HttpServletRequest httpServletRequest;
+
+    private Status status;
 
     private LocalDateTime viewTime;
 

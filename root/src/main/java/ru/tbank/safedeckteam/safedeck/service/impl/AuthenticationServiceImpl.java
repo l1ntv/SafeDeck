@@ -166,9 +166,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var client = clientRepository.findOptionalByEmail(request.getEmail())
                 .orElseThrow(() -> new ClientNotFoundException("Client with this email not found."));
 
-        SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())
-                .orElseThrow(() -> new GeneratedCodeNotFoundException("Code not found."));
-        secondFARepository.delete(secondFA);
+//        SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())
+//                .orElseThrow(() -> new GeneratedCodeNotFoundException("Code not found."));
+//        secondFARepository.delete(secondFA);
 
         try {
             authenticationManager.authenticate(

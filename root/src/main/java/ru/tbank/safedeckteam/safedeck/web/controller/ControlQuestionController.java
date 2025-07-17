@@ -1,5 +1,6 @@
 package ru.tbank.safedeckteam.safedeck.web.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,11 @@ public class ControlQuestionController {
     @GetMapping("/{boardId}/ids")
     public ResponseEntity<List<Long>> getBoardQuestionsIds(@PathVariable Long boardId) {
         return ResponseEntity.ok().body(controlQuestionService.getBoardQuestionsIds(boardId));
+    }
+
+    @GetMapping("/{boardId}/random")
+    public ResponseEntity<GivenQuestionDTO> getRandomQuestion(@PathVariable Long boardId) {
+        return ResponseEntity.ok().body(controlQuestionService.getRandomQuestion(boardId));
     }
 
     @GetMapping("/by-id/{questionId}")
@@ -61,7 +67,11 @@ public class ControlQuestionController {
 
     @PostMapping("/{questionId}/check-question")
     public ResponseEntity<Boolean> checkControlQuestion(@PathVariable Long questionId,
-                                                        @RequestBody GivenAnswerDTO givenAnswerDTO) {
-        return ResponseEntity.ok().body(controlQuestionService.checkControlQuestion(givenAnswerDTO, questionId));
+                                                        @RequestBody GivenAnswerDTO givenAnswerDTO,
+                                                        Principal principal,
+                                                        HttpServletRequest request) {
+        return ResponseEntity.ok()
+                .body(controlQuestionService
+                        .checkControlQuestion(givenAnswerDTO, questionId, principal.toString(), request));
     }
 }
