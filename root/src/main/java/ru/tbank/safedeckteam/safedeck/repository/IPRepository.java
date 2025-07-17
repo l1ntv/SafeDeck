@@ -10,4 +10,8 @@ import java.util.Optional;
 public interface IPRepository extends JpaRepository<IP, Long> {
 
     Optional<IP> findByIp(String ip);
+
+    IP findNonOptionalByIp(String ip);
+
+    boolean existsByIp(String ip);
 }

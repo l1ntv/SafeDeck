@@ -117,9 +117,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ConflictResourceException("User with this email already exists.");
         }
 
-        /*SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())
+        SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())
                 .orElseThrow(() -> new GeneratedCodeNotFoundException("Code not found."));
-        secondFARepository.delete(secondFA);*/
+        secondFARepository.delete(secondFA);
 
 
         request.setIP(httpServletRequest.getRemoteAddr());
@@ -127,11 +127,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         request.setCountry(httpServletRequest.getLocale() != null ? httpServletRequest.getLocale().getCountry() : "Unknown");
         request.setProvider((String) httpServletRequest.getSession().getAttribute("user-provider"));
 
-
-        // Проверить, что IP не существует
-        IP ip = IP.builder()
-                .ip(request.getIP())
-                .build();
+        IP ip = ipRepository.findByIp(request.getIP())
+                .orElse(IP.builder()
+                        .ip(request.getIP())
+                        .build());
         ipRepository.save(ip);
 
 
@@ -166,9 +165,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var client = clientRepository.findOptionalByEmail(request.getEmail())
                 .orElseThrow(() -> new ClientNotFoundException("Client with this email not found."));
 
-//        SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())
-//                .orElseThrow(() -> new GeneratedCodeNotFoundException("Code not found."));
-//        secondFARepository.delete(secondFA);
+        SecondFA secondFA = secondFARepository.findByEmailAndGeneratedCode(request.getEmail(), request.getGeneratedCode())
+                .orElseThrow(() -> new GeneratedCodeNotFoundException("Code not found."));
+        secondFARepository.delete(secondFA);
 
         try {
             authenticationManager.authenticate(
