@@ -17,7 +17,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="ip" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>

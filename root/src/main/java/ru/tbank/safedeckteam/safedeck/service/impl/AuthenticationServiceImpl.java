@@ -127,11 +127,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         request.setCountry(httpServletRequest.getLocale() != null ? httpServletRequest.getLocale().getCountry() : "Unknown");
         request.setProvider((String) httpServletRequest.getSession().getAttribute("user-provider"));
 
-
-        // Проверить, что IP не существует
-        IP ip = IP.builder()
-                .ip(request.getIP())
-                .build();
+        IP ip = ipRepository.findByIp(request.getIP())
+                .orElse(IP.builder()
+                        .ip(request.getIP())
+                        .build());
         ipRepository.save(ip);
 
 
