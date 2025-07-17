@@ -164,10 +164,13 @@ public class ControlQuestionServiceImpl implements ControlQuestionService {
         if (ans) {
             Client client = clientRepository.findOptionalByEmail(email)
                     .orElseThrow(() -> new ClientNotFoundException("Client not found."));
-            IP ipAddress = IP.builder()
-                    .ip(httpServletRequest.getRemoteAddr())
-                    .build();
+
+            IP ipAddress = ipRepository.findByIp(httpServletRequest.getRemoteAddr())
+                    .orElse(IP.builder()
+                            .ip(httpServletRequest.getRemoteAddr())
+                            .build());
             ipRepository.save(ipAddress);
+
             TrustedUserIP trustedUserIP = TrustedUserIP.builder()
                     .user(client)
                     .ip(ipAddress)
