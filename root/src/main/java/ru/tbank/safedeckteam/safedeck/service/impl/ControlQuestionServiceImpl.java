@@ -139,7 +139,7 @@ public class ControlQuestionServiceImpl implements ControlQuestionService {
     public boolean checkControlQuestion(GivenAnswerDTO givenAnswerDTO, long questionId, String email, HttpServletRequest httpServletRequest) {
         ControlQuestion question = controlQuestionRepository.findById(questionId)
                 .orElseThrow(() -> new RuntimeException("Question not found."));
-        givenAnswerDTO.setCorrectAnswer(question.getQuestion());
+        givenAnswerDTO.setCorrectAnswer(question.getAnswer());
         String url = "http://localhost:8082/check-answer";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
