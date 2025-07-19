@@ -1,48 +1,6 @@
 version: '3.8'
 
 services:
-  # === Kafka ===
-  kafka:
-    image: bitnami/kafka:latest
-    container_name: kafka
-    hostname: kafka
-    ports:
-      - "29092:29092"
-      - "9092:9092"
-      - "9093:9093"
-    environment:
-      KAFKA_ENABLE_KRAFT: "yes"
-      KAFKA_CFG_PROCESS_ROLES: "controller,broker"
-      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
-      KAFKA_CFG_NODE_ID: "1"
-      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
-      KAFKA_KRAFT_CLUSTER_ID: "Adksdfonds_sAdsf"
-      KAFKA_CFG_LISTENERS: "INTERNAL://:9092,EXTERNAL://:29092,CONTROLLER://:9093"
-      KAFKA_CFG_ADVERTISED_LISTENERS: "INTERNAL://kafka:9092,EXTERNAL://localhost:29092"
-      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT"
-      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "INTERNAL"
-      ALLOW_PLAINTEXT_LISTENER: "yes"
-      KAFKA_JMX_PORT: "9102"
-      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
-    healthcheck:
-      test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "kafka:9092", "--list"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: kafka-ui
-    ports:
-      - "8080:8080"
-    environment:
-      KAFKA_CLUSTERS_0_NAME: "local"
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9092"
-      KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL: "PLAINTEXT"
-    depends_on:
-      kafka:
-        condition: service_healthy
-
   # === PostgreSQL для safedeck-root ===
   postgres-root:
     image: postgres:15
@@ -87,15 +45,13 @@ services:
       dockerfile: root/Dockerfile
     container_name: safedeck-root
     ports:
-      - "8080:8080"
+      - "8090:8090"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-root:5432/root_db
       SPRING_DATASOURCE_USERNAME: root_user
       SPRING_DATASOURCE_PASSWORD: root_pass
     depends_on:
       postgres-root:
-        condition: service_healthy
-      kafka:
         condition: service_healthy
 
   safedeck-email-service:
@@ -105,11 +61,6 @@ services:
     container_name: safedeck-email-service
     ports:
       - "8087:8087"
-    environment:
-      SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
-    depends_on:
-      kafka:
-        condition: service_healthy
 
   safedeck-encrypt-service:
     build:
@@ -125,8 +76,6 @@ services:
     depends_on:
       postgres-encrypt:
         condition: service_healthy
-      kafka:
-        condition: service_healthy
 
   safedeck-llm-service:
     build:
@@ -135,9 +84,6 @@ services:
     container_name: safedeck-llm-service
     ports:
       - "8082:8082"
-    depends_on:
-      kafka:
-        condition: service_healthy
 
 volumes:
   postgres_encrypt_data:
