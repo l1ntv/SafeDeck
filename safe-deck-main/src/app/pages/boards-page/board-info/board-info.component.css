@@ -1,0 +1,72 @@
+.board-bg {
+   width: 30vh;
+   padding: 1rem;
+   margin: 1rem;
+   gap: 1rem;
+}
+
+.vertical-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
+}
+
+.horizontal-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-end;
+   align-items: flex-start;
+}
+
+/* texts */
+
+.board-name {
+   color: black;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+}
+
+.input:focus {
+   outline: none;
+   border: none;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   border-bottom: 2px solid var(--orange);
+}
+
+/* buttons */
+
+[tuiAppearance].light-gray-button {
+   background-color: rgb(240, 240, 240);
+   border-radius: 1rem;
+   font: var(--main-font);
+   font-weight: normal;
+   color: black;
+
+   padding: 0rem;
+   margin-left: 0.5rem;
+}
+
+[tuiAppearance].light-gray-button:hover {
+   background-color: gray;
+   color: white;
+}
+
+/* images */
+.icon {
+   margin-right: 3px;
+}
+
+.small-icon {
+   width: var(--normal-font-size);
+   height: var(--normal-font-size);
+   margin: 0.5rem;
+}
+
+/* other */
+.full-width {
+   width: 100%;
+}

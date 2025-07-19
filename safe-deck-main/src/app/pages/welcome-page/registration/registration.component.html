@@ -1,0 +1,25 @@
+<form [formGroup]="authForm" class="vertical-list outlet">
+   <h1 class="header-text">Регистрация</h1>
+
+   <input name="login" class="input" formControlName="login" placeholder="Email" required />
+   @if(authForm.controls["login"].invalid && authForm.controls["login"].touched){
+      <span class="alert">Введите email</span>
+   }
+   <input type="password" class="input" name="password" formControlName="password" placeholder="Пароль" required />
+   @if(authForm.controls["password"].invalid && authForm.controls["password"].touched){
+      <span class="alert">Введите пароль</span>
+   }
+   <input class="input" name="publicName" formControlName="publicName" placeholder="Имя пользователя" required />
+   @if(authForm.controls["publicName"].invalid && authForm.controls["publicName"].touched){
+      <span class="alert">Введите имя пользователя</span>
+   }
+   <span class="error"> {{ error() }} </span>
+   <br>
+
+   <button tuiButton class="blue-button full-width-button" type="submit" [disabled]="authForm.invalid"
+      (click)="onSubmit()">
+      Зарегистрироваться
+   </button><br>
+
+   <p class="main-text">Есть аккаунт? <a class="link" (click)="showAuthDialog()">Войти</a> </p>
+</form>

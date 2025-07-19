@@ -1,0 +1,59 @@
+.card {
+   background-color: white;
+   border-radius: 20px;
+   box-shadow: 0 0 10px var(--shadow-gray);
+   margin: 1rem;
+   padding: 1rem;
+
+   /* широкий экран пк */
+   @media (min-aspect-ratio: 3/2) {
+      width: calc(33vw - 4rem - 4rem/3);
+   }
+   /* средний экран пк */
+   @media (max-aspect-ratio: 3/2) and (min-aspect-ratio: 1/1) {
+      width: calc(50vw - 4rem - 2rem);
+   }
+   /* телефоны */
+   @media (max-aspect-ratio: 1/1) {
+      width: calc(100vw - 4rem - 4rem);
+   }
+
+   /* ПК */
+   @media (min-width: 600px) and (min-height: 600px) {
+      min-height: 20vh;
+   }
+}
+
+.horizontal-center-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-around;
+   align-items: center;
+   gap: 1rem;
+}
+
+.circle {
+   background-color: #F5F5F5;
+   border-radius: 4vw;
+   padding: 2vw;
+   margin: 1vw;
+}
+
+.icon {
+   width: 3rem;
+   height: 3rem;
+}
+
+.text {
+   font-family: var(--main-font);
+   @media (min-width: 600px) and (min-height: 600px) {
+      font-size: 1.3rem;
+      line-height: 1.5rem;
+   }
+   @media (max-width: 600px) or (max-height: 600px) {
+      font-size: 0.8rem;
+      line-height: 0.9rem;
+   }
+   
+   color: black;
+}

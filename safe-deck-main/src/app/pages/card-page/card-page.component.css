@@ -1,0 +1,209 @@
+.vertical-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
+}
+
+.horizontal-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: flex-start;
+}
+
+.bg-card {
+   display: inline-block;
+   margin: 2rem;
+   padding: 1rem 2rem;
+}
+
+.container-card {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
+   gap: 1rem;
+}
+
+.box {
+   inline-size: calc(100vw - 28vh - 2rem);
+   block-size: calc(100vh - 2rem - var(--normal-font-size));
+}
+
+.block {
+   border: 1px solid rgb(197, 197, 197);
+   width: calc(100% - 2rem);
+   border-radius: 16px;
+   padding: 1rem;
+}
+
+/* inputs */
+
+.input-line {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+   gap: 1rem;
+}
+
+.textarea-line {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: flex-start;
+   gap: 1rem;
+}
+
+.input {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   border-radius: 10px;
+   border: 1px solid black;
+   padding: 0.5rem 1rem;
+}
+
+.input:focus {
+   outline: none;
+   border: 2px solid var(--blue);
+}
+
+input.ng-touched.ng-invalid {
+   border: 2px solid red;
+}
+
+.textarea {
+   resize: vertical;
+}
+
+/* texts */
+
+.text {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+}
+
+.label {
+   padding-top: 0.5rem;
+}
+
+.title {
+   font-family: var(--main-font);
+   font-size: 1.5rem;
+   font-weight: bold;
+   margin: 0.5rem 0;
+}
+
+.title-link {
+   color: white;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   text-decoration: none;
+
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 0.5rem;
+}
+
+.title-link:hover {
+   color: rgb(221, 221, 221);
+   cursor: pointer;
+}
+
+.link {
+   color: var(--blue);
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   text-decoration: none;
+   margin-left: 0.5rem;
+}
+
+.link:hover {
+   color: var(--dark-blue);
+   cursor: pointer;
+}
+
+.table-title {
+   color: black;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   font-weight: bold;
+}
+
+.table-text {
+   color: black;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+}
+
+/* images */
+
+.icon {
+   width: var(--normal-font-size);
+   height: var(--normal-font-size);
+}
+
+.small-icon {
+   width: var(--normal-font-size);
+   height: var(--normal-font-size);
+   color: black;
+   margin: 0.5rem;
+}
+
+/* buttons */
+
+[tuiAppearance].light-gray-button {
+   background-color: rgb(240, 240, 240);
+   border-radius: 1rem;
+   font: var(--main-font);
+   font-weight: normal;
+   color: black;
+
+   padding: 0rem;
+}
+
+[tuiAppearance].light-gray-button:hover {
+   background-color: gray;
+   color: white;
+}
+
+/* table */
+
+.table {
+   inline-size: 100%;
+   border: none;
+   border-collapse: collapse;
+
+}
+
+.delete-cell {
+   border: none;
+   background-color: white;
+   width: 2.15rem;
+}
+
+
+/* other */
+
+.page-padding {
+   padding: 1.5rem;
+}
+
+.padding {
+   padding: 1rem;
+}
+
+.gap {
+   gap: 1rem;
+}
+
+.right {
+   margin-left: auto;
+}

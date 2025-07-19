@@ -1,0 +1,52 @@
+<div class="horizontal-list">
+   <main-menu></main-menu>
+
+   <div class="vertical-list main-page">
+      <div class="main-page-header">
+         <span class="title">Настройки</span>
+      </div>
+
+      <div class="cloud profile-bg">
+         <span class="title-profile">Профиль</span>
+
+         <div class="horizontal-center-list">
+            <tui-avatar
+               size="l"
+               [src]="getAvatarText()"
+               [style.background]="getAvatarColor()"
+               [style.color]="'white'"
+               [style.font-family]="'var(--main-font)'"
+            />
+
+            @if (isNameEdited()) {
+               <input
+                  tuiAutoFocus
+                  type="text" class="text input"
+                  [formControl]="userNameControl"
+                  (keydown.enter.prevent)="editName()"
+                  (blur)="cancelEdit()"
+                  (focus)="selectInputText($event)"
+               >
+            }
+            @else {
+               <span class="text" (dblclick)="startEdit()">{{ userName() }}</span>
+               <button 
+                  tuiButton 
+                  class="light-gray-button"
+                  size="s"
+                  (click)="startEdit()"
+               >
+                  <tui-icon
+                     icon="@tui.pencil"
+                     class="small-icon"
+                  ></tui-icon>
+               </button>
+            }
+         </div>
+
+         <button tuiButton size="m" class="light-button auth-button" (click)="logout()">Выйти из аккаунта</button>
+      </div>
+
+      
+   </div>
+</div>

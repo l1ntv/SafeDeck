@@ -1,4 +1,11 @@
 services:
+  # === Фронтенд ===
+  frontend:
+    build:
+      context: ./safe-deck-main   # путь к папке с вашим фронтендом и Dockerfile
+    ports:
+      - "8085:80"            # доступ по localhost:8085
+    restart: unless-stopped
   # Kafka и UI
   kafka:
     image: bitnami/kafka:latest
@@ -23,7 +30,7 @@ services:
       KAFKA_JMX_PORT: "9102"
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
     healthcheck:
-      test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "kafka:9092", "--list"]
+      test: [ "CMD", "kafka-topics.sh", "--bootstrap-server", "kafka:9092", "--list" ]
       interval: 5s
       timeout: 5s
       retries: 10

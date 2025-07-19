@@ -1,0 +1,117 @@
+.vertical-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
+}
+
+.horizontal-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: flex-start;
+}
+
+.full-width-page {
+   width: min(800px, calc(100% - 3rem));
+   margin: 1.5rem;
+}
+
+.box {
+   inline-size: 100%;
+   block-size: calc(100vh - 2rem - var(--normal-font-size));
+}
+
+.bg-form {
+   display: inline-block;
+   margin: 2rem;
+   padding: 1rem 2rem;
+}
+
+.container {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
+   gap: 1rem;
+}
+
+.block {
+   border: 1px solid rgb(197, 197, 197);
+   width: calc(100% - 2rem);
+   border-radius: 16px;
+   padding: 1rem;
+}
+
+/* inputs */
+
+.input-line {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+   gap: 1rem;
+}
+
+.input {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   border-radius: 10px;
+   border: 1px solid black;
+   padding: 0.5rem 1rem;
+}
+
+.input:focus {
+   outline: none;
+   border: 2px solid var(--blue);
+}
+
+input.ng-touched.ng-invalid {
+   border: 2px solid red;
+}
+
+/* texts */
+
+.title-link {
+   color: white;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   text-decoration: none;
+
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 0.5rem;
+}
+
+.title-link:hover {
+   color: rgb(221, 221, 221);
+   cursor: pointer;
+}
+
+.text {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+}
+
+.title {
+   font-family: var(--main-font);
+   font-size: 1.5rem;
+   font-weight: bold;
+   margin: 0.5rem 0;
+}
+
+/* images */
+
+.icon {
+   width: var(--normal-font-size);
+   height: var(--normal-font-size);
+}
+
+/* other */
+
+.gap {
+   gap: 1rem;
+}

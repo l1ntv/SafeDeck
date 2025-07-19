@@ -1,0 +1,45 @@
+<div class="cloud board-bg vertical-list">
+   @if (isNameEdited()) {
+      <input
+         tuiAutoFocus
+         type="text" class="board-name input"
+         [formControl]="boardName"
+         (keydown.enter.prevent)="editName()"
+         (blur)="cancelEdit()"
+         (focus)="selectInputText($event)"
+      >
+   }
+   @else {
+      <span class="board-name" (dblclick)="startEdit()"> 
+         {{board().boardName}}
+      </span>
+   }
+   
+
+   <div class="horizontal-list full-width">
+      <button 
+         tuiButton 
+         class="light-gray-button"
+         size="s"
+         (click)="startEdit()"
+      >
+         <tui-icon
+            icon="@tui.pencil"
+            class="small-icon"
+         ></tui-icon>
+      </button>    
+
+      <button 
+         tuiButton 
+         class="light-gray-button"
+         size="s"
+         (click)="confirmDeleteBoard()"
+      >
+         <tui-icon 
+            icon="@tui.trash"
+            class="small-icon"
+         ></tui-icon>
+      </button>
+   </div>
+   
+</div>

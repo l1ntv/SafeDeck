@@ -1,0 +1,39 @@
+<div class="vertical-list">
+   @if (selectedRoles().length > 0) {
+      <div class="items-list">
+      @for (role of selectedRoles(); track role.roleId) {
+         <div class="item">
+            <span class="text"> {{ role.roleName }} </span>
+            <tui-icon icon="circle-x" class="white-icon" (click)="removeRole(role)"></tui-icon>
+         </div>
+      }
+      </div>
+   }
+   
+   <a class="link"
+      [tuiDropdown]="dropdownContent"
+      [tuiDropdownManual]="openDropDown"
+      (click)="showMenu()"
+      (tuiActiveZoneChange)="onActiveZone($event)"
+      (tuiObscured)="onObscured($event)"
+   >
+      <tui-icon icon="circle-plus" class="icon"></tui-icon>
+      Добавить роль
+   </a>
+
+   <ng-template #dropdownContent>
+      <div class="menu">
+         @for (role of roles(); track role.roleId) {
+         <button tuiButton size="s" class="line-button" (click)="selectRoleToAdd(role)">
+            {{ role.roleName }}
+         </button>
+         } @empty {
+            <button tuiButton size="s" class="line-button" disabled="true">
+               В проекте пока нет ролей
+            </button>
+         }
+         
+      </div>
+   </ng-template>
+
+</div>

@@ -1,0 +1,88 @@
+.vertical-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+}
+
+.horizontal-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+   gap: 1rem;
+}
+
+.outlet {
+   padding-left: 1em;
+   padding-right: 1em;
+}
+
+/* inputs */
+.input {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   border-radius: 10px;
+   border: 1px solid black;
+   padding: 1em;
+   margin: 1em;
+   width: calc(100% - 2em);
+}
+
+.input:focus {
+   outline: none;
+   border: 2px solid var(--blue);
+}
+
+input.ng-touched.ng-invalid {
+   border: 2px solid red;
+}
+
+/* texts */
+.header-text {
+   font-family: var(--main-font);
+   font-size: 1.75em;
+   margin-block-start: 1rem;
+   margin-block-end: 1rem;
+}
+
+.main-text {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+}
+
+.link {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   font-weight: bold;
+   color: var(--blue);
+   text-decoration: none;
+}
+
+.link:hover {
+   color: var(--orange);
+   cursor: pointer;
+}
+
+.alert {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   margin-top: -0.8em;
+   padding-left: 2em;
+   color: red;
+   width: 100%;
+   text-align: left;
+}
+
+.error {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   color: red;
+   width: 100%;
+   text-align: left;
+}
+
+/* buttons */
+[tuiAppearance].full-width-button {
+   width: 100%;
+}

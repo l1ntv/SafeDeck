@@ -1,0 +1,82 @@
+<div class="horizontal-list">
+   <main-menu></main-menu>
+
+   <div class="vertical-list main-page">
+      <div class="main-page-header">
+         <a class="title-link" routerLink="/cards/{{boardId}}">
+            <tui-icon icon="arrow-left" class="icon"></tui-icon>
+            Назад
+         </a>
+      </div>
+
+      <div class="full-width-page vertical-list">
+         <div class="cloud">
+            <tui-scrollbar class="box">
+               <table
+                  tuiTable
+                  class="table"
+                  [columns]="columns"
+               >
+                  <thead>
+                     <tr tuiThGroup>
+                        <th tuiTh class="table-title left-round">Email</th>
+                        <th tuiTh class="table-title">IP</th>
+                        <th tuiTh class="table-title">Карточка</th>
+                        <th tuiTh class="table-title">Время</th>
+                        <th tuiTh class="table-title right-round">Статус</th>
+                     </tr>
+                  </thead>
+   
+                  
+                  <tbody tuiTbody>
+                     @for(log of logs(); track log.logId) {
+                        <tr tuiTr class="table-row">
+   
+                           <td *tuiCell="'email'" class="table-text" tuiTd>
+                              {{ log.email }}
+                           </td>
+   
+                           <td *tuiCell="'ip'" class="table-text" tuiTd>
+                              {{ log.ip }}
+                           </td>
+   
+                           <td *tuiCell="'card'" class="table-text" tuiTd>
+                             {{ log.cardName }}
+                           </td>
+   
+                           <td *tuiCell="'time'" class="table-text" tuiTd>
+                              {{ getDatetimeString(log.viewTime) }}
+                           </td>
+   
+                           <td *tuiCell="'status'" class="table-text {{ colors[log.status] }}" tuiTd>
+                              
+                              @if (log.status == 'HACK') {
+                                 <div class="row">
+                                    {{ statusTexts[log.status] }}
+                                    <button tuiButton class="light-gray-button" size="s">
+                                       <tui-icon icon="arrow-right" size="m" class="small-icon"></tui-icon>
+                                    </button>
+
+                                 </div> 
+                              } @else {
+                                 {{ statusTexts[log.status] }}
+                              }
+                           </td>
+
+                           <!--td *tuiCell="'action'" class="table-text" tuiTd>
+                              <button tuiButton class="light-gray-button" size="s">
+                                 <tui-icon icon="trash" size="m" class="small-icon"></tui-icon>
+                              </button>
+                           </td-->
+                        </tr>
+                     }     
+                  </tbody>
+                  
+               </table>
+            </tui-scrollbar>
+            
+         </div>
+      </div>
+      
+   </div>
+</div>

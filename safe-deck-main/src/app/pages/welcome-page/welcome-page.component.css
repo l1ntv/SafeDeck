@@ -1,0 +1,146 @@
+main {
+   background-color: var(--light-gray);
+}
+
+.welcome-bg {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+
+   background-color: var(--light-gray);
+   height: calc(100vh - 66px);
+   /* высота header-a = иконка 36 px и 3 отступа по 10 px*/
+   overflow: hidden;
+}
+
+.white-circle {
+   background-color: white;
+   border-radius: 50%;
+   min-height: calc(100vh * 2);
+   width: 100vw;
+}
+
+.horizontal-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: center;
+   flex-wrap: wrap;
+}
+
+.horizontal-center-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+   flex-wrap: wrap;
+}
+
+.vertical-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: flex-start;
+   gap: 3vw;
+}
+
+.vertical-center-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   gap: 3vw;
+}
+
+.vertical-top-center-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 3vw;
+}
+
+.half {
+   @media (orientation: portrait) {
+      max-width: calc(100vw - 8vw);
+   }
+
+   @media (orientation: landscape) {
+      max-width: calc(50vw - 8vw);
+   }
+
+   margin-top: 2rem;
+   margin-bottom: 2rem;
+}
+
+/* functions screen */
+.gray-bg {
+   background-color: var(--light-gray);
+   min-height: 95vh;
+   padding: 2rem;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   gap: 3vw;
+}
+
+/* texts */
+.title,
+.accent {
+   font-family: var(--title-font);
+   font-weight: bold;
+   font-size: max(40px, 4vw);
+   color: black;
+   margin-block-start: 0;
+   margin-block-end: 0;
+   line-height: max(40px, 4vw);
+   margin-right: 1vw;
+   max-width: 50vw;
+}
+
+.accent {
+   color: var(--yellow);
+}
+
+.sub-title {
+   font-family: var(--title-font);
+   font-weight: bold;
+   font-size: 3rem;
+   color: black;
+   margin-block-start: 0;
+   margin-block-end: 0;
+   line-height: 3rem;
+}
+
+.text {
+   font-family: var(--main-font);
+   font-size: 1.5rem;
+   line-height: 1.75rem;
+}
+
+/* images */
+.welcome-img {
+   @media (orientation: portrait) {
+      width: 80%;
+   }
+
+   @media (orientation: landscape) {
+      width: max(300px, 50%);
+   }
+
+   height: auto;
+}
+
+/* other */
+.padding {
+   padding: 8vw;
+}
+
+.big-button {
+   font-size: 1.5rem;
+   padding-top: 2rem;
+   padding-bottom: 2rem;
+}

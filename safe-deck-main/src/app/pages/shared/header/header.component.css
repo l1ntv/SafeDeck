@@ -1,0 +1,48 @@
+.header-outer {
+   background: var(--light-gray);
+   padding-bottom: 3px;
+}
+
+.header-bg {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+
+   background: white;
+   padding: 10px;
+   padding-left: 2rem;
+   padding-right: 2rem;
+   margin-bottom: 1px;
+   box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
+   flex-wrap: wrap;
+}
+
+.horizontal-center-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+   gap: 1rem;
+}
+
+.logo {
+   height: 36px;
+   width: auto;
+}
+
+.link {
+   font-family: var(--main-font);
+   font-size: 1.25rem;
+   text-decoration: none;
+   padding-top: 3px;
+   padding-bottom: 3px;
+   border-bottom: 2px solid white;
+}
+.link:hover {
+   border-bottom: 2px solid var(--orange);
+}
+
+[tuiAppearance].auth-button {
+   font-weight: normal;
+}

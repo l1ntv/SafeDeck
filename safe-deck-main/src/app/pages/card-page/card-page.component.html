@@ -1,0 +1,116 @@
+<div class="horizontal-list">
+   <main-menu></main-menu>
+
+   <div class="vertical-list main-page">
+      <div class="main-page-header">
+         <a class="title-link" routerLink="/cards/{{boardId}}">
+            <tui-icon icon="arrow-left" class="icon"></tui-icon>
+            Назад
+         </a>
+      </div>
+
+      <tui-scrollbar class="box">
+         <form [formGroup]="cardForm" class="cloud bg-card">
+            <div class="container-card">
+               <span class="title">Создание карточки</span>
+   
+               <div class="input-line">
+                  <label for="cardName" class="text">Название</label>
+                  <input class="input" name="cardName" formControlName="cardName" required maxlength="50" size="50">
+               </div>
+      
+               <div class="textarea-line">
+                  <label for="cardDescription" class="text label">Описание</label>
+                  <textarea class="input textarea" name="cardDescription" formControlName="cardDescription" maxlength="255" cols="50"></textarea>
+               </div>
+
+               <span class="text">Хранимые данные:</span>
+
+               <div class="block vertical-list gap">
+                  
+                  <table
+                     tuiTable
+                     class="table"
+                     [columns]="columns"
+                  >
+                     <thead>
+                           <tr tuiThGroup>
+                              <th tuiTh class="table-title">Название</th>
+                              <th tuiTh class="table-title">Значение</th>
+                              <th tuiTh class="table-title delete-cell"></th>
+                           </tr>
+                     </thead>
+         
+                     <tbody tuiTbody>
+                        @for(item of items(); track $index) {
+                           <tr
+                              tuiTr
+                              [formGroup]="item"
+                           >
+         
+                              <td
+                                 *tuiCell="'name'"
+                                 tuiTd
+                              >
+                                 <tui-textfield>
+                                    <input
+                                       formControlName="name"
+                                       placeholder="Название"
+                                       class="table-text"
+                                       tuiTextfield
+                                    />
+                                 </tui-textfield>
+                              </td>
+         
+                              <td *tuiCell="'value'" tuiTd>
+                                 <tui-textfield class="horizontal-list">
+                                    <input
+                                       class="table-text"
+                                       formControlName="value"
+                                       size="20"
+                                       [type]="isPasswordVisible($index) ? 'text' : 'password'"
+                                       tuiTextfield
+                                    />
+                                    <tui-icon 
+                                    [icon]="isPasswordVisible($index) ? 'eye-off' : 'eye'" 
+                                    size="m" 
+                                    class="small-icon"
+                                    (click)="togglePasswordVisibility($index)"></tui-icon>
+                                 </tui-textfield>         
+                              </td>
+         
+                              <td *tuiCell="'icon'" tuiTd class="delete-cell">
+                                 <button tuiButton class="light-gray-button" size="s" (click)="deleteRow($index)">
+                                   <tui-icon icon="trash" size="m" class="small-icon"></tui-icon>
+                                 </button>
+                              </td>
+                           </tr>
+                        }
+                        
+                     </tbody>
+                  </table>
+         
+                  <a class="link" (click)="addRow()">
+                     <tui-icon icon="circle-plus" class="icon"></tui-icon>
+                     Добавить строку
+                  </a>
+               </div>
+
+               <span class="text">Роли, которым доступна карточка:</span>
+
+               <div class="block vertical-list gap">
+                  <select-roles [boardId]="boardId"></select-roles>
+               </div>
+      
+               <button tuiButton class="blue-button right" size="l" type="submit" [disabled]="cardForm.invalid" (click)="onSubmit()">
+                  Создать
+               </button>
+               
+            </div>
+         </form>
+      </tui-scrollbar>   
+
+   </div>
+</div>
+
+

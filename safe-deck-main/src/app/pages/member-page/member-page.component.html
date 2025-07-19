@@ -1,0 +1,68 @@
+<div class="horizontal-list">
+   <main-menu></main-menu>
+
+   <div class="vertical-list main-page">
+      <div class="main-page-header">
+         <a class="title-link" routerLink="/members/{{boardId}}">
+            <tui-icon icon="arrow-left" class="icon"></tui-icon>
+            Назад
+         </a>
+      </div>
+
+      <tui-scrollbar class="box">
+         <form [formGroup]="memberForm" class="cloud bg-form">
+            <div class="container">
+               @if (memberId == -1) {
+                  <span class="title">Добавление участника</span>
+               } @else {
+                  <span class="title">Редактирование участника</span>
+               }
+               
+               <div class="input-line">
+                  <label for="email" class="text">Email</label>
+                  <input 
+                     class="input" 
+                     name="email"
+                     formControlName="email" 
+                     [readOnly]="memberId >= 0"
+                     required 
+                     maxlength="50" 
+                     size="50"
+                  >
+               </div>
+
+               <span class="text">Доступные участнику роли:</span>
+               <div class="block vertical-list gap">
+                  <select-roles [boardId]="boardId"></select-roles>
+               </div>
+
+               @if (memberId == -1) {
+                  <button 
+                     tuiButton 
+                     class="blue-button right" 
+                     size="l" 
+                     type="submit" 
+                     [disabled]="memberForm.invalid" 
+                     (click)="addBoardMember()"
+                  >
+                     Добавить
+                  </button>
+               } @else {
+                  <button 
+                     tuiButton
+                     class="blue-button right"
+                     size="l"
+                     type="submit"
+                     [disabled]="memberForm.invalid"
+                     (click)="updateBoardMember()"
+                  >
+                     Сохранить
+                  </button>
+               }
+
+            </div>
+         </form>
+      </tui-scrollbar>
+
+   </div>
+</div>

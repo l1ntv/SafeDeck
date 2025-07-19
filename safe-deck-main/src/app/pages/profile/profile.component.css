@@ -1,0 +1,95 @@
+.profile-bg {
+   padding: 1.5rem;
+   margin: 1.5rem;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
+   gap: 1.5rem;
+}
+
+.horizontal-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: flex-start;
+}
+
+.horizontal-center-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 1rem;
+}
+
+.vertical-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
+}
+
+/* texts */
+
+.title {
+   color: white;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   margin-left: 0.5rem;
+}
+
+.title-profile {
+   color: black;
+   font-family: var(--main-font);
+   font-size: 1.5rem;
+}
+
+.text {
+   color: black;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+}
+
+/* inputs */
+
+.input:focus {
+   outline: none;
+   border: none;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   border-bottom: 2px solid var(--orange);
+}
+
+/* buttons */
+
+[tuiAppearance].auth-button {
+   font-weight: normal;
+}
+
+[tuiAppearance].light-gray-button {
+   background-color: rgb(240, 240, 240);
+   border-radius: 1rem;
+   font: var(--main-font);
+   font-weight: normal;
+   color: black;
+
+   padding: 0rem;
+   margin-left: 0.5rem;
+}
+
+[tuiAppearance].light-gray-button:hover {
+   background-color: gray;
+   color: white;
+}
+
+/* images */
+
+.small-icon {
+   width: var(--normal-font-size);
+   height: var(--normal-font-size);
+   margin: 0.5rem;
+}

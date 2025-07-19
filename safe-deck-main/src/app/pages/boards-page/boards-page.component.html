@@ -1,0 +1,27 @@
+<div class="horizontal-list">
+   <main-menu></main-menu>
+
+   <div class="vertical-list main-page">
+      <div class="main-page-header">
+         <span class="title">Доступные проекты</span>
+      </div>
+
+      <tui-scrollbar class="box">
+         <div class="vertical-list gap page-padding">
+            <a class="link" (click)="createBoard()">
+               <tui-icon icon="circle-plus" class="icon"></tui-icon>
+               Добавить проект
+            </a>
+            
+            <div class="boards-list">
+               @for (board of boards(); track board.boardId) {
+                  <board-info 
+                     [board]="board"
+                  ></board-info>
+               }
+            </div>      
+         </div>     
+      </tui-scrollbar>
+      
+   </div>
+</div>

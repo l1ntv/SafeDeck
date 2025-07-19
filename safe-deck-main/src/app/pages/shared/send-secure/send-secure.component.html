@@ -1,0 +1,22 @@
+<div class="vertical-list">
+   <span class="header">Одноразовая ссылка</span>
+
+   <span class="text">
+      Переход по ссылке покажет пароли один раз. После этого ссылка уничтожится.
+      Если ей не воспользуются в течение суток, она также уничтожится
+   </span>
+   
+   @if (hasLink()) {
+      <div class="link-display">
+         <input type="text" [value]="link" readonly>
+         <button tuiButton size="m" class="light-gray-button" (click)="copyToClipboard()">
+            <tui-icon class="small-icon" icon="copy"></tui-icon>
+         </button>
+      </div>
+   } @else {
+      <button tuiButton class="blue-button right" size="m" (click)="generateLink()">
+         Создать ссылку
+      </button>
+   }
+   
+</div>

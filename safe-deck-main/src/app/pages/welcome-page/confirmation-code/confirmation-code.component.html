@@ -1,0 +1,21 @@
+<form [formGroup]="confirmationCodeForm" class="vertical-left-list min-outlet">
+   <h1 class="header-text no-bottom-margin">Введите код</h1>
+   <span class="main-text">Код подтверждения был отправлен на вашу почту</span>
+
+   <input name="code" class="no-margin input" formControlName="code" placeholder="Код подтверждения"  minlength="5" maxlength="5" pattern="\d{5}" required />
+   @if(confirmationCodeForm.controls["code"].invalid && confirmationCodeForm.controls["code"].touched){
+      <span class="alert no-padding">Код состоит из пяти цифр</span>
+   }
+
+   <div class="horizontal-list">
+      <button tuiButton 
+         class="blue-button" 
+         type="submit" 
+         [disabled]="confirmationCodeForm.invalid"
+         (click)="sendCode()"
+      >
+         Отправить
+      </button>
+      <a class="link" (click)="cancel()">Отмена</a>
+   </div> 
+</form>

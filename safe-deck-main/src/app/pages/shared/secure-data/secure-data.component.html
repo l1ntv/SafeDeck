@@ -1,0 +1,32 @@
+<div class="page">
+   <span class="title"> {{ cardName }} </span>
+
+
+   <table tuiTable class="table" [columns]="columns">
+      <thead>
+         <tr tuiThGroup>
+            <th tuiTh class="table-title">Название</th>
+            <th tuiTh class="table-title">Значение</th>
+         </tr>
+      </thead>
+
+      <tbody tuiTbody>
+         @for(credential of credentials; track $index) {
+         <tr tuiTr>
+            <td *tuiCell="'name'" class="table-text" tuiTd>
+               {{ credential.field }}
+            </td>
+
+            <td *tuiCell="'value'" class="table-text" tuiTd>
+               {{ credential.password }}
+            </td>
+         </tr>
+         }
+
+      </tbody>
+   </table>
+
+   <button tuiButton class="blue-button right" size="m" (click)="closeDialog()">
+      Закрыть
+   </button>
+</div>

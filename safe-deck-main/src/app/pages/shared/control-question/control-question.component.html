@@ -1,0 +1,14 @@
+<form [formGroup]="answerForm" class="vertical-list">
+   <span class="header">Контрольный вопрос</span>
+
+   <span class="text"> {{ questionText }} </span>
+
+   <div class="textarea-line">
+      <label for="answer" class="text label">Ваш ответ</label>
+      <textarea class="input textarea" name="answer" formControlName="answer" maxlength="255"></textarea>
+   </div>
+
+   <button tuiButton class="blue-button right" size="m" (click)="checkAnswer()">
+      Отправить ответ
+   </button>
+</form>

@@ -1,0 +1,52 @@
+.card-bg {
+   padding: 1rem;
+   margin: 1rem;
+   width: 30vh;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: stretch;
+   gap: 0.5rem;
+}
+
+.horizontal-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: flex-start;
+}
+
+/* texts */
+.text {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   color: black;
+}
+
+.title {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   font-weight: bold;
+   color: black;
+}
+
+.input {
+   outline: none;
+   border: none;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   background-color: transparent;
+}
+
+.input:focus {
+   border-bottom: 2px solid var(--orange);
+}
+
+/* buttons */
+[tuiAppearance].normal-font-weight {
+   font-weight: normal;
+}

@@ -1,0 +1,29 @@
+<tui-icon
+   icon="@tui.ellipsis-vertical"
+   [tuiDropdown]="dropdownContent"
+   [tuiDropdownManual]="open"
+   (click)="showMenu()"
+   (tuiActiveZoneChange)="onActiveZone($event)"
+   (tuiObscured)="onObscured($event)"
+></tui-icon>
+
+<ng-template #dropdownContent>
+   <div class="bg vertical-list">
+      <button tuiButton size="s" class="line-button" (click)="clickMenuOption(0)">
+         <tui-icon icon="pencil" class="icon"></tui-icon>
+         Переименовать
+      </button>
+      <button tuiButton size="s" class="line-button" (click)="clickMenuOption(1)">
+         <tui-icon icon="square-pen" class="icon"></tui-icon>
+         Изменить описание
+      </button>
+      <button tuiButton size="s" class="line-button" (click)="clickMenuOption(2)">
+         <tui-icon icon="trash" class="icon"></tui-icon>
+         Удалить
+      </button>
+      <button tuiButton size="s" class="line-button" (click)="clickMenuOption(3)">
+         <tui-icon icon="share-2" class="icon"></tui-icon>
+         Создать ссылку
+      </button>
+   </div>
+</ng-template>

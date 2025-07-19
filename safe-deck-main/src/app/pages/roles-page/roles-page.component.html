@@ -1,0 +1,119 @@
+<div class="horizontal-list">
+   <main-menu></main-menu>
+
+   <div class="vertical-list main-page">
+      <div class="main-page-header">
+         <a class="title-link" routerLink="/cards/{{boardId}}">
+            <tui-icon icon="arrow-left" class="icon"></tui-icon>
+            Назад
+         </a>
+      </div>
+
+      <div class="full-width-page vertical-list gap">
+         <div class="full-width horizontal-space-list gap">
+            <div class="horizontal-wrap-list gap">
+               <button tuiButton size="m" class="blue-button" (click)="startCreatingRole()">
+                  <tui-icon icon="plus" class="icon"></tui-icon>
+                  Добавить
+               </button>
+               <button tuiButton size="m" class="blue-button" [disabled]="selectRoleIndex() < 0" (click)="confirmDeleteRole()">
+                  <tui-icon icon="trash" class="icon"></tui-icon>
+                  Удалить
+               </button>
+               <button tuiButton size="m" class="blue-button" [disabled]="selectRoleIndex() < 0" (click)="startEditingRole()">
+                  <tui-icon icon="pencil" class="icon"></tui-icon>
+                  Изменить
+               </button>
+            </div>
+
+            @if (selectRoleIndex() != -1) {
+               <button tuiButton size="m" class="blue-button" (click)="updateCardsRole()">
+                  <tui-icon icon="check" class="icon"></tui-icon>
+                  Сохранить изменения
+               </button>
+            }
+         </div>
+         
+
+         <div class="group-horiz-list full-width">
+
+            <!-- Левая часть - роли -->           
+            <div class="half-width vertical-list cloud">
+               <div class="header-row">Роли</div>
+               <tui-scrollbar class="box">
+                  <div class="full-width vertical-list">
+                     @if (isCreateRole()) {
+                        <input
+                           tuiAutoFocus
+                           class="row2 input"
+                           placeholder="Название роли"
+                           [formControl]="createdRoleName"
+                           (keydown.enter.prevent)="createRole()"
+                           (blur)="cancelCreatingRole()"
+                        >
+                     }
+                     @for (role of roles(); track role.roleId) {
+                        @if (editRoleIndex() == $index) {
+                           <input
+                              tuiAutoFocus
+                              class="row2 input"
+                              placeholder="Название роли"
+                              [formControl]="editedRoleName"
+                              (keydown.enter.prevent)="editRole(role.roleId)"
+                              (blur)="cancelEditingRole()"
+                           >
+                        } @else {
+                           <div 
+                              [class]="selectRoleIndex() == $index ? 'selected-row' : 'row'"
+                              (click)="selectRow($index)"
+                           >
+                              {{ role.roleName }}
+                           </div>
+                        } 
+                     }
+                     @empty {
+                        <div class="row2">
+                           Пока нет ролей
+                        </div>
+                     }
+                  </div>
+               </tui-scrollbar>               
+            </div>
+            
+
+            <!-- Правая часть - карточки -->   
+            <div class="half-width vertical-list cloud">
+               <div class="header-row">Карточки</div>
+               <tui-scrollbar class="box">
+                  <div class="full-width vertical-list">
+                     
+                     @if (selectRoleIndex() == -1) {
+                        <div class="row2">
+                           Выберите роль
+                        </div>
+                     } @else {
+                     <form [formGroup]="roleForm" class="full-width">
+                        <div formArrayName="checkboxes" class="full-width vertical-list">
+                           @for (card of cards; track card.cardId) {
+                              <div class="row2 horizontal-center-list">
+                                 <input tuiCheckbox type="checkbox" [formControlName]="$index">
+                                 {{ card.cardName }}
+                              </div>
+                           }
+                           @empty {
+                              <div class="row2">
+                                 Пока нет карточек
+                              </div>
+                           }
+                        </div>
+                     </form>
+                     }
+                  </div>
+               </tui-scrollbar>                
+            </div>
+    
+         </div>
+      </div>
+   </div>
+
+</div>

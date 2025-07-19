@@ -1,0 +1,85 @@
+<div class="horizontal-list">
+   <main-menu></main-menu>
+
+   <div class="vertical-list main-page">
+      <div class="main-page-header">
+         <a class="title-link" routerLink="/cards/{{boardId}}">
+            <tui-icon icon="arrow-left" class="icon"></tui-icon>
+            Назад
+         </a>
+      </div>
+
+      <div class="full-width-page vertical-list gap">
+         @if (boardMembers().length == 0) {
+            <div class="cloud info-block">
+               <span class="text">Вы пока не приглашали в проект участников. Самое время это исправить! </span>
+               <img src="images/people.png" class="image">
+               <button tuiButton size="m" class="blue-button" routerLink="/member/{{boardId}}/-1">
+                  <tui-icon icon="plus" class="icon"></tui-icon>
+                  Добавить участника
+               </button>
+            </div>
+         }
+
+         @if (boardMembers().length != 0) {
+            <button tuiButton size="m" class="blue-button" routerLink="/member/{{boardId}}/-1">
+               <tui-icon icon="plus" class="icon"></tui-icon>
+               Добавить участника
+            </button>
+
+            <div class="cloud">
+               <tui-scrollbar class="box">
+                  <table
+                     tuiTable
+                     class="table"
+                     [columns]="columns"
+                  >
+                     <thead>
+                           <tr tuiThGroup>
+                              <th tuiTh class="table-title left-round">Имя</th>
+                              <th tuiTh class="table-title">Email</th>
+                              <th tuiTh class="table-title"></th>
+                              <th tuiTh class="table-title right-round"></th>
+                           </tr>
+                     </thead>
+   
+                     
+                     <tbody tuiTbody>
+                        @for(boardMember of boardMembers(); track boardMember.id) {
+                           <tr tuiTr class="table-row">
+      
+                              <td *tuiCell="'publicName'" class="table-text" tuiTd>
+                                 {{ boardMember.publicName }}
+                              </td>
+      
+                              <td *tuiCell="'email'" class="table-text" tuiTd>
+                                 {{ boardMember.email }}
+                              </td>
+      
+                              <td *tuiCell="'action1'" class="table-text" tuiTd>
+                                 <button tuiButton class="light-gray-button" size="s" routerLink="/member/{{boardId}}/{{boardMember.id}}">
+                                    <tui-icon icon="pencil" size="m" class="small-icon"></tui-icon>
+                                    Изменить
+                                 </button>
+                              </td>
+      
+                              <td *tuiCell="'action2'" class="table-text" tuiTd>
+                                 <button tuiButton class="light-gray-button" size="s" (click)="confirmDeleteBoardMember(boardMember.id)">
+                                    <tui-icon icon="trash" size="m" class="small-icon"></tui-icon>
+                                    Удалить
+                                 </button>
+                              </td>
+                           </tr>
+                        }     
+                     </tbody>
+                     
+                  </table>
+               </tui-scrollbar>
+               
+            </div>
+         }  
+
+      </div>
+   </div>
+
+</div>

@@ -1,0 +1,100 @@
+.full-width {
+   width: 100%;
+}
+
+.padding {
+   padding: 1rem;
+}
+
+.items-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: center;
+   flex-wrap: wrap;
+}
+
+.vertical-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
+   gap: 1rem;
+}
+
+.item {
+   border-radius: 1rem;
+   background-color: var(--orange);
+   margin: 0.5rem;
+   padding: 0.5rem;
+   padding-left: 1rem;
+
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+   gap: 1rem;
+}
+
+.menu {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: stretch;
+   padding: 0.5rem 0;
+}
+
+/* texts */
+
+.text {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   color: white;
+}
+
+.link {
+   color: var(--blue);
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   text-decoration: none;
+   margin-left: 0.5rem;
+}
+
+.link:hover {
+   color: var(--dark-blue);
+   cursor: pointer;
+}
+
+/* images */
+
+.icon {
+   width: var(--normal-font-size);
+   height: var(--normal-font-size);
+}
+
+.white-icon {
+   color: white;
+}
+.white-icon:hover {
+   color: rgb(234, 234, 234);
+   cursor: pointer;
+}
+
+/* buttons */
+
+[tuiAppearance].line-button {
+   background: white;
+   border-radius: 0;
+   font: var(--main-font);
+   font-size: 1rem;
+   font-weight: normal;
+   color: black;
+   justify-content: flex-start;
+   padding: 0 1rem;
+}
+
+[tuiAppearance].line-button:hover {
+   background-color: #f1f2f6;
+}

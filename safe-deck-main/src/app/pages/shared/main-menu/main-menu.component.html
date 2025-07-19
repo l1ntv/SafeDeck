@@ -1,0 +1,56 @@
+<div class="bg">
+   <button tuiButton size="m" class="line-button" routerLink="/profile">
+     <div class="horizontal-list">
+         <tui-avatar
+            size="s"
+            [src]="getAvatarText()"
+            [style.background]="getAvatarColor()"
+            [style.color]="'white'"
+            [style.font-family]="'var(--main-font)'"
+         />
+         <span class="text">{{ userName() }}</span>
+      </div> 
+   </button>
+
+   <div class="section-line"></div>
+
+   <div class="vertical-list">
+      <div class="horizontal-list">
+         <button tuiButton size="s" class="line-button">
+            <tui-icon 
+               icon="@tui.gem"
+               class="icon"
+            ></tui-icon>
+            <span class="text">Подписки</span>
+         </button>  
+      </div>
+
+      <div class="horizontal-list">
+         <button tuiButton size="s" class="line-button" routerLink="/password-generator">
+            <tui-icon 
+               icon="@tui.lock-keyhole"
+               class="icon"
+            ></tui-icon>
+            <span class="text">Генератор паролей</span>
+         </button>  
+      </div>
+   </div>
+
+   <div class="section-line"></div>
+   
+   <tui-scrollbar class="box">
+      <div class="vertical-list">
+         <button tuiButton size="s" class="line-button" routerLink="/boards">
+            <span class="text">Доступные проекты</span>
+         </button>
+
+         @for(board of boards(); track board.boardId) {
+            <button tuiButton size="s" class="line-button left-indent" (click)="openBoard(board.boardId)">
+               <span class="text"> {{board.boardName}} </span>
+            </button>
+         }
+
+      </div>
+   </tui-scrollbar>
+      
+</div>

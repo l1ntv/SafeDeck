@@ -1,0 +1,54 @@
+.page {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
+   gap: 1rem;
+}
+
+.right {
+   margin-left: auto;
+}
+
+/* texts */
+
+.text {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+}
+
+.title {
+   font-family: var(--main-font);
+   font-size: 1.5rem;
+   font-weight: bold;
+   margin: 0.5rem 0;
+}
+
+.link:hover {
+   color: var(--dark-blue);
+   cursor: pointer;
+}
+
+.table-title {
+   color: black;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   font-weight: bold;
+}
+
+.table-text {
+   color: black;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+}
+
+/* table */
+
+.table {
+   inline-size: 100%;
+   border: none;
+   border-collapse: collapse;
+
+}

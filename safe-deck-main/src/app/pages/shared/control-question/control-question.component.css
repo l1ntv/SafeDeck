@@ -1,0 +1,66 @@
+.vertical-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
+   gap: 1rem;
+}
+
+.textarea-line {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: flex-start;
+   gap: 1rem;
+   width: 100%;
+}
+
+/* texts */
+
+.header {
+   font-family: var(--title-font);
+   font-size: 1.5rem;
+   font-weight: bold;
+   width: 100%;
+   text-align: center;
+}
+
+.text {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+}
+
+.label {
+   padding-top: 0.5rem;
+}
+
+
+/* inputs */
+
+.input {
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   border-radius: 10px;
+   border: 1px solid black;
+   padding: 0.5rem 1rem;
+}
+
+.input:focus {
+   outline: none;
+   border: 2px solid var(--blue);
+}
+
+input.ng-touched.ng-invalid {
+   border: 2px solid red;
+}
+
+.textarea {
+   resize: vertical;
+   width: 100%;
+}
+
+/* other */
+
+.right {
+   margin-left: auto;
+}

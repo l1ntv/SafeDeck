@@ -1,0 +1,50 @@
+<div class="horizontal-list">
+   <main-menu></main-menu>
+
+   <div class="vertical-list main-page">
+      <div class="main-page-header header-group">
+         <span class="title">{{ boardName() }}</span>
+         <div class="horizontal-list big-gap">
+            @if (accessLevel == "OWNER") {
+               <a class="title-link" routerLink="/logs/{{boardId}}">Журнал просмотров</a>
+               <a class="title-link" routerLink="/roles/{{boardId}}">Управление ролями</a>
+               <a class="title-link" routerLink="/members/{{boardId}}">Управление доступом</a>
+            }
+         </div>    
+      </div>
+
+      <tui-scrollbar class="box">
+         <div class="vertical-list gap page-padding">
+            @if (accessLevel == "OWNER") {
+               <a class="link" routerLink="/card/{{boardId}}/-1">
+                  <tui-icon icon="circle-plus" class="icon"></tui-icon>
+                  Добавить карточку
+               </a>  
+            }
+            
+            <div class="cards-list">
+               @for (card of cards; track card.cardId) {
+                  <card [card]="card" [boardId]="boardId"></card>
+               }
+               @if (accessLevel == "PARTICIPANT" && cards.length == 0) {
+                  <div class="cloud info-block">
+                     <span class="text">Нет доступных карточек для вас</span>
+                     <img src="images/disconnect.png" class="image">
+                     <a class="link" routerLink="/boards">Мои проекты</a>
+                  </div>
+               }
+               @if (accessLevel == "") {
+                  <div class="cloud info-block">
+                     <span class="text">Страница не найдена</span>
+                     <img src="images/disconnect.png" class="image">
+                     <a class="link" routerLink="/boards">Мои проекты</a>
+                  </div>             
+               }
+            </div>
+            
+            
+         </div>     
+      </tui-scrollbar>
+      
+   </div>
+</div>

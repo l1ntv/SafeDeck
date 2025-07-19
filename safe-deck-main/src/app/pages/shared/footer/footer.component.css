@@ -1,0 +1,45 @@
+/* containers */
+
+.footer-bg {
+   background-color: var(--light-gray);
+   border-top: 1px solid rgb(192, 192, 192);
+   padding: 1.5rem;
+   padding-left: 2rem;
+   padding-right: 2rem;
+}
+
+.horizontal-center-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+   gap: 1rem;
+}
+
+.vertical-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   gap: 1rem;
+}
+
+/* texts */
+
+.text {
+   font-family: var(--main-font);
+   font-size: 1.25rem;
+}
+
+.link {
+   font-family: var(--main-font);
+   font-size: 1.25rem;
+   text-decoration: none;
+}
+
+/* images */
+
+.icon {
+   height: 1.25rem;
+   width: auto;
+}

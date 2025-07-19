@@ -1,0 +1,37 @@
+<div 
+   class="cloud card-bg"
+   [style.border-top]="getBorderCard()"
+   [style.background-color]="getBackgroundColor()"
+>
+   <div class="horizontal-list">
+      @if (isNameEdited()) {
+         <input
+         tuiAutoFocus
+         type="text" class="title input"
+         (keyup.enter)="editName()"
+         (blur)="cancelEdit()"
+         (focus)="selectInputText($event)"
+         [formControl]="cardName">
+      }
+      @else {
+         <span class="title" (dblclick)="startEditName()"> {{card().cardName}} </span>
+      }
+      
+      <card-menu (selectMenuOption)="selectMenuOption($event)"></card-menu>
+   </div>
+   
+   @if (isDescriptionEdited()) {
+      <input
+      tuiAutoFocus
+      type="text" class="text input"
+      (keyup.enter)="editDescription()"
+      (blur)="cancelEditDescription()"
+      (focus)="selectInputText($event)"
+      [formControl]="cardDescription">
+   }
+   @else {
+      <span class="text" (dblclick)="startEditDescription()"> {{card().cardDescription}} </span>
+   }
+
+   <button tuiButton size="m" class="gray-button normal-font-weight" (click)="showSecureData()">Показать данные</button>
+</div>

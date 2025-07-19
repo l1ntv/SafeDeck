@@ -1,0 +1,31 @@
+.bg {
+   background: transparent;
+   padding: 0.5rem 0;
+}
+
+.vertical-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: stretch;
+}
+
+[tuiAppearance].line-button {
+   background: white;
+   border-radius: 0;
+   font: var(--main-font);
+   font-size: 1rem;
+   font-weight: normal;
+   color: black;
+   justify-content: flex-start;
+}
+
+[tuiAppearance].line-button:hover {
+   background-color: #f1f2f6;
+}
+
+.icon {
+   height: 1rem;
+   width: 1rem;
+   margin: 0 0.5rem;
+}

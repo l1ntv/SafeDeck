@@ -1,0 +1,139 @@
+.vertical-list {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: flex-start;
+}
+
+.horizontal-list {
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: flex-start;
+}
+
+.full-width-page {
+   width: min(800px, calc(100% - 3rem));
+   margin: 1.5rem;
+}
+
+.box {
+   inline-size: 100%;
+   block-size: calc(100vh - 2rem - 4rem - var(--normal-font-size) - 2.75rem);
+}
+
+.info-block {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: center;
+
+   padding: 1.5rem 1rem;
+   gap: 1rem;
+}
+
+/* texts */
+
+.title-link {
+   color: white;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   text-decoration: none;
+
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 0.5rem;
+}
+
+.title-link:hover {
+   color: rgb(221, 221, 221);
+   cursor: pointer;
+}
+
+.text {
+   color: black;
+   font-family: var(--main-font);
+   font-size: 1.25rem;
+   line-height: 1.25rem;
+}
+
+/* table */
+
+[tuiTh],
+[tuiTd] {
+    border-inline-start: none;
+    border-inline-end: none;
+}
+
+.table-title[tuiTh] {
+   background-color: gray;
+   color: white;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+   font-weight: bold;
+}
+
+.left-round[tuiTh] {
+   border-top-left-radius: 20px;
+}
+
+.right-round[tuiTh] {
+   border-top-right-radius: 20px;
+}
+
+.table-text[tuiTd] {
+   color: black;
+   background: transparent;
+   font-family: var(--main-font);
+   font-size: var(--normal-font-size);
+   line-height: var(--normal-font-size);
+}
+
+.table-row[tuiTr]:nth-child(odd) {
+   background: white;
+}
+
+.table-row[tuiTr]:nth-child(even) {
+   background: #f0f0f0;
+}
+
+/* buttons */
+
+[tuiAppearance].light-gray-button {
+   background-color: #f8f8f8;
+   border-radius: 1rem;
+   border: 1px solid #a7a7a7;
+   font: var(--main-font);
+   font-weight: normal;
+   color: black;
+}
+
+[tuiAppearance].light-gray-button:hover {
+   background-color: gray;
+   border: 1px solid gray;
+   color: white;
+   border: none;
+}
+
+/* images */
+
+.icon {
+   width: var(--normal-font-size);
+   height: var(--normal-font-size);
+}
+
+.image {
+   height: 50vh;
+   width: auto;
+   object-fit: contain;
+}
+
+/* other */
+
+.gap {
+   gap: 1rem;
+}

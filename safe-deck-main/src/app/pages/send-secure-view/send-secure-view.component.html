@@ -1,0 +1,40 @@
+<div class="page">
+   <div class="block cloud">
+      @if (hasData() && data) {
+         <span class="title"> {{ data.cardName }} </span>
+   
+         <span class="text"> {{ data.cardDescription }} </span>
+   
+         <table tuiTable class="table" [columns]="columns">
+            <thead>
+               <tr tuiThGroup>
+                  <th tuiTh class="table-title">Название</th>
+                  <th tuiTh class="table-title">Значение</th>
+               </tr>
+            </thead>
+      
+            <tbody tuiTbody>
+               @for(credential of data.credentials; track $index) {
+               <tr tuiTr>
+                  <td *tuiCell="'name'" class="table-text" tuiTd>
+                     {{ credential.field }}
+                  </td>
+      
+                  <td *tuiCell="'value'" class="table-text" tuiTd>
+                     {{ credential.password }}
+                  </td>
+               </tr>
+               }
+      
+            </tbody>
+         </table>
+      } @else {
+         <span class="text">Страница не найдена</span>
+         <img src="images/disconnect.png" class="image">  
+      }
+      <button tuiButton class="blue-button right" size="m" routerLink="/">
+         На главную
+      </button>
+   </div>
+   
+</div>
