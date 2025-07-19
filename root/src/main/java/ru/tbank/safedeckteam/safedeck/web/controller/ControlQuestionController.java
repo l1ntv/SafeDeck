@@ -72,6 +72,6 @@ public class ControlQuestionController {
                                                         HttpServletRequest request) {
         return ResponseEntity.ok()
                 .body(controlQuestionService
-                        .checkControlQuestion(givenAnswerDTO, questionId, principal.toString(), request));
+                        .checkControlQuestion(givenAnswerDTO, questionId, principal.getName(), request));
     }
 }

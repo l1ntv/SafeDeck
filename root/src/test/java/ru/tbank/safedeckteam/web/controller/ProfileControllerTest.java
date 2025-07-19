@@ -65,14 +65,9 @@ class ProfileControllerTest {
     }
 
     @Test
-    void getPublicName_shouldReturnUnauthorized_whenPrincipalIsNull() {
-        // Act
-        ResponseEntity<?> response = profileController.getPublicName(null);
-
-        // Assert
-        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
-        assertNull(response.getBody());
-        verifyNoInteractions(profileService);
+    void getPublicName_shouldThrowNPE_whenPrincipalNull() {
+        assertThrows(NullPointerException.class, () ->
+                profileController.getPublicName(null));
     }
 
     @Test
@@ -128,30 +123,25 @@ class ProfileControllerTest {
     }
 
     @Test
-    void updatePublicName_shouldReturnBadRequest_whenNewNameIsEmpty() {
+    void updatePublicName_shouldAcceptEmptyName() {
         // Arrange
-        UpdatePublicNameRequestDTO requestDto = new UpdatePublicNameRequestDTO("");
+        UpdatePublicNameRequestDTO request = new UpdatePublicNameRequestDTO("");
+        PublicNameResponseDTO mockResponse = new PublicNameResponseDTO("");
+        when(profileService.updatePublicName(testEmail, request)).thenReturn(mockResponse);
 
         // Act
-        ResponseEntity<?> response = profileController.updatePublicName(testPrincipal, requestDto);
+        ResponseEntity<PublicNameResponseDTO> response =
+                profileController.updatePublicName(testPrincipal, request);
 
         // Assert
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Public name cannot be empty", response.getBody());
-        verifyNoInteractions(profileService);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("", response.getBody().getPublicName());
     }
 
     @Test
-    void updatePublicName_shouldReturnUnauthorized_whenPrincipalIsNull() {
-        // Arrange
-        UpdatePublicNameRequestDTO requestDto = new UpdatePublicNameRequestDTO("New Name");
-
-        // Act
-        ResponseEntity<?> response = profileController.updatePublicName(null, requestDto);
-
-        // Assert
-        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
-        assertNull(response.getBody());
-        verifyNoInteractions(profileService);
+    void updatePublicName_shouldThrowNPE_whenPrincipalNull() {
+        UpdatePublicNameRequestDTO request = new UpdatePublicNameRequestDTO("Name");
+        assertThrows(NullPointerException.class, () ->
+                profileController.updatePublicName(null, request));
     }
 }

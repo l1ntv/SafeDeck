@@ -139,7 +139,7 @@ public class ControlQuestionServiceImpl implements ControlQuestionService {
     public boolean checkControlQuestion(GivenAnswerDTO givenAnswerDTO, long questionId, String email, HttpServletRequest httpServletRequest) {
         ControlQuestion question = controlQuestionRepository.findById(questionId)
                 .orElseThrow(() -> new RuntimeException("Question not found."));
-        givenAnswerDTO.setCorrectAnswer(question.getQuestion());
+        givenAnswerDTO.setCorrectAnswer(question.getAnswer());
         String url = "http://localhost:8082/check-answer";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -164,10 +164,13 @@ public class ControlQuestionServiceImpl implements ControlQuestionService {
         if (ans) {
             Client client = clientRepository.findOptionalByEmail(email)
                     .orElseThrow(() -> new ClientNotFoundException("Client not found."));
-            IP ipAddress = IP.builder()
-                    .ip(httpServletRequest.getRemoteAddr())
-                    .build();
+
+            IP ipAddress = ipRepository.findByIp(httpServletRequest.getRemoteAddr())
+                    .orElse(IP.builder()
+                            .ip(httpServletRequest.getRemoteAddr())
+                            .build());
             ipRepository.save(ipAddress);
+
             TrustedUserIP trustedUserIP = TrustedUserIP.builder()
                     .user(client)
                     .ip(ipAddress)
