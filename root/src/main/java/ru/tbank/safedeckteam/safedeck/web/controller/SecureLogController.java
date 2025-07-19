@@ -17,17 +17,17 @@ public class SecureLogController {
     private final SecureLogService secureLogService;
 
     @GetMapping("/{boardId}")
-    ResponseEntity<List<LogDTO>> getBoardLogs(@PathVariable Long boardId) {
+    public ResponseEntity<List<LogDTO>> getBoardLogs(@PathVariable Long boardId) {
         return ResponseEntity.ok().body(secureLogService.getBoardLogs(boardId));
     }
 
     @GetMapping("/{logId}/all")
-    ResponseEntity<LogDTO> getFullLog(@PathVariable Long logId) {
+    public ResponseEntity<LogDTO> getFullLog(@PathVariable Long logId) {
         return ResponseEntity.ok().body(secureLogService.getFullLog(logId));
     }
 
     @DeleteMapping("/{logId}/delete")
-    ResponseEntity<?> deleteLog(@PathVariable Long logId) {
+    public ResponseEntity<?> deleteLog(@PathVariable Long logId) {
         secureLogService.deleteLog(logId);
         return  ResponseEntity.ok().build();
     }
