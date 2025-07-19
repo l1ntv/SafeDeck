@@ -2,8 +2,9 @@ package ru.tbank.safedeckteam.safedeckemailservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class SafedeckEmailServiceApplication {
 
     public static void main(String[] args) {

@@ -7,6 +7,7 @@ springdoc:
   openapi:
     urls:
       - /v3/api-docs
+
 management:
   endpoints:
     web:
@@ -18,13 +19,13 @@ spring:
     enabled: false
 
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/root_db
+    username: root_user
+    password: root_pass
+    driver-class-name: org.postgresql.Driver
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
     properties:
@@ -34,8 +35,3 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/main-changelog.xml
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console

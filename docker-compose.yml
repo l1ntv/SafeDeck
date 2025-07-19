@@ -1,12 +1,7 @@
+version: '3.8'
+
 services:
-  # === Фронтенд ===
-  frontend:
-    build:
-      context: ./safe-deck-main   # путь к папке с вашим фронтендом и Dockerfile
-    ports:
-      - "8085:80"            # доступ по localhost:8085
-    restart: unless-stopped
-  # Kafka и UI
+  # === Kafka ===
   kafka:
     image: bitnami/kafka:latest
     container_name: kafka
@@ -30,7 +25,7 @@ services:
       KAFKA_JMX_PORT: "9102"
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
     healthcheck:
-      test: [ "CMD", "kafka-topics.sh", "--bootstrap-server", "kafka:9092", "--list" ]
+      test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "kafka:9092", "--list"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -48,20 +43,7 @@ services:
       kafka:
         condition: service_healthy
 
-  # Postgres для safedeck-encrypt-service
-  postgres-encrypt:
-    image: postgres:15
-    container_name: postgres-encrypt
-    environment:
-      POSTGRES_USER: encrypt_user
-      POSTGRES_PASSWORD: encrypt_pass
-      POSTGRES_DB: encrypt_db
-    ports:
-      - "5433:5432"  # Чтобы не конфликтовать с другим Postgres
-    volumes:
-      - postgres_encrypt_data:/var/lib/postgresql/data
-
-  # Postgres для safedeck-root
+  # === PostgreSQL для safedeck-root ===
   postgres-root:
     image: postgres:15
     container_name: postgres-root
@@ -70,63 +52,92 @@ services:
       POSTGRES_PASSWORD: root_pass
       POSTGRES_DB: root_db
     ports:
-      - "5434:5432"
+      - "5434:5432"  # Чтобы не конфликтовать с другим Postgres
     volumes:
       - postgres_root_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root_user -d root_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-  # Микросервисы
+  # === PostgreSQL для safedeck-encrypt-service ===
+  postgres-encrypt:
+    image: postgres:15
+    container_name: postgres-encrypt
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: encrypt
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_encrypt_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U encrypt_user -d encrypt_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # === Микросервисы ===
 
   safedeck-root:
     build:
-      context: ./root
+      context: .
+      dockerfile: root/Dockerfile
+    container_name: safedeck-root
     ports:
-      - "8081:8081"
+      - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-root:5432/root_db
       SPRING_DATASOURCE_USERNAME: root_user
       SPRING_DATASOURCE_PASSWORD: root_pass
     depends_on:
-      - postgres-root
-      - kafka
+      postgres-root:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
 
   safedeck-email-service:
     build:
-      context: ./safedeck-email-service
+      context: .
+      dockerfile: safedeck-email-service/Dockerfile
+    container_name: safedeck-email-service
     ports:
-      - "8082:8082"
+      - "8087:8087"
     environment:
       SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9092
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
 
   safedeck-encrypt-service:
     build:
-      context: ./safedeck-encrypt-service
+      context: .
+      dockerfile: safedeck-encrypt-service/Dockerfile
+    container_name: safedeck-encrypt-service
     ports:
-      - "8083:8083"
+      - "8081:8081"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-encrypt:5432/encrypt_db
       SPRING_DATASOURCE_USERNAME: encrypt_user
       SPRING_DATASOURCE_PASSWORD: encrypt_pass
     depends_on:
-      - postgres-encrypt
-      - kafka
+      postgres-encrypt:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
 
   safedeck-llm-service:
     build:
-      context: ./safedeck-llm
+      context: .
+      dockerfile: safedeck-llm/Dockerfile
+    container_name: safedeck-llm-service
     ports:
-      - "8084:8084"
+      - "8082:8082"
     depends_on:
-      - kafka
-
-  safedeck-llm:
-    build:
-      context: ./python-llm
-    ports:
-      - "7860:7860"
-    depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
 
 volumes:
   postgres_encrypt_data:
