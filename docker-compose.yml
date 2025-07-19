@@ -119,9 +119,9 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-encrypt:5432/encrypt_db
-      SPRING_DATASOURCE_USERNAME: encrypt_user
-      SPRING_DATASOURCE_PASSWORD: encrypt_pass
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-encrypt:5432/encrypt
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
     depends_on:
       postgres-encrypt:
         condition: service_healthy
