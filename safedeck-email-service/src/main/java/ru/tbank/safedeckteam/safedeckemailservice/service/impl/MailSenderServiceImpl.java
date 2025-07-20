@@ -92,6 +92,39 @@ public class MailSenderServiceImpl implements MailSenderService {
     }
 
     @Override
+    public Boolean sendNewPassword(String email, String publicName, String newPassword) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom(emailFrom);
+        mailMessage.setTo(email);
+        mailMessage.setSubject("Внимание: Подозрение на взлом вашей учетной записи в Safedeck.");
+
+        StringBuilder text = new StringBuilder();
+        text.append("Здравствуйте, ").append(publicName).append("!\n\n")
+                .append("В вашей учетной записи в сервисе Safedeck были зафиксированы подозрительные действия, ")
+                .append("которые могут указывать на несанкционированный доступ.\n\n")
+                .append("Для обеспечения безопасности мы изменили пароль вашей учетной записи.\n")
+                .append("Новый пароль: ").append(newPassword).append("\n\n")
+                .append("Рекомендуем вам:\n")
+                .append("- Авторизоваться с этим паролем;\n")
+                .append("- Сохранить его в безопасное место;\n")
+                .append("- Удалить это письмо из вашей почты, чтобы избежать утечки данных.\n\n")
+                .append("Также настоятельно советуем провести полную проверку вашего устройства на наличие вредоносного ПО ")
+                .append("с помощью надёжного антивирусного программного обеспечения.\n\n")
+                .append("Если у вас возникнут вопросы или проблемы с доступом — пожалуйста, свяжитесь с нами.\n\n")
+                .append("С уважением,\n")
+                .append("Команда Safedeck");
+
+        mailMessage.setText(text.toString());
+
+        try {
+            javaMailSender.send(mailMessage);
+        } catch (MailException exception) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
+
+    @Override
     @Async
     public void sendAlert(Alert alert) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();

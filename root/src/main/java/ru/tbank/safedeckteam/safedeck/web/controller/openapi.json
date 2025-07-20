@@ -1,0 +1,1153 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "OpenAPI definition",
+    "description": "SafeDeck API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8090",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/auth/generate-register-code": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "generateRegisterCode",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateRegisterCodeRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/generate-2fa-code": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "generate2FACode",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Generate2FACodeRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/Void"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "register",
+        "parameters": [
+          {
+            "name": "httpServletRequest",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/HttpServletRequest"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationClientRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "authenticate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticationRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GenerateRegisterCodeRequestDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "Void": {
+        "type": "object",
+        "properties": {}
+      },
+      "Generate2FACodeRequestDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "RegistrationClientRequestDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "publicName": {
+            "type": "string"
+          },
+          "generatedCode": {
+            "type": "string"
+          },
+          "IP": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "device": {
+            "type": "string"
+          }
+        }
+      },
+      "RegistrationResponseDTO": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "BufferedReader": {
+        "type": "object",
+        "properties": {}
+      },
+      "ServletInputStream": {
+        "type": "object",
+        "properties": {
+          "ready": {
+            "type": "boolean"
+          },
+          "finished": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Principal": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "InputStream": {
+        "type": "object",
+        "properties": {}
+      },
+      "Part": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "headerNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "inputStream": {
+            "$ref": "#/components/schemas/InputStream"
+          },
+          "submittedFileName": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          }
+        }
+      },
+      "Character": {
+        "type": "object",
+        "properties": {}
+      },
+      "Locale": {
+        "type": "object",
+        "properties": {
+          "unicodeLocaleKeys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "country": {
+            "type": "string"
+          },
+          "ISO3Language": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "displayVariant": {
+            "type": "string"
+          },
+          "displayLanguage": {
+            "type": "string"
+          },
+          "script": {
+            "type": "string"
+          },
+          "unicodeLocaleAttributes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "displayCountry": {
+            "type": "string"
+          },
+          "variant": {
+            "type": "string"
+          },
+          "ISO3Country": {
+            "type": "string"
+          },
+          "extensionKeys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Character"
+            }
+          },
+          "displayScript": {
+            "type": "string"
+          }
+        }
+      },
+      "ServletConnection": {
+        "type": "object",
+        "properties": {
+          "protocol": {
+            "type": "string"
+          },
+          "connectionId": {
+            "type": "string"
+          },
+          "protocolConnectionId": {
+            "type": "string"
+          },
+          "secure": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ServicesCatalog": {
+        "type": "object",
+        "properties": {}
+      },
+      "ModuleLayer": {
+        "type": "object",
+        "properties": {
+          "servicesCatalog": {
+            "$ref": "#/components/schemas/ServicesCatalog"
+          }
+        }
+      },
+      "ModuleDescriptor": {
+        "type": "object",
+        "properties": {
+          "open": {
+            "type": "boolean"
+          },
+          "automatic": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Annotation": {
+        "type": "object",
+        "properties": {}
+      },
+      "Module": {
+        "type": "object",
+        "properties": {
+          "layer": {
+            "$ref": "#/components/schemas/ModuleLayer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "descriptor": {
+            "$ref": "#/components/schemas/ModuleDescriptor"
+          },
+          "declaredAnnotations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotation"
+            }
+          },
+          "named": {
+            "type": "boolean"
+          },
+          "classLoader": {
+            "$ref": "#/components/schemas/ClassLoader"
+          },
+          "annotations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotation"
+            }
+          },
+          "packages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Package": {
+        "type": "object",
+        "properties": {
+          "packageInfo": {
+            "type": "object"
+          },
+          "specificationVendor": {
+            "type": "string"
+          },
+          "declaredAnnotations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotation"
+            }
+          },
+          "specificationTitle": {
+            "type": "string"
+          },
+          "implementationVersion": {
+            "type": "string"
+          },
+          "sealed": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "implementationVendor": {
+            "type": "string"
+          },
+          "annotations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotation"
+            }
+          },
+          "implementationTitle": {
+            "type": "string"
+          },
+          "specificationVersion": {
+            "type": "string"
+          }
+        }
+      },
+      "ClassLoader": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "$ref": "#/components/schemas/ClassLoader"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unnamedModule": {
+            "$ref": "#/components/schemas/Module"
+          },
+          "packages": {
+            "type": "string"
+          },
+          "registeredAsParallelCapable": {
+            "type": "boolean"
+          },
+          "definedPackages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Package"
+            }
+          }
+        }
+      },
+      "SessionCookieConfig": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "maxAge": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "domain": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "string"
+          },
+          "httpOnly": {
+            "type": "boolean"
+          },
+          "secure": {
+            "type": "boolean"
+          }
+        }
+      },
+      "JspPropertyGroupDescriptor": {
+        "type": "object",
+        "properties": {
+          "elIgnored": {
+            "type": "string"
+          },
+          "scriptingInvalid": {
+            "type": "string"
+          },
+          "urlPatterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pageEncoding": {
+            "type": "string"
+          },
+          "errorOnELNotFound": {
+            "type": "string"
+          },
+          "includePreludes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "defaultContentType": {
+            "type": "string"
+          },
+          "isXml": {
+            "type": "string"
+          },
+          "errorOnUndeclaredNamespace": {
+            "type": "string"
+          },
+          "trimDirectiveWhitespaces": {
+            "type": "string"
+          },
+          "buffer": {
+            "type": "string"
+          },
+          "deferredSyntaxAllowedAsLiteral": {
+            "type": "string"
+          },
+          "includeCodas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TaglibDescriptor": {
+        "type": "object",
+        "properties": {
+          "taglibLocation": {
+            "type": "string"
+          },
+          "taglibURI": {
+            "type": "string"
+          }
+        }
+      },
+      "JspConfigDescriptor": {
+        "type": "object",
+        "properties": {
+          "jspPropertyGroups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JspPropertyGroupDescriptor"
+            }
+          },
+          "taglibs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaglibDescriptor"
+            }
+          }
+        }
+      },
+      "ServletContext": {
+        "type": "object",
+        "properties": {
+          "initParameterNames": {
+            "type": "string"
+          },
+          "virtualServerName": {
+            "type": "string"
+          },
+          "classLoader": {
+            "$ref": "#/components/schemas/ClassLoader"
+          },
+          "filterRegistrations": {
+            "type": "string"
+          },
+          "contextPath": {
+            "type": "string"
+          },
+          "defaultSessionTrackingModes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "COOKIE",
+                "URL",
+                "SSL"
+              ]
+            }
+          },
+          "majorVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "effectiveMinorVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sessionCookieConfig": {
+            "$ref": "#/components/schemas/SessionCookieConfig"
+          },
+          "effectiveSessionTrackingModes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "COOKIE",
+                "URL",
+                "SSL"
+              ]
+            }
+          },
+          "attributeNames": {
+            "type": "string"
+          },
+          "serverInfo": {
+            "type": "string"
+          },
+          "servletRegistrations": {
+            "type": "string"
+          },
+          "jspConfigDescriptor": {
+            "$ref": "#/components/schemas/JspConfigDescriptor"
+          },
+          "requestCharacterEncoding": {
+            "type": "string"
+          },
+          "responseCharacterEncoding": {
+            "type": "string"
+          },
+          "sessionTimeout": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minorVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "servletContextName": {
+            "type": "string"
+          },
+          "effectiveMajorVersion": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ServletRequest": {
+        "type": "object",
+        "properties": {
+          "contentLengthLong": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "scheme": {
+            "type": "string"
+          },
+          "remoteHost": {
+            "type": "string"
+          },
+          "reader": {
+            "$ref": "#/components/schemas/BufferedReader"
+          },
+          "asyncStarted": {
+            "type": "boolean"
+          },
+          "serverName": {
+            "type": "string"
+          },
+          "parameterNames": {
+            "type": "string"
+          },
+          "serverPort": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "locale": {
+            "$ref": "#/components/schemas/Locale"
+          },
+          "secure": {
+            "type": "boolean"
+          },
+          "protocolRequestId": {
+            "type": "string"
+          },
+          "protocol": {
+            "type": "string"
+          },
+          "attributeNames": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string"
+          },
+          "asyncSupported": {
+            "type": "boolean"
+          },
+          "servletConnection": {
+            "$ref": "#/components/schemas/ServletConnection"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "parameterMap": {
+            "type": "string"
+          },
+          "localAddr": {
+            "type": "string"
+          },
+          "remoteAddr": {
+            "type": "string"
+          },
+          "localPort": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "servletContext": {
+            "$ref": "#/components/schemas/ServletContext"
+          },
+          "remotePort": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "inputStream": {
+            "$ref": "#/components/schemas/ServletInputStream"
+          },
+          "localName": {
+            "type": "string"
+          },
+          "locales": {
+            "$ref": "#/components/schemas/Locale"
+          },
+          "dispatcherType": {
+            "type": "string",
+            "enum": [
+              "FORWARD",
+              "INCLUDE",
+              "REQUEST",
+              "ASYNC",
+              "ERROR"
+            ]
+          },
+          "contentLength": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "characterEncoding": {
+            "type": "string"
+          },
+          "asyncContext": {
+            "$ref": "#/components/schemas/AsyncContext"
+          }
+        }
+      },
+      "ServletOutputStream": {
+        "type": "object",
+        "properties": {
+          "ready": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PrintWriter": {
+        "type": "object",
+        "properties": {}
+      },
+      "ServletResponse": {
+        "type": "object",
+        "properties": {
+          "committed": {
+            "type": "boolean"
+          },
+          "outputStream": {
+            "$ref": "#/components/schemas/ServletOutputStream"
+          },
+          "writer": {
+            "$ref": "#/components/schemas/PrintWriter"
+          },
+          "characterEncoding": {
+            "type": "string"
+          },
+          "locale": {
+            "$ref": "#/components/schemas/Locale"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "bufferSize": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "AsyncContext": {
+        "type": "object",
+        "properties": {
+          "request": {
+            "$ref": "#/components/schemas/ServletRequest"
+          },
+          "response": {
+            "$ref": "#/components/schemas/ServletResponse"
+          },
+          "timeout": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "HttpSession": {
+        "type": "object",
+        "properties": {
+          "lastAccessedTime": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "new": {
+            "type": "boolean"
+          },
+          "maxInactiveInterval": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "attributeNames": {
+            "type": "string"
+          },
+          "creationTime": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "servletContext": {
+            "$ref": "#/components/schemas/ServletContext"
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "Cookie": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "maxAge": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "domain": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "httpOnly": {
+            "type": "boolean"
+          },
+          "secure": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "StringBuffer": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            }
+          },
+          "coder": {
+            "type": "string",
+            "format": "byte"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "HttpServletMapping": {
+        "type": "object",
+        "properties": {
+          "mappingMatch": {
+            "type": "string",
+            "enum": [
+              "CONTEXT_ROOT",
+              "DEFAULT",
+              "EXACT",
+              "EXTENSION",
+              "PATH"
+            ]
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "matchValue": {
+            "type": "string"
+          },
+          "servletName": {
+            "type": "string"
+          }
+        }
+      },
+      "HttpServletRequest": {
+        "type": "object",
+        "properties": {
+          "requestedSessionIdFromCookie": {
+            "type": "boolean"
+          },
+          "contentLengthLong": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "remoteHost": {
+            "type": "string"
+          },
+          "reader": {
+            "$ref": "#/components/schemas/BufferedReader"
+          },
+          "asyncStarted": {
+            "type": "boolean"
+          },
+          "parameterNames": {
+            "type": "string"
+          },
+          "requestedSessionIdValid": {
+            "type": "boolean"
+          },
+          "secure": {
+            "type": "boolean"
+          },
+          "protocolRequestId": {
+            "type": "string"
+          },
+          "protocol": {
+            "type": "string"
+          },
+          "attributeNames": {
+            "type": "string"
+          },
+          "requestedSessionId": {
+            "type": "string"
+          },
+          "requestedSessionIdFromURL": {
+            "type": "boolean"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "parameterMap": {
+            "type": "string"
+          },
+          "pathTranslated": {
+            "type": "string"
+          },
+          "remoteUser": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "trailerFields": {
+            "type": "string"
+          },
+          "localPort": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "headerNames": {
+            "type": "string"
+          },
+          "contextPath": {
+            "type": "string"
+          },
+          "inputStream": {
+            "$ref": "#/components/schemas/ServletInputStream"
+          },
+          "queryString": {
+            "type": "string"
+          },
+          "userPrincipal": {
+            "$ref": "#/components/schemas/Principal"
+          },
+          "localName": {
+            "type": "string"
+          },
+          "parts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Part"
+            }
+          },
+          "characterEncoding": {
+            "type": "string"
+          },
+          "asyncContext": {
+            "$ref": "#/components/schemas/AsyncContext"
+          },
+          "scheme": {
+            "type": "string"
+          },
+          "session": {
+            "$ref": "#/components/schemas/HttpSession"
+          },
+          "serverName": {
+            "type": "string"
+          },
+          "serverPort": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "locale": {
+            "$ref": "#/components/schemas/Locale"
+          },
+          "cookies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Cookie"
+            }
+          },
+          "trailerFieldsReady": {
+            "type": "boolean"
+          },
+          "requestURL": {
+            "$ref": "#/components/schemas/StringBuffer"
+          },
+          "requestId": {
+            "type": "string"
+          },
+          "asyncSupported": {
+            "type": "boolean"
+          },
+          "authType": {
+            "type": "string"
+          },
+          "servletConnection": {
+            "$ref": "#/components/schemas/ServletConnection"
+          },
+          "localAddr": {
+            "type": "string"
+          },
+          "remoteAddr": {
+            "type": "string"
+          },
+          "servletContext": {
+            "$ref": "#/components/schemas/ServletContext"
+          },
+          "remotePort": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "httpServletMapping": {
+            "$ref": "#/components/schemas/HttpServletMapping"
+          },
+          "requestURI": {
+            "type": "string"
+          },
+          "locales": {
+            "$ref": "#/components/schemas/Locale"
+          },
+          "servletPath": {
+            "type": "string"
+          },
+          "dispatcherType": {
+            "type": "string",
+            "enum": [
+              "FORWARD",
+              "INCLUDE",
+              "REQUEST",
+              "ASYNC",
+              "ERROR"
+            ]
+          },
+          "contentLength": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pathInfo": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthenticationRequestDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "generatedCode": {
+            "type": "string"
+          },
+          "IP": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "device": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthenticationResponseDTO": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

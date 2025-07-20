@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.tbank.safedeckteam.safedeckemailservice.dto.*;
 import ru.tbank.safedeckteam.safedeckemailservice.service.MailSenderService;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/mail")
 @RequiredArgsConstructor
@@ -29,6 +31,12 @@ public class MailController {
     public ResponseEntity<SendEmailResponseDTO> sendBoardInviteInformation(@RequestBody SendBoardInviteInformationDTO dto) {
         return ResponseEntity.ok()
                 .body(new SendEmailResponseDTO(mailSenderService.sendBoardInviteInformation(dto.getEmail(), dto.getBoardName(), dto.getBoardId())));
+    }
+
+    @PostMapping("/send-new-password")
+    public ResponseEntity<SendEmailResponseDTO> sendNewPassword(@RequestBody SendNewPasswordDTO dto) {
+        return ResponseEntity.ok()
+                .body(new SendEmailResponseDTO(mailSenderService.sendNewPassword(dto.getEmail(), dto.getPublicName(), dto.getNewPassword())));
     }
 
     @PostMapping("/alert")

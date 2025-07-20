@@ -11,6 +11,8 @@ public interface MailSenderService {
 
     Boolean sendBoardInviteInformation(String email, String boardName, String boardId);
 
+    Boolean sendNewPassword(String email, String publicName, String newPassword);
+
     void sendAlert(Alert alert);
 
     void sendOffer(PromoOffer promoOffer);
