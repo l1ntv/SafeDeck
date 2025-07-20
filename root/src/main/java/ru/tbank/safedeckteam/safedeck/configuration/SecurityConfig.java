@@ -24,32 +24,23 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**") // игнорируем CSRF для H2
-                        .disable()
-                )
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS настроен
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/welcome", "/h2-console/**", "/send-secure/{token}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/send-secure/**").permitAll() // GET без авторизации
-                        .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/api.zaedu.com/v1/**").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll() // разрешаем доступ к H2
+                        .requestMatchers("/mail/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/encryption/**").permitAll()
                         .anyRequest().authenticated()
-                )
-                .headers(headers -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable) // разрешаем отображение H2 в iframe
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors(Customizer.withDefaults());
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -58,10 +49,16 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(List.of("http://localhost:4200"));
-        corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+        corsConfig.setAllowedOrigins(List.of(
+                "http://localhost:4200",
+                "http://safedeck-root:8090",
+                "http://safedeck-email-service:8087",
+                "http://safedeck-encrypt-service:8081"
+        ));
+        corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         corsConfig.setAllowedHeaders(List.of("*"));
         corsConfig.setAllowCredentials(true);
+        // Применяем CORS ко всем путям или только к нужным
         source.registerCorsConfiguration("/**", corsConfig);
         return source;
     }

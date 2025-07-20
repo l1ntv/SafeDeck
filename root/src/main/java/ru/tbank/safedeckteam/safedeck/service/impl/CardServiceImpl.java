@@ -103,7 +103,7 @@ public class CardServiceImpl implements CardService {
         }
 
         card = cardRepository.save(card);
-        String url = "http://localhost:8081/encryption/encrypt";
+        String url = "http://safedeck-encrypt-service:8081/encryption/encrypt";
 
         EncryptDTO encryptDTO = EncryptDTO.builder()
                 .cardId(card.getId())

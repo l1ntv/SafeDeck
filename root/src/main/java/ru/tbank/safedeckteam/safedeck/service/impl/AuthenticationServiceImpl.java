@@ -63,7 +63,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .generatedCode(code)
                 .build();
 
-        String url = "http://localhost:8087/mail/send-register-code";
+        String url = "http://safedeck-email-service:8087/mail/send-register-code";
 
         ResponseEntity<SendEmailResponseDTO> responseEntity = restTemplate.exchange(
                 url,
@@ -94,7 +94,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .generatedCode(code)
                 .build();
 
-        String url = "http://localhost:8087/mail/send-2fa-code";
+        String url = "http://safedeck-email-service:8087/mail/send-2fa-code";
 
         ResponseEntity<SendEmailResponseDTO> responseEntity = restTemplate.exchange(
                 url,

@@ -70,7 +70,7 @@ public class SendSecureServiceImpl implements SendSecureService {
             throw new ConflictResourceException("Send secure token expired.");
 
         Card card = sendSecure.getCard();
-        String url = "http://localhost:8081/encryption/decrypt";
+        String url = "http://safedeck-encrypt-service:8081/encryption/decrypt";
 
         ResponseEntity<List<CredentialPairDTO>> responseEntity = restTemplate.exchange(
                 url,

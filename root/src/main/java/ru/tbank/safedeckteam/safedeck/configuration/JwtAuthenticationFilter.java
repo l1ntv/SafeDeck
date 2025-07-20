@@ -22,7 +22,6 @@ import java.util.Collections;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -52,5 +51,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    /**
+     * Пропускаем фильтр для путей, где не нужна аутентификация через JWT
+     */
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getServletPath();
+
+        return path.startsWith("/mail/")
+                || path.startsWith("/encryption/")
+                || path.startsWith("/auth/");
     }
 }

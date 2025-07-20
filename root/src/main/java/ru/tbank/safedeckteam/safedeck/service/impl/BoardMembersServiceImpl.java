@@ -178,7 +178,7 @@ public class BoardMembersServiceImpl implements BoardMembersService {
         clientRepository.save(member);
         List<Role> actuallyRoles = roleRepository.findAllByClients_Id(member.getId());
 
-        String url = "http://localhost:8087/mail/send-board-invite-information";
+        String url = "http://safedeck-email-service:8087/mail/send-board-invite-information";
 
         ResponseEntity<SendEmailResponseDTO> responseEntity = restTemplate.exchange(
                 url,

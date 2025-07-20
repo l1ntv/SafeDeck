@@ -51,7 +51,7 @@ public class SecureDataServiceImpl implements SecureDataService {
             if (!hasAccess)
                 throw new ConflictResourceException("Client has no access to this card.");
         }
-        String url = "http://localhost:8081/encryption/decrypt";
+        String url = "http://safedeck-encrypt-service:8081/encryption/decrypt";
 
         ResponseEntity<List<CredentialPairDTO>> responseEntity = restTemplate.exchange(
                 url,
@@ -76,7 +76,7 @@ public class SecureDataServiceImpl implements SecureDataService {
         if (!board.getOwner().equals(client))
             throw new ConflictResourceException("Client does not have the right to edit secure data.");
 
-        String url = "http://localhost:8081/encryption/encrypt";
+        String url = "http://safedeck-encrypt-service:8081/encryption/encrypt";
         EncryptDTO encryptDTO = EncryptDTO.builder()
                 .cardId(card.getId())
                 .credentials(credentials)
