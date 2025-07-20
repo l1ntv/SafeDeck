@@ -3,13 +3,18 @@ package ru.tbank.safedeckteam.safedeck.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tbank.safedeckteam.safedeck.model.Client;
+import ru.tbank.safedeckteam.safedeck.model.SecureLog;
 import ru.tbank.safedeckteam.safedeck.model.Status;
 import ru.tbank.safedeckteam.safedeck.model.TrustedUserIP;
 import ru.tbank.safedeckteam.safedeck.model.enums.AuthStatus;
+import ru.tbank.safedeckteam.safedeck.repository.SecureLogRepository;
 import ru.tbank.safedeckteam.safedeck.repository.StatusRepository;
+import ru.tbank.safedeckteam.safedeck.service.SecureLogService;
 import ru.tbank.safedeckteam.safedeck.service.StatusService;
 import ru.tbank.safedeckteam.safedeck.web.dto.ClientDataDTO;
+import ru.tbank.safedeckteam.safedeck.web.dto.LogDTO;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -17,6 +22,7 @@ import java.util.List;
 public class StatusServiceImpl implements StatusService {
 
     private final StatusRepository statusRepository;
+    private final SecureLogRepository secureLogRepository;
 
     @Override
     public Status determineStatus(ClientDataDTO clientDataDTO) {
@@ -35,7 +41,25 @@ public class StatusServiceImpl implements StatusService {
         System.out.println("isCountryTrusted: " + isCountryTrusted);
         System.out.println("isProviderTrusted: " + isProviderTrusted);
 
-        if (isIPTrusted && isDeviceTrusted && isCountryTrusted) {
+        List<SecureLog> secureLogs = secureLogRepository
+                .findByUserAndIpAndCountryAndDeviceAndBoard(
+                        client,
+                        clientDataDTO.getIP(),
+                        clientDataDTO.getCountry(),
+                        clientDataDTO.getDevice(),
+                        clientDataDTO.getBoard())
+                .orElse(null);
+
+        SecureLog secureLog = null;
+        if (secureLogs == null) {
+            secureLogs.sort(Comparator.comparing(SecureLog::getViewTime).reversed());
+            secureLog = secureLogs.get(0);
+        }
+
+        if (secureLog != null && secureLog.getStatus().getName().equals(AuthStatus.OK.name())) {
+            return statusRepository.findByName("OK").orElseThrow(() -> new RuntimeException("No status found")); // OK
+        }
+        else if (isIPTrusted && isDeviceTrusted && isCountryTrusted) {
             return statusRepository.findByName("OK").orElseThrow(() -> new RuntimeException("No status found")); // OK
         }
         else if (isIPTrusted || isDeviceTrusted || isCountryTrusted || isProviderTrusted) {

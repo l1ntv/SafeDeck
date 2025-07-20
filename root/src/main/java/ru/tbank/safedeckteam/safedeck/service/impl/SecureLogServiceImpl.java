@@ -77,6 +77,7 @@ public class SecureLogServiceImpl implements SecureLogService {
 
         ClientDataDTO clientDataDTO = ClientDataDTO.builder()
                 .client(client)
+                .board(board)
                 .IP(ip)
                 .country(country)
                 .device(device)
