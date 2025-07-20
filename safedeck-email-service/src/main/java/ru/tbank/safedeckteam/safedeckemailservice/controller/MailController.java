@@ -39,6 +39,13 @@ public class MailController {
                 .body(new SendEmailResponseDTO(mailSenderService.sendNewPassword(dto.getEmail(), dto.getPublicName(), dto.getNewPassword())));
     }
 
+    @PostMapping("/send-alert")
+    public ResponseEntity<SendEmailResponseDTO> sendAlert(@RequestBody SendAlertDTO dto) {
+        return ResponseEntity.ok()
+                .body(new SendEmailResponseDTO(mailSenderService.sendAlert(dto.getEmailOwner(), dto.getPublicNameOwner(),
+                        dto.getEmailSuspect(), dto.getPublicNameSuspect(), dto.getBoardName(), dto.getBoardId(), dto.getStatus())));
+    }
+
     @PostMapping("/alert")
     public ResponseEntity<?> sendAlert(@RequestBody Alert alert) {
         mailSenderService.sendAlert(alert);

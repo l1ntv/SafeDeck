@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ru.tbank.safedeckteam.safedeckemailservice.dto.Alert;
+import ru.tbank.safedeckteam.safedeckemailservice.dto.AuthStatus;
 import ru.tbank.safedeckteam.safedeckemailservice.dto.PromoOffer;
 import ru.tbank.safedeckteam.safedeckemailservice.service.MailSenderService;
 
@@ -111,6 +112,64 @@ public class MailSenderServiceImpl implements MailSenderService {
                 .append("Также настоятельно советуем провести полную проверку вашего устройства на наличие вредоносного ПО ")
                 .append("с помощью надёжного антивирусного программного обеспечения.\n\n")
                 .append("Если у вас возникнут вопросы или проблемы с доступом — пожалуйста, свяжитесь с нами.\n\n")
+                .append("С уважением,\n")
+                .append("Команда Safedeck");
+
+        mailMessage.setText(text.toString());
+
+        try {
+            javaMailSender.send(mailMessage);
+        } catch (MailException exception) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean sendAlert(String emailOwner, String publicNameOwner, String emailSuspect, String publicNameSuspect, String boardName, Long boardId, AuthStatus status) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom(emailFrom);
+        mailMessage.setTo(emailOwner);
+        mailMessage.setSubject("Предупреждение: Подозрительная активность на доске «" + boardName + "».");
+
+        StringBuilder text = new StringBuilder();
+        text.append("Здравствуйте, ").append(publicNameOwner).append("!\n\n");
+
+        if (status == AuthStatus.SUSPECT) {
+            text.append("Мы зафиксировали подозрительную активность на доске «")
+                    .append(boardName)
+                    .append("» в аккаунте участника: ")
+                    .append(publicNameSuspect)
+                    .append(" (")
+                    .append(emailSuspect)
+                    .append(").\n\n")
+
+                    .append("Система обнаружила несоответствия в регистрационных данных (IP-адрес, устройство или провайдер) при попытке просмотреть секретные данные карточки, ")
+                    .append("поэтому участнику было предложено ответить на тест с автоматической проверкой аккаунта.\n\n")
+
+                    .append("Рекомендуем:\n")
+                    .append("- Сообщить участнику о подозрительной активности;\n")
+                    .append("- Попросить его написать в техническую поддержку для разбирательства;\n")
+                    .append("- Удалить участника с доски, если вы считаете это необходимым для обеспечения безопасности.\n\n");
+        } else if (status == AuthStatus.HACK) {
+            text.append("На доске «")
+                    .append(boardName)
+                    .append("» в аккаунте участника ")
+                    .append(publicNameSuspect)
+                    .append(" (")
+                    .append(emailSuspect)
+                    .append(") подтверждён факт взлома.\n\n")
+
+                    .append("В целях безопасности рекомендуем уведомить участника о необходимости немедленно обратиться в техническую поддержку для восстановления и проверки аккаунта.\n\n")
+
+                    .append("Рекомендуем:\n")
+                    .append("- Попросить участника написать в техподдержку для восстановления учётной записи;\n")
+                    .append("- Удалить участника с доски, если вы опасаетесь за безопасность данных;\n")
+                    .append("- Убедиться, что другие участники вашей доски используют надёжные пароли и регулярно обновляют их.\n\n");
+        }
+
+        text.append("Ссылка на доску: http://localhost:4200/cards/").append(boardId).append("\n\n")
+                .append("Если у вас возникнут вопросы или потребуется помощь — мы всегда на связи.\n\n")
                 .append("С уважением,\n")
                 .append("Команда Safedeck");
 
