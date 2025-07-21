@@ -41,8 +41,5 @@ public class LLMService {
         }
         double ans = root.path("output").asDouble();
         return ResponseDTO.builder().result(ans > 0.9).build();
-        return ResponseDTO.builder()
-                .result(request.getGivenAnswer().equals(request.getCorrectAnswer()))
-                .build();
     }
 }
