@@ -9,10 +9,8 @@ import ru.tbank.safedeckteam.safedeck.model.TrustedUserIP;
 import ru.tbank.safedeckteam.safedeck.model.enums.AuthStatus;
 import ru.tbank.safedeckteam.safedeck.repository.SecureLogRepository;
 import ru.tbank.safedeckteam.safedeck.repository.StatusRepository;
-import ru.tbank.safedeckteam.safedeck.service.SecureLogService;
 import ru.tbank.safedeckteam.safedeck.service.StatusService;
 import ru.tbank.safedeckteam.safedeck.web.dto.ClientDataDTO;
-import ru.tbank.safedeckteam.safedeck.web.dto.LogDTO;
 
 import java.util.Comparator;
 import java.util.List;

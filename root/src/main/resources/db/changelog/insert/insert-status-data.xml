@@ -7,7 +7,7 @@
 
     <changeSet id="insert-statuses-from-csv" author="vlint">
         <loadData
-                tableName="Status"
+                tableName="status"
                 file="db/changelog/data/statuses_data.csv"
                 separator=","
                 quotchar="&quot;">

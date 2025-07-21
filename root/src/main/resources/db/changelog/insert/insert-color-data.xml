@@ -7,7 +7,7 @@
 
     <changeSet id="insert-colors-from-csv" author="vlint">
         <loadData
-                tableName="Color"
+                tableName="color"
                 file="db/changelog/data/colors_data.csv"
                 separator=","
                 quotchar="&quot;">
