@@ -20,29 +20,26 @@ public class LLMService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ResponseDTO checkAnswer(QuestionCheckRequestDTO request) {
-//        String url = "http://localhost:7860/llm/check-answer";
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//
-//        String json;
-//        try {
-//            json = new ObjectMapper().writeValueAsString(request);
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//        HttpEntity entity = new HttpEntity(json, headers);
-//        RestTemplate restTemplate = new RestTemplate();
-//        String res = restTemplate.postForObject(url, entity, String.class);
-//        JsonNode root;
-//        try {
-//            root = objectMapper.readTree(res);
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//        double ans = root.path("output").asDouble();
-//        return ResponseDTO.builder().result(ans > 0.9).build();
-        return ResponseDTO.builder()
-                .result(request.getGivenAnswer().equals(request.getCorrectAnswer()))
-                .build();
+        String url = "https://semionmur-safe-deck-llm.hf.space/llm/check-answer";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String json;
+        try {
+            json = new ObjectMapper().writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        HttpEntity entity = new HttpEntity(json, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        String res = restTemplate.postForObject(url, entity, String.class);
+        JsonNode root;
+        try {
+            root = objectMapper.readTree(res);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        double ans = root.path("output").asDouble();
+        return ResponseDTO.builder().result(ans > 0.9).build();
     }
 }
