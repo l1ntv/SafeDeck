@@ -54,7 +54,7 @@ public class StatusServiceImpl implements StatusService {
         }
 
         SecureLog secureLog = null;
-        if (secureLogs != null) {
+        if (secureLogs != null && !secureLogs.isEmpty()) {
             secureLogs.sort(Comparator.comparing(SecureLog::getViewTime).reversed());
             secureLog = secureLogs.get(0);
         }
