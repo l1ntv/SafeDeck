@@ -38,4 +38,7 @@ public class Card extends AbstractEntity {
 
     @OneToMany(mappedBy = "card")
     private List<SendSecure> sendSecures = new ArrayList<>();
+
+    @OneToMany(mappedBy = "card", cascade = CascadeType.REMOVE)
+    private List<SecureLog> secureLogs = new ArrayList<>();
 }
