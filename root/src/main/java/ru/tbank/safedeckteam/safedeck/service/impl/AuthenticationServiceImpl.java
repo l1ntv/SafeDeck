@@ -121,11 +121,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .orElseThrow(() -> new GeneratedCodeNotFoundException("Code not found."));
         secondFARepository.delete(secondFA);
 
-
         request.setIP(httpServletRequest.getRemoteAddr());
-        request.setDevice(httpServletRequest.getHeader("User-Agent"));
+        request.setDevice(httpServletRequest.getHeader("User-Agent") == null ? "Unknown" : httpServletRequest.getHeader("User-Agent"));
         request.setCountry(httpServletRequest.getLocale() != null ? httpServletRequest.getLocale().getCountry() : "Unknown");
-        request.setProvider((String) httpServletRequest.getSession().getAttribute("user-provider"));
+        request.setProvider((String) httpServletRequest.getSession().getAttribute("user-provider") == null ? "Unknown" : httpServletRequest.getHeader("user-provider"));
 
         IP ip = ipRepository.findByIp(request.getIP())
                 .orElse(IP.builder()

@@ -31,7 +31,7 @@ public class StatusServiceImpl implements StatusService {
                 .equals(String.valueOf(clientDataDTO.getDevice()));
         boolean isCountryTrusted = String.valueOf(client.getCountry())
                 .equals(String.valueOf(clientDataDTO.getCountry()));
-        boolean isProviderTrusted =  String.valueOf(client.getProvider())
+        boolean isProviderTrusted = String.valueOf(client.getProvider())
                 .equals(String.valueOf(clientDataDTO.getProvider()));
 
         System.out.println("isIPTrusted: " + isIPTrusted);
@@ -48,19 +48,22 @@ public class StatusServiceImpl implements StatusService {
                         clientDataDTO.getBoard())
                 .orElse(null);
 
+
+        for (SecureLog secureLog: secureLogs) {
+            System.out.println(secureLog.getIp() + " " + secureLog.getCountry() + " " + secureLog.getDevice());
+        }
+
         SecureLog secureLog = null;
-        if (secureLogs == null) {
+        if (secureLogs != null) {
             secureLogs.sort(Comparator.comparing(SecureLog::getViewTime).reversed());
             secureLog = secureLogs.get(0);
         }
 
         if (secureLog != null && secureLog.getStatus().getName().equals(AuthStatus.OK.name())) {
             return statusRepository.findByName("OK").orElseThrow(() -> new RuntimeException("No status found")); // OK
-        }
-        else if (isIPTrusted && isDeviceTrusted && isCountryTrusted) {
+        } else if (isIPTrusted && isDeviceTrusted && isCountryTrusted) {
             return statusRepository.findByName("OK").orElseThrow(() -> new RuntimeException("No status found")); // OK
-        }
-        else if (isIPTrusted || isDeviceTrusted || isCountryTrusted || isProviderTrusted) {
+        } else if (isIPTrusted || isDeviceTrusted || isCountryTrusted || isProviderTrusted) {
             return statusRepository.findByName("SUSPECT").orElseThrow(() -> new RuntimeException("No status found")); // SUSPECT
         } else {
             return statusRepository.findByName("HACK").orElseThrow(() -> new RuntimeException("No status found")); // HACK
