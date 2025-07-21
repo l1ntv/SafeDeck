@@ -140,7 +140,7 @@ public class ControlQuestionServiceImpl implements ControlQuestionService {
         ControlQuestion question = controlQuestionRepository.findById(questionId)
                 .orElseThrow(() -> new RuntimeException("Question not found."));
         givenAnswerDTO.setCorrectAnswer(question.getAnswer());
-        String url = "http://localhost:8082/check-answer";
+        String url = "http://safedeck-llm-service:8082/check-answer";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         String json;
